@@ -11,6 +11,12 @@ public class PetriNet {
     private Matrix tInvariants;
     private Matrix matriz;
     private Matrix maxPInvariants;
+    private Matrix workingVector;
+    public enum transitionState {
+        NONE_WORKING,
+        OTHER_WORKING,
+        SELF_WORKING
+    }
 
     private final double[][] matrixIndicence = {
             { -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -65,7 +71,7 @@ public class PetriNet {
         this.sensibilizedTransitions = new Matrix(incidence.getRowDimension(), 1);
         this.pInvariants = new Matrix(incidence.getRowDimension(), 1);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
-
+        this.workingVector = new Matrix(1, incidence.getRowDimension());
     }
 
     /*
@@ -117,9 +123,12 @@ public class PetriNet {
      * - actualizar sensibilizadas
      * - checkear invariantes
      * - agregar disparo a la secuencia
+     * 
+     * Este es el metodo fire transition pero quería usar el nombre 
+     * fire transition en monitor asi q yo le pongo el nombre q se me canta el culo manga de putossss
      */
 
-    void fireTransition(Matrix v) {
+    void newState(Matrix v) {
         /*
          * this.currentMarking = fundamentalEquation(v);
          * enableTransitions();
@@ -139,16 +148,48 @@ public class PetriNet {
     }
 
     /*
+     * 
+     * HACER
+     * 
+     * 
+     */
+    public boolean testCondition()
+    {
+        return true;
+    }
+
+    /*
      * *************************
      * ***** Util Functions*****
      * *************************
      */
 
+
     /*
-     * creo q la forma más segura es hardcodearlo como hizo flor
+     * 
+     *          Checkeo el estado de la transición que quiero disparar
+     * 
+     *          Estados:  
+     *                  1) No hay nadie (0). ESTADO = NONE
+     *                  2) Hay alguien que no es el hilo solicitante (IDs no coincidentes) ESTADO = OTHER
+     *                  3) Quien estaba trabajando es el hilo solicitante. ESTADO = SELF
+     */
+    
+    public transitionState workingState(Matrix v) {
+        int index = getIndex(v);
+
+        if(workingVector.get(0, index) == 0) return transitionState.NONE_WORKING;
+        else if(workingVector.get(0, index) != Thread.currentThread().getId()) return transitionState.OTHER_WORKING;
+        else return transitionState.SELF_WORKING;
+    }
+
+
+    /*
+     * 
      */
     public void testPInvariants() {
         boolean pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8;
+        int i = 0;
 
         double[] pInv_0 = { currentMarking.get(0, 0), currentMarking.get(0, 3), currentMarking.get(0, 5),
                 currentMarking.get(0, 6), currentMarking.get(0, 9), currentMarking.get(0, 11),
@@ -217,12 +258,13 @@ public class PetriNet {
         }
         pInv8 = (sumInv8 == maxPInvariants.get(8, 0));
 
-        boolean[] p_Invariants = { pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8 };
+        boolean[] pInv = { pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8 };
 
-        for (int i = 0; i < p_Invariants.length; i++) {
-            if (!p_Invariants[i]) {
+        for (boolean pInvariant : pInv) {
+            if (!pInvariant) {
                 System.out.println("No se cumple el invariante de plaza: pInv" + i);
             }
+            i++;
         }
 
     }
@@ -255,6 +297,20 @@ public class PetriNet {
 
     public void setMarking(Matrix marking) {
         this.currentMarking = marking;
+    }
+
+    /**
+     * la posicion del 
+     * primer 1 del vector de disparo
+     */
+    public int getIndex(Matrix v) {
+        int index = 0;
+        
+        for(int i = 0; i < v.getColumnDimension(); i++) {
+            if(v.get(0, i) == 1) break; else index++;
+        }
+        
+        return index;
     }
 
 }

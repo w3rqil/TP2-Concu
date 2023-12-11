@@ -17,7 +17,14 @@
 
 ## Monitor
 Recordar: **notify, wait, ¿alguien en la cola?**
-
+- tomar mutex
+- Estadecuación de estado ? nadie en la transición?
+Estados: 
+		Estado 1:
+					- no se cumple la ecuacin de estado
+					hay un hilo trabajando en la transición
+		Estado 2:
+				
 
 ## Política
 - decisión? 
