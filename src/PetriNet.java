@@ -1,50 +1,260 @@
 import java.util.ArrayList;
 import Jama.Matrix;
 
-
-public class PetriNet 
-{
+public class PetriNet {
+    private final int STOP = 200;
     private Matrix incidence;
-    private Matrix incidenceT;
+    private Matrix transposeIncidence;
     private Matrix currentMarking;
-    private Matrix enableTrans;
+    private Matrix sensibilizedTransitions; // vector de transiciones sensibilizadas
     private Matrix pInvariants;
-    
-    
+    private Matrix tInvariants;
+    private Matrix matriz;
+    private Matrix maxPInvariants;
 
+    private final double[][] matrixIndicence = {
+            { -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
+            { -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { -1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1 },
+            { 0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 1, 1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, -1, -1, 1, 1, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 1, 1, -1, -1, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1 }
+    };
 
+    private double[][] tInvariant = {
+            { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 },
+            { 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1 },
+            { 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1 },
+            { 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1 },
+            { 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 },
+            { 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1 },
+            { 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1 },
+            { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1 },
+    };
 
-    public PetriNet(Matrix incidence, Matrix marking)
-    {
-        this.incidence = incidence;
-        this.incidenceT = incidence.transpose();
+    private double[][] pInvariant = {
+            // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+            { 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 }, // 1 0,3,5,6,9,11,12,13,15,16,17
+            { 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 2 1,3,
+            { 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 3 2,5
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 }, // 4 13,14,15
+            { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 5 7,9
+            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }, // 6 8,10
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 }, // 7 9,10,11
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 }, // 8 17,18
+            { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, // 9 3,4,5,17
+    };
+
+    public PetriNet(Matrix incidence, Matrix marking) {
+        this.incidence = new Matrix(matrixIndicence);
+        this.transposeIncidence = incidence.transpose();
         this.currentMarking = marking;
-        this.enableTrans = new Matrix(incidence.getRowDimension(), 1);
+        this.sensibilizedTransitions = new Matrix(incidence.getRowDimension(), 1);
         this.pInvariants = new Matrix(incidence.getRowDimension(), 1);
+        this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
+
     }
 
-
-    /*  ********************
-        *  Public Methods  *
-        ********************
+    /*
+     * ********************
+     * Public Methods *
+     ********************
      */
-    /* Caculates state equation
-     *  new marking = current marking + (incidence matrix * fire vector).
+
+    /*
+     * Caculates fundamental ecuation of a petri net for a given fire vector.
+     * new marking = current marking + (incidence matrix * fire vector).
      */
-    public Matrix stateEquation(Matrix v)
-    {
-        return currentMarking.plus(incidence.times(v));
+
+    public Matrix fundamentalEquation(Matrix v) {
+        boolean flag = true;
+        matriz = currentMarking.plus(incidence.times(v));
+
+        for (int i = 0; i < this.matriz.getColumnDimension(); i++)
+            if (this.matriz.get(0, i) < 0)
+                flag = false;
+
+        return flag ? currentMarking.plus(incidence.times(v)) : null;
     }
-    //
-    public boolean isTransitionEnabled(int transition)
-    {
-        return enableTrans.get(transition, 0) == 1;
+
+    /*
+     * Idea: comparar el marcado actual, con el marcado pedido para cada transición.
+     * Marcado actual: vector con el marcado individual de todas las plazas
+     * Matriz de incidencia: columnas=transiciones| filas= plazas
+     * Entonces, si una transición del marcado actual tiene menos tokens que los
+     * pedidos por la trasicion, no se puede disparar.
+     */
+    void enableTransitions() {
+        for (int i = 0; i < incidence.getRowDimension(); i++) {
+            boolean flag = true;
+            for (int j = 0; j < incidence.getColumnDimension(); j++) {
+                if (incidence.get(i, j) > currentMarking.get(0, j)) {
+                    flag = false;
+                    break;
+                } else {
+                    flag = true;
+                }
+            }
+            sensibilizedTransitions.set(i, 0, flag ? 1 : 0);
+        }
     }
-    //
-    public boolean checkPInvariants()
-    {
-        return false;
+
+    /*
+     * - cambiar marcado actual
+     * - actualizar sensibilizadas
+     * - checkear invariantes
+     * - agregar disparo a la secuencia
+     */
+
+    void fireTransition(Matrix v) {
+        /*
+         * this.currentMarking = fundamentalEquation(v);
+         * enableTransitions();
+         */
 
     }
-    
+
+    // ********************* */
+
+    /*
+     * hay q buscar una forma de hacer que reciba un vector de disparo
+     * y me diga si es posible realizar un vector de disparo
+     */
+
+    public boolean isTransitionEnabled(int transition) {
+        return sensibilizedTransitions.get(transition, 0) == 1;
+    }
+
+    /*
+     * *************************
+     * ***** Util Functions*****
+     * *************************
+     */
+
+    /*
+     * creo q la forma más segura es hardcodearlo como hizo flor
+     */
+    public void testPInvariants() {
+        boolean pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8;
+
+        double[] pInv_0 = { currentMarking.get(0, 0), currentMarking.get(0, 3), currentMarking.get(0, 5),
+                currentMarking.get(0, 6), currentMarking.get(0, 9), currentMarking.get(0, 11),
+                currentMarking.get(0, 12), currentMarking.get(0, 13), currentMarking.get(0, 15),
+                currentMarking.get(0, 16), currentMarking.get(0, 17) };
+        double sumInv0 = 0;
+        for (double markAux : pInv_0) {
+            sumInv0 += markAux;
+        }
+        pInv0 = (sumInv0 == maxPInvariants.get(0, 0));
+
+        double[] pInv_1 = { currentMarking.get(0, 1), currentMarking.get(0, 3) };
+        double sumInv1 = 0;
+        for (double markAux : pInv_1) {
+            sumInv1 += markAux;
+        }
+        pInv1 = (sumInv1 == maxPInvariants.get(1, 0));
+
+        double[] pInv_2 = { currentMarking.get(0, 2), currentMarking.get(0, 5) };
+        double sumInv2 = 0;
+        for (double markAux : pInv_2) {
+            sumInv2 += markAux;
+        }
+        pInv2 = (sumInv2 == maxPInvariants.get(2, 0));
+
+        double[] pInv_3 = { currentMarking.get(0, 13), currentMarking.get(0, 14), currentMarking.get(0, 15) };
+        double sumInv3 = 0;
+        for (double markAux : pInv_3) {
+            sumInv3 += markAux;
+        }
+        pInv3 = (sumInv3 == maxPInvariants.get(3, 0));
+
+        double[] pInv_4 = { currentMarking.get(0, 7), currentMarking.get(0, 9) };
+        double sumInv4 = 0;
+        for (double markAux : pInv_4) {
+            sumInv4 += markAux;
+        }
+        pInv4 = (sumInv4 == maxPInvariants.get(4, 0));
+
+        double[] pInv_5 = { currentMarking.get(0, 8), currentMarking.get(0, 10) };
+        double sumInv5 = 0;
+        for (double markAux : pInv_5) {
+            sumInv5 += markAux;
+        }
+        pInv5 = (sumInv5 == maxPInvariants.get(5, 0));
+
+        double[] pInv_6 = { currentMarking.get(0, 9), currentMarking.get(0, 10), currentMarking.get(0, 11) };
+        double sumInv6 = 0;
+        for (double markAux : pInv_6) {
+            sumInv6 += markAux;
+        }
+        pInv6 = (sumInv6 == maxPInvariants.get(6, 0));
+
+        double[] pInv_7 = { currentMarking.get(0, 17), currentMarking.get(0, 18) };
+        double sumInv7 = 0;
+        for (double markAux : pInv_7) {
+            sumInv7 += markAux;
+        }
+        pInv7 = (sumInv7 == maxPInvariants.get(7, 0));
+
+        double[] pInv_8 = { currentMarking.get(0, 3), currentMarking.get(0, 4), currentMarking.get(0, 5),
+                currentMarking.get(0, 17) };
+        double sumInv8 = 0;
+        for (double markAux : pInv_8) {
+            sumInv8 += markAux;
+        }
+        pInv8 = (sumInv8 == maxPInvariants.get(8, 0));
+
+        boolean[] p_Invariants = { pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8 };
+
+        for (int i = 0; i < p_Invariants.length; i++) {
+            if (!p_Invariants[i]) {
+                System.out.println("No se cumple el invariante de plaza: pInv" + i);
+            }
+        }
+
+    }
+
+    /*
+     * ************************
+     * *** Geters & Setters ***
+     * ************************
+     */
+
+    /*
+     * Idea: tener en un vector la cantidad máxima de tokens para c/p invariante
+     * esto sirve para checkear los p invariants
+     */
+    public Matrix setMaxPInvariants() {
+        Matrix auxMatrix = new Matrix(pInvariants.getColumnDimension(), 1);
+        for (int i = 0; i < pInvariants.getColumnDimension(); i++) {
+            int max = 0;
+            for (int j = 0; j < pInvariants.getRowDimension(); j++) {
+                max += pInvariants.get(i, j);
+            }
+
+            auxMatrix.set(i, 0, max);
+
+        }
+
+        return auxMatrix;
+
+    }
+
+    public void setMarking(Matrix marking) {
+        this.currentMarking = marking;
+    }
+
 }
