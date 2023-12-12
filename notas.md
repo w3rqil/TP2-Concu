@@ -37,6 +37,12 @@ Estados:
 - ¿alguien esperando?
 
 
+## Hilos
+Idea general: Asociar transiciones específicas a hilos.
+			 De esta forma tendríamos hilos específicos por partes del código
+
+###### ver como darles a run despues xdxd
+
 
 ## Info auxuliar
 
