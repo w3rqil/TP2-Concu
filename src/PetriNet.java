@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import Jama.Matrix;
+//import MyEnum.transitionState;
 
 public class PetriNet {
     private final int STOP = 200;
@@ -12,11 +13,6 @@ public class PetriNet {
     private Matrix matriz;
     private Matrix maxPInvariants;
     private Matrix workingVector;
-    public enum transitionState {
-        NONE_WORKING,
-        OTHER_WORKING,
-        SELF_WORKING
-    }
 
     private final double[][] matrixIndicence = {
             { -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -53,18 +49,19 @@ public class PetriNet {
 
     private double[][] pInvariant = {
             // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
-            { 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 }, // 1 0,3,5,6,9,11,12,13,15,16,17
-            { 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 2 1,3,
-            { 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 3 2,5
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 }, // 4 13,14,15
-            { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 5 7,9
-            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }, // 6 8,10
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 }, // 7 9,10,11
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 }, // 8 17,18
-            { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, // 9 3,4,5,17
+            { 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 }, // 1    0,3,5,6,9,11,12,13,15,16,17
+            { 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 2    1,3,
+            { 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 3    2,5
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0 }, // 4    13,14,15
+            { 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 5    7,9
+            { 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 }, // 6    8,10
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0 }, // 7    9,10,11
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1 }, // 8    17,18
+            { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, // 9    3,4,5,17
     };
 
-    public PetriNet(Matrix incidence, Matrix marking) {
+    public PetriNet(Matrix incidence, Matrix marking) 
+    {
         this.incidence = new Matrix(matrixIndicence);
         this.transposeIncidence = incidence.transpose();
         this.currentMarking = marking;
@@ -85,14 +82,13 @@ public class PetriNet {
      * new marking = current marking + (incidence matrix * fire vector).
      */
 
-    public Matrix fundamentalEquation(Matrix v) {
+    public Matrix fundamentalEquation(Matrix v) 
+    {
         boolean flag = true;
         matriz = currentMarking.plus(incidence.times(v));
-
         for (int i = 0; i < this.matriz.getColumnDimension(); i++)
             if (this.matriz.get(0, i) < 0)
                 flag = false;
-
         return flag ? currentMarking.plus(incidence.times(v)) : null;
     }
 
@@ -103,7 +99,8 @@ public class PetriNet {
      * Entonces, si una transición del marcado actual tiene menos tokens que los
      * pedidos por la trasicion, no se puede disparar.
      */
-    void enableTransitions() {
+    void enableTransitions() 
+    {
         for (int i = 0; i < incidence.getRowDimension(); i++) {
             boolean flag = true;
             for (int j = 0; j < incidence.getColumnDimension(); j++) {
@@ -128,7 +125,8 @@ public class PetriNet {
      * fire transition en monitor asi q yo le pongo el nombre q se me canta el culo manga de putossss
      */
 
-    void newState(Matrix v) {
+    void fire(Matrix v) 
+    {
         /*
          * this.currentMarking = fundamentalEquation(v);
          * enableTransitions();
@@ -143,7 +141,8 @@ public class PetriNet {
      * y me diga si es posible realizar un vector de disparo
      */
 
-    public boolean isTransitionEnabled(int transition) {
+    public boolean isTransitionEnabled(int transition) 
+    {
         return sensibilizedTransitions.get(transition, 0) == 1;
     }
 
@@ -175,12 +174,13 @@ public class PetriNet {
      *                  3) Quien estaba trabajando es el hilo solicitante. ESTADO = SELF
      */
     
-    public transitionState workingState(Matrix v) {
+    public int workingState(Matrix v) 
+    {
         int index = getIndex(v);
 
-        if(workingVector.get(0, index) == 0) return transitionState.NONE_WORKING;
-        else if(workingVector.get(0, index) != Thread.currentThread().getId()) return transitionState.OTHER_WORKING;
-        else return transitionState.SELF_WORKING;
+        if(workingVector.get(0, index) == 0) return 0;
+        else if(workingVector.get(0, index) != Thread.currentThread().getId()) return 1;
+        else return 2;
     }
 
 
@@ -188,6 +188,7 @@ public class PetriNet {
      * 
      */
     public void testPInvariants() {
+        
         boolean pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8;
         int i = 0;
 
@@ -279,7 +280,8 @@ public class PetriNet {
      * Idea: tener en un vector la cantidad máxima de tokens para c/p invariante
      * esto sirve para checkear los p invariants
      */
-    public Matrix setMaxPInvariants() {
+    public Matrix setMaxPInvariants() 
+    {
         Matrix auxMatrix = new Matrix(pInvariants.getColumnDimension(), 1);
         for (int i = 0; i < pInvariants.getColumnDimension(); i++) {
             int max = 0;
@@ -295,18 +297,26 @@ public class PetriNet {
 
     }
 
-    public void setMarking(Matrix marking) {
+    public void setMarking(Matrix marking) 
+    {
         this.currentMarking = marking;
+    }
+
+    public Matrix getSensibilized() 
+    {
+        return sensibilizedTransitions;
     }
 
     /**
      * la posicion del 
      * primer 1 del vector de disparo
      */
-    public int getIndex(Matrix v) {
+    public int getIndex(Matrix v) 
+    {
         int index = 0;
         
-        for(int i = 0; i < v.getColumnDimension(); i++) {
+        for(int i = 0; i < v.getColumnDimension(); i++) 
+        {
             if(v.get(0, i) == 1) break; else index++;
         }
         

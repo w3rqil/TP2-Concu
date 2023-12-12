@@ -3,56 +3,101 @@ import java.util.concurrent.Semaphore;
 import Jama.Matrix;
 import java.util.ArrayList;
 
-
 public class Monitor {
 
-    private PetriNet petrinet; 
+    private PetriNet petrinet;
     private Policy policy;
-    private Semaphore enMonitor;
+    private Semaphore mutex;
     private CQueues conditionQueues;
-   // hay q hacer la colas de condición 
+    private int tInvariantsCounter;
+    private InvariantsManager invariantsManager;
+    // hay q hacer la colas de condición
 
-    public Monitor (PetriNet petrinet, Policy policy)
-    {
+    public Monitor(PetriNet petrinet, Policy policy) {
         this.petrinet = petrinet;
         this.policy = policy;
-        this.enMonitor = new Semaphore(1, true);
+        this.mutex = new Semaphore(1, true);
+        this.tInvariantsCounter = 0;
+        this.invariantsManager = new InvariantsManager();
     }
 
-
-    /* 
+    /*
      * *************************
-     * **** Método  TRONCAL ****
+     * **** Método TRONCAL *****                 pene 8============================================================D
      * *************************
+     * 
      */
-
-
-    public void fireTransition(Matrix v)
+    // gestor del monitor
+    public boolean fireTransition(Matrix v) 
     {
         try {
             catchMonitor();
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-    //----------------------------------------------
-    // revisar tema enum
-    //
-    if(petrinet.fundamentalEquation(v) == null || !(petrinet.workingState(v).equals("transitionState.NONE_WORKING"))) {
+        // -----------------------------------------------
+        boolean k = true;
+        while (k) 
+        {
+            // esto sería el equivalente a k=false. Se manda a dormir al hilo q no puede
+            // disparar
+            if (petrinet.fundamentalEquation(v) == null || !(petrinet.workingState(v) == 0)) 
+            {
+                exitMonitor();
+                int queue = conditionQueues.getQueue(v);
+                try 
+                {
+                    conditionQueues.getQueued().get(queue).acquire();
+                    if (testCondition()) {
+                        return false; // Si un hilo se despierta en este punto y ya se completo la condicion, debe
+                    }         // salir sin disparar nada.
+
+                } catch (InterruptedException e) 
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            petrinet.fire(v);   // en realidad acá seria un if(Pudo disparar) -no wacho no
+            if (k) 
+            {
+                Matrix sensibilized = petrinet.getSensibilized();
+                Matrix queued = conditionQueues.queuedUp();
+                Matrix and = sensibilized.arrayTimes(queued); // operación 'and'
+
+                int m = result(and); // cantidad de transiciones sensibilizadas y encoladas
+
+                if (m != 0) 
+                {
+                    // cual
+                    int choice = policy.fireChoice(and);
+                    // release
+                    conditionQueues.getQueued().get(choice).release();
+                    this.tInvariantsCounter += this.invariantsManager.countTransition(choice);
+                } else 
+                {
+                    k = false;
+                }
+
+            }
+        }
 
         exitMonitor();
-        
-        int queue = conditionQueues.getQueue(v);
-        
-        try {
-            conditionQueues.getQueues().get(queue).acquire();
-            if(petrinet.testCondition()) return; //Si un hilo se despierta en este punto y ya se completaron 1000 tareas, debe salir sin disparar nada.
-        } catch(InterruptedException e) {
-            e.printStackTrace();
-        }
+        return true;
     }
 
-    }
+
+    /*  _____
+     * |*****|                                      PENE 8============================================================D
+     * |*****|                                                                                       ____
+     * |*****| ______________________________________________________________________________________|    \
+     *  _____ _______________________________________________________________________________________|   --|
+     * |*****|                                                                                       |____/
+     * |*****|
+     * |*****|
+     */
+
 
 
     /*
@@ -60,21 +105,27 @@ public class Monitor {
      * *** Métodos públicos ****
      * *************************
      */
-    public void catchMonitor() throws InterruptedException
-    {
-        enMonitor.acquire();
+    public void catchMonitor() throws InterruptedException {
+        mutex.acquire();
     }
 
-    public void exitMonitor() 
-    {
-        enMonitor.release();
+    public void exitMonitor() {
+        mutex.release();
     }
 
+    public int result(Matrix and) {
+        int m = 0;
 
+        for (int i = 0; i < and.getColumnDimension(); i++)
+            if (and.get(0, i) > 0)
+                m++;
 
+        return m;
+    }
 
-
-
+    private boolean testCondition() {
+        return (this.tInvariantsCounter == 200);
+    }
 
     /*
      * *************************

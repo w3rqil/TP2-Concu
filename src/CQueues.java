@@ -33,7 +33,7 @@ public class CQueues {
     */
 
 
-    public ArrayList<Semaphore> getQueues() {
+    public ArrayList<Semaphore> getQueued() {
         return conditionQueues;
     }
     /* 
@@ -49,6 +49,25 @@ public class CQueues {
         }
 
         return index;
+    }
+
+
+    // tengo q retornar una matriz con las trnasiciones encoladas
+    // para poder hacer el and
+    // modificar
+    public Matrix queuedUp()
+    {
+        double[] aux = new double[this.maxQueues];
+        
+        for(Semaphore queue : conditionQueues) {
+            if(queue.hasQueuedThreads()) aux[conditionQueues.indexOf(queue)] = 1;
+            else aux[conditionQueues.indexOf(queue)] = 0;
+        }
+        
+        Matrix waitingThreads = new Matrix(aux, 1);
+        
+        return waitingThreads;
+
     }
 
     
