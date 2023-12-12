@@ -7,8 +7,6 @@
 - en la clase petrinet hay métodos que faltan implementar (tienen comentarios con lo que deberían hacer)
 
 
-
-
 ## Main
 - crear rdp
 - habilitar monitor (con su respectiva política)
