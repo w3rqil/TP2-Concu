@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class InvariantsManager {
+public class InvariantsManager 
+{
     private List<Set<Integer>> invariants;
     private List<Integer> transitionsProgress;
-    public InvariantsManager() {
+    public InvariantsManager() 
+    {
         this.invariants = new ArrayList<>(8);
         this.transitionsProgress = new ArrayList<>(Collections.nCopies(8,0));  //Cuanto va cumpliendo el progreso de cada invariante
         // Estos son los 8 invariantes de transicion
@@ -22,14 +24,19 @@ public class InvariantsManager {
         invariants.add(new HashSet<>(Arrays.asList(0,2,4,6,8,10,12,13)));
     }
     
-    public int countTransition(int transition) {
-        for(int i = 0; i < invariants.size(); i++) {
+    public int countTransition(int transition) 
+    {
+        for(int i = 0; i < invariants.size(); i++) 
+        {
             Set<Integer> requiredTransitions = this.invariants.get(i);
             int progress = transitionsProgress.get(i);
-            if(requiredTransitions.contains(transition)) {
-                if(transition == (progress+1)) {
+            if(requiredTransitions.contains(transition)) 
+            {
+                if(transition == (progress+1)) 
+                {
                     transitionsProgress.set(i,(progress+1));
-                    if(transitionsProgress.get(i) == requiredTransitions.size()) {
+                    if(transitionsProgress.get(i) == requiredTransitions.size()) 
+                    {
                         /*
                         Se completa un invariante de transicion, entonces reiniciamos el progreso 
                         y devolvemos 1, para sumar al contador de la condicion de corte.

@@ -1,3 +1,13 @@
+# Para hacer:
+- clase hilos
+	q tengan serie de transiciones asociadas
+- ver tema de sincronización de hilos
+- log
+- implementar bien main
+- en la clase petrinet hay métodos que faltan implementar (tienen comentarios con lo que deberían hacer)
+
+
+
 
 ## Main
 - crear rdp
