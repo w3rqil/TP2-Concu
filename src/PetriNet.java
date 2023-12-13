@@ -60,11 +60,13 @@ public class PetriNet {
             { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, // 9    3,4,5,17
     };
 
-    public PetriNet(Matrix incidence, Matrix marking) 
+    private double[][] initialMarking = { { 1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1 } }; // revisar
+
+    public PetriNet() 
     {
         this.incidence = new Matrix(matrixIndicence);
         this.transposeIncidence = incidence.transpose();
-        this.currentMarking = marking;
+        this.currentMarking = new Matrix(initialMarking);
         this.sensibilizedTransitions = new Matrix(incidence.getRowDimension(), 1);
         this.pInvariants = new Matrix(incidence.getRowDimension(), 1);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
