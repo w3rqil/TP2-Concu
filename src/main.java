@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import Jama.Matrix;
 
 public class main {
@@ -12,6 +14,7 @@ public class main {
     private static PetriNet pNet  ;    //Red de petri representativa del sistema.
 
     private static Monitor monitor;  //Monitor que controlará la red de Petri que modela el sistema.
+    
 
     /**
      * Método principal.
@@ -22,6 +25,8 @@ public class main {
      */
     
     public static void main(String args[]) {
+
+        Log log = new Log(pNet, monitor);
        
         Matrix initialMarking = new Matrix(initialMark, 1);
 
@@ -38,8 +43,6 @@ public class main {
 
         //Creación y ejecución del hilo logger.
         try {
-            Log log = new Log("ReportMonitor.txt", pNet, monitor);
-
             log.start();
         } catch(Exception e) {
             e.printStackTrace();
@@ -51,5 +54,12 @@ public class main {
             threads[i] = new MyThread(threadPaths.get(i), monitor);
             threads[i].start();
         }
+
+
+         System.out.println("Vector contador: ");
+        System.out.println(Arrays.toString(rdp.getContador()));
+        System.out.println("Duracion del programa: " + (System.currentTimeMillis() - horaInicio));
+
+        log.closeFile();
     }
 }
