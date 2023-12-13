@@ -7,13 +7,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+
 public class Log {
 
     private PrintWriter pw;
     private FileWriter file;
-
     // crea el archivo log
-    public Log() {
+    private static long start;
+
+    public Log(long start) {
+        this.start = start;
         try {
             file = new FileWriter("./effect/log.txt");
             pw = new PrintWriter(file);
@@ -39,9 +42,10 @@ public class Log {
     }
 
     /* Cierra el archivo log */
-    public void closeFile() {
+    public void closeFile(PetriNet petrinet) {
         try {
-            pw.write(rdp.transitionsCounterInfo());  //      rdp.transitionsCounterInfo() devuelve string
+            pw.write(petrinet.transitionsCounterInfo());  //      rdp.transitionsCounterInfo() devuelve string
+            pw.write("Tiempo de ejecucion: " + start);
             file.flush();
             file.close();
         } catch (IOException e) {
@@ -49,4 +53,13 @@ public class Log {
         }
     }
 
+    public void clearFile() {
+        try {
+            PrintWriter pw_log = new PrintWriter(".//Estadistica.txt");
+            pw_log.print("");
+            pw_log.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

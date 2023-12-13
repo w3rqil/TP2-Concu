@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import Jama.Matrix;
 
-public class Threads implements Runnable {
+public class Threads extends Thread {
     
     private ArrayList<Matrix> transitions;
     private Matrix firingVector;
@@ -30,8 +30,13 @@ public class Threads implements Runnable {
         }
     }
 
+    public String getThreadName() {
+        return this.name;
+    }
+
     @Override
     public void run() {
+        System.out.println(Thread.currentThread().getId() + ": started run()");
         while (!this.monitor.testCondition()) {
             this.firingVector = transitions.get(transitionCounter);
             if (monitor.fireTransition(firingVector)) {

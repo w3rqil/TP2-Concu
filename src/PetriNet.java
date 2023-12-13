@@ -4,7 +4,7 @@ import Jama.Matrix;
 //import MyEnum.transitionState;
 
 public class PetriNet {
-    private final int STOP = 200;
+    
     private Matrix incidence;
     private Matrix transposeIncidence;
     private Matrix currentMarking;
@@ -64,20 +64,20 @@ public class PetriNet {
             { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, // 9    3,4,5,17
     };
 
-    private double[][] initialMarking = { { 1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1 } }; // revisar
+    private double[] initialMarking = { 1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1 }; 
 
     public PetriNet(Log log) 
     {
         this.log= log;
         this.incidence = new Matrix(matrixIndicence);
         this.transposeIncidence = incidence.transpose();
-        this.currentMarking = new Matrix(initialMarking);
+        this.currentMarking = new Matrix(initialMarking, 1);
         this.sensibilizedTransitions = new Matrix(incidence.getRowDimension(), 1);
-        this.pInvariants = new Matrix(incidence.getRowDimension(), 1);
+        this.pInvariants = new Matrix(pInvariant);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
         this.workingVector = new Matrix(1, incidence.getRowDimension());
         this.firedSequence = new ArrayList<String>();
-        this.transitionCounter = new Matrix(1,13);
+        this.transitionCounter = new Matrix(1,15);
         for (int j = 0; j < 15; j++) {
             transitionCounter.set(0, j, 0.0);
         }
@@ -95,9 +95,9 @@ public class PetriNet {
      */
 
     public Matrix fundamentalEquation(Matrix v) 
-    {
+    { 
         boolean flag = true;
-        matriz = currentMarking.plus(incidence.times(v));
+        matriz = (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
         for (int i = 0; i < this.matriz.getColumnDimension(); i++)
             if (this.matriz.get(0, i) < 0)
                 flag = false;
@@ -145,6 +145,7 @@ public class PetriNet {
         setWorkingVector(v, 0);
         testPInvariants();
         firedSequence.add("T" + getIndex(v) + ""); //tiene TODAS las secuencia de transiciones disparadas
+        System.out.println("Disparo: T" + getIndex(v));
         log.writeLog(getIndex(v));
         for(int i = 0; i < v.getRowDimension(); i++) {
             for(int j = 0; j < v.getColumnDimension(); j++) {
@@ -317,11 +318,8 @@ public class PetriNet {
             for (int j = 0; j < pInvariants.getRowDimension(); j++) {
                 max += pInvariants.get(i, j);
             }
-
             auxMatrix.set(i, 0, max);
-
         }
-
         return auxMatrix;
 
     }

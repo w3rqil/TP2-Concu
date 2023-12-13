@@ -1,7 +1,7 @@
 
 import java.util.concurrent.Semaphore;
 import Jama.Matrix;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 
 public class Monitor {
 
@@ -45,6 +45,7 @@ public class Monitor {
             if (petrinet.fundamentalEquation(v) == null || !(petrinet.workingState(v) == 0)) 
             {
                 exitMonitor();
+                System.out.println("Hilo " + Thread.currentThread().getId() + " se va a dormir");
                 int queue = conditionQueues.getQueue(v);
                 try 
                 {
@@ -75,6 +76,7 @@ public class Monitor {
                     // release
                     conditionQueues.getQueued().get(choice).release();
                     this.tInvariantsCounter += this.invariantsManager.countTransition(choice);
+                    System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
                 } else 
                 {
                     k = false;

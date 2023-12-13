@@ -1,8 +1,6 @@
-//import java.lang.reflect.Array;???????????''
-import java.util.Random;
 import Jama.Matrix;
 
-import java.lang.reflect.Array;
+//import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Policy {
@@ -30,25 +28,31 @@ public class Policy {
         if(this.policyType.equalsIgnoreCase("Equitative")) {
             if(segment == 1) {
                 if(randomNum < prob1) {
+                    System.out.println("T0");
                     return 0;
                 }
                 else {
+                    System.out.println("T1");
                     return 1;
                 }
             }
             else if(segment == 2) {
                 if(randomNum < prob1) {
+                    System.out.println("T4");
                     return 4;
                 }
                 else {
+                    System.out.println("T5");
                     return 5;
                 }
             }
             else if(segment == 3) {
                 if(randomNum < prob1) {
+                    System.out.println("T8");
                     return 8;
                 }
                 else {
+                    System.out.println("T9");
                     return 9;
                 }
             }
@@ -56,25 +60,31 @@ public class Policy {
         else {
             if(segment == 1) {
                 if(randomNum < prob1) {
+                    System.out.println("T0");
                     return 0;
                 }
                 else {
+                    System.out.println("T1");
                     return 1;
                 }
             }
             else if(segment == 2) {
                 if(randomNum < prob1) {
+                    System.out.println("T4");
                     return 4;
                 }
                 else {
+                    System.out.println("T5");
                     return 5;
                 }
             }
             else if(segment == 3) {
                 if(randomNum > prob2) {
+                    System.out.println("T8");
                     return 8;
                 }
                 else {
+                    System.out.println("T9");
                     return 9;
                 }
             }
