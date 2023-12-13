@@ -38,6 +38,7 @@ public class Threads extends Thread {
     public void run() {
         System.out.println(Thread.currentThread().getId() + ": started run()");
         while (!this.monitor.testCondition()) {
+            System.out.println("ENTRO WACHO ENTRO EL HILO:"+ Thread.currentThread().getId());
             this.firingVector = transitions.get(transitionCounter);
             if (monitor.fireTransition(firingVector)) {
                 nextTransition();
