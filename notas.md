@@ -46,8 +46,10 @@ Estados:
 
 
 ## Hilos
-Idea general: Asociar transiciones específicas a hilos.
-			 De esta forma tendríamos hilos específicos por partes del código
+Idea intuitiva: **Hilos tratan de disparar sus transiciones asociadas todo el tiempo. Monitor maneja los disparos.**
+-	Asociar transiciones específicas a hilos.
+De esta forma tendríamos hilos específicos por partes del código.
+
 
 ###### ver como darles a run despues xdxd
 
