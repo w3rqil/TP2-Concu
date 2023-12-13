@@ -1,3 +1,8 @@
+/*
+        Imprimir: Disparos de transiciones 
+                  Contador para cantidad de invariantes completadas
+*/
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -36,6 +41,7 @@ public class Log {
     /* Cierra el archivo log */
     public void closeFile() {
         try {
+            pw.write(rdp.transitionsCounterInfo());  //      rdp.transitionsCounterInfo() devuelve string
             file.flush();
             file.close();
         } catch (IOException e) {

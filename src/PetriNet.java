@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import Jama.Matrix;
 //import MyEnum.transitionState;
@@ -13,6 +14,9 @@ public class PetriNet {
     private Matrix matriz;
     private Matrix maxPInvariants;
     private Matrix workingVector;
+    private Matrix transitionCounter;
+    private ArrayList<String> firedSequence;
+    private Log log;
 
     private final double[][] matrixIndicence = {
             { -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -62,8 +66,9 @@ public class PetriNet {
 
     private double[][] initialMarking = { { 1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1 } }; // revisar
 
-    public PetriNet() 
+    public PetriNet(Log log) 
     {
+        this.log= log;
         this.incidence = new Matrix(matrixIndicence);
         this.transposeIncidence = incidence.transpose();
         this.currentMarking = new Matrix(initialMarking);
@@ -71,6 +76,11 @@ public class PetriNet {
         this.pInvariants = new Matrix(incidence.getRowDimension(), 1);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
         this.workingVector = new Matrix(1, incidence.getRowDimension());
+        this.firedSequence = new ArrayList<String>();
+        this.transitionCounter = new Matrix(1,13);
+        for (int j = 0; j < 15; j++) {
+            transitionCounter.set(0, j, 0.0);
+        }
     }
 
     /*
@@ -117,7 +127,7 @@ public class PetriNet {
         }
     }
 
-    /*
+    /* 
      * - cambiar marcado actual
      * - actualizar sensibilizadas
      * - checkear invariantes
@@ -125,18 +135,33 @@ public class PetriNet {
      * 
      * Este es el metodo fire transition pero quería usar el nombre 
      * fire transition en monitor asi q yo le pongo el nombre q se me canta el culo manga de putossss
+     * chupenme la pija
      */
 
-    void fire(Matrix v) 
+    void fire(Matrix v)             //esta es la que hace el disparo literal, actualizando la rdp
     {
-        /*
-         * this.currentMarking = fundamentalEquation(v);
-         * enableTransitions();
-         */
-
+        this.currentMarking = fundamentalEquation(v);
+        enableTransitions();
+        setWorkingVector(v, 0);
+        testPInvariants();
+        firedSequence.add("T" + getIndex(v) + ""); //tiene TODAS las secuencia de transiciones disparadas
+        log.writeLog(getIndex(v));
+        for(int i = 0; i < v.getRowDimension(); i++) {
+            for(int j = 0; j < v.getColumnDimension(); j++) {
+                if(v.get(i,j) != 0.0) {
+                    transitionCounter.set(i,j,(transitionCounter.get(i,j)+v.get(i,j)));
+                }
+            }
+        }
     }
 
-    
+    public String transitionsCounterInfo() {
+        String arg = "Cantidad de disparos de transiciones:\n";
+        for(int i = 0; i < transitionCounter.getColumnDimension(); i++) {
+            arg += ("   - T" + i + ": " + transitionCounter.get(0,i) + "veces\n");
+        }
+        return arg;
+    }
 
     // ********************* */
 
@@ -311,6 +336,10 @@ public class PetriNet {
         return sensibilizedTransitions;
     }
 
+    public ArrayList<String> getFiredSequence() 
+    {
+        return firedSequence;
+    }
     /**
      * la posicion del 
      * primer 1 del vector de disparo
@@ -327,4 +356,13 @@ public class PetriNet {
         return index;
     }
 
+    public void setWorkingVector(Matrix firingVector, double value) 
+    {
+        this.workingVector.set(0, getIndex(firingVector), value);
+    }
+
+    public Matrix getIncidenceMatrix() 
+    {
+        return this.incidence;
+    }
 }

@@ -123,7 +123,7 @@ public class Monitor {
         return m;
     }
 
-    private boolean testCondition() {
+    public boolean testCondition() {
         return (this.tInvariantsCounter == 200);
     }
 
@@ -132,4 +132,12 @@ public class Monitor {
      * *** Getters & Setters ***
      * *************************
      */
+
+    public PetriNet getPetriNet() {
+        return this.petrinet;
+    }
+
+    public int getTInvariantsCount() {
+        return this.tInvariantsCounter;
+    }
 }

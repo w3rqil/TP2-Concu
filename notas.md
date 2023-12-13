@@ -23,6 +23,9 @@
 - habilitar transiciones
 		![Alt text](image.png)
 
+
+**VERIFICAR SI VECTOR DE DISPARO ES UN 'CHORIZO PARADO'**
+
 ## Monitor
 Recordar: **notify, wait, ¿alguien en la cola?**
 - tomar mutex
