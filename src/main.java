@@ -8,7 +8,7 @@ public class main
 
     private static ArrayList<Matrix> threadPaths; //Arreglo que contiene los "caminos" de cada hilo (secuencia de transiciones a ejecutar).
 
-    private static final int amountThreads = 7;
+    private static final int amountThreads = 7; // Depende de la cantidad de Path ???????? e asi o no?
 
     private static double[] initialMark = { 1,1,1,0,3,0,0,1,1,0,2,0,0,0,1,0,0,0,1 }; //Marcado inicial de la red.
 
