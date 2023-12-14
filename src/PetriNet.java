@@ -41,7 +41,7 @@ public class PetriNet {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1 } //P18
     };
 
-    private double[][] tInvariant = {
+    private final double[][] tInvariant = {
             { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1 },
             { 0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1 },
             { 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1 },
@@ -52,7 +52,7 @@ public class PetriNet {
             { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1 },
     };
 
-    private double[][] pInvariant = {
+    private final double[][] pInvariant = {
             //0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18
             { 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0 }, // 1    0,3,5,6,9,11,12,13,15,16,17
             { 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // 2    1,3,
@@ -65,7 +65,7 @@ public class PetriNet {
             { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, // 9    3,4,5,17
     };
 
-    private double[][] bIncidence = {
+    private final double[][] bIncidence = {
          //T 0,1,2,3,4,5,6,7,8,9,0,1,2,3
             {1,1,0,0,0,0,0,0,0,0,0,0,0,0},// P0
             {1,0,0,0,0,0,0,0,0,0,0,0,0,0},// P1
@@ -88,7 +88,7 @@ public class PetriNet {
             {0,0,0,0,0,0,0,0,0,0,0,0,1,0}  //P18
     };
 
-    private double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
+    private final double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
 
     public PetriNet(Log log) 
     {
@@ -142,8 +142,9 @@ public class PetriNet {
     // aguante el paco, las putas, la droga, los enanos, las enanas
 
     public boolean fundamentalEquationTest(Matrix firingVector) {
+        System.out.println("marcado actual ");
+        currentMarking.print(2,0);
         matriz = fundamentalEquation(firingVector);
-
         for(int i = 0; i < this.matriz.getColumnDimension(); i++)
             if(this.matriz.get(0, i) < 0) return false; return true;
     }
