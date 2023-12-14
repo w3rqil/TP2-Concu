@@ -62,7 +62,7 @@ public class Monitor {
             }
             System.out.print("Disparo:   ");
             v.print(2,1);
-            petrinet.fire(v);   // en realidad acá seria un if(Pudo disparar) -no wacho no
+            petrinet.fire(v);   //
             if (k) 
             {
                 Matrix sensibilized = petrinet.getSensibilized();
@@ -70,12 +70,13 @@ public class Monitor {
                 Matrix and = sensibilized.arrayTimes(queued); // operación 'and'
                 int m = result(and); // cantidad de transiciones sensibilizadas y encoladas
 
-                if (m != 0) 
+                if (m > 0)
                 {
                     // cual
                     int choice = policy.fireChoice(and);
                     // release
                     conditionQueues.getQueued().get(choice).release();
+                    //          arreglo         .get(choiice).release ---> pido una posicón del arreglo de semáforos y le doy release
                     this.tInvariantsCounter += this.invariantsManager.countTransition(choice);
                     System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
                 } else 

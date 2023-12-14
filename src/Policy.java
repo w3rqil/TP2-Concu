@@ -126,7 +126,6 @@ public class Policy {
                     //segment=3;
                     return 3;
                 }
-
             }
         }
         return 0;
