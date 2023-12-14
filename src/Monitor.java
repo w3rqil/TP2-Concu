@@ -41,9 +41,10 @@ public class Monitor {
         boolean k = true;
         while (k) 
         {
+            v.print(2,0);
             // esto sería el equivalente a k=false. Se manda a dormir al hilo q no puede
             // disparar
-            if (petrinet.fundamentalEquationTest(v) || !(petrinet.workingState(v) == 0))
+            if (!petrinet.fundamentalEquationTest(v) || !(petrinet.workingState(v) == 0))
             {
                 exitMonitor();
                 System.out.println("Hilo " + Thread.currentThread().getId() + " se va a dormir");
@@ -62,29 +63,43 @@ public class Monitor {
             }
             System.out.print("Disparo:   ");
             v.print(2,1);
-            petrinet.fire(v);   //
+               //
+
             if (k) 
             {
+                petrinet.fire(v);
                 Matrix sensibilized = petrinet.getSensibilized();
+                sensibilized.print(0,2);
                 Matrix queued = conditionQueues.queuedUp();
                 Matrix and = sensibilized.arrayTimes(queued); // operación 'and'
+
+                System.out.println("queued:");
+                queued.print(2,0);
+
+                System.out.println("sensibles:");
+                sensibilized.print(2,0);
+
+                System.out.println("and:");
+                and.print(2,0);
                 int m = result(and); // cantidad de transiciones sensibilizadas y encoladas
 
                 if (m > 0)
                 {
+
                     // cual
                     int choice = policy.fireChoice(and);
+
                     // release
                     conditionQueues.getQueued().get(choice).release();
                     //          arreglo         .get(choiice).release ---> pido una posicón del arreglo de semáforos y le doy release
                     this.tInvariantsCounter += this.invariantsManager.countTransition(choice);
                     System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
-                } else 
-                {
+                } else {
                     k = false;
                 }
             }
         }
+        petrinet.setWorkingVector(v,(double)Thread.currentThread().getId());
         System.out.println("Invariantes cumplidos: " + tInvariantsCounter);
         exitMonitor();
         return true;

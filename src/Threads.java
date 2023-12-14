@@ -12,6 +12,7 @@ public class Threads extends Thread {
     public Threads(Matrix transitionsSequence, Monitor monitor, String name) {   // Procesinhos cerra el orto vos
         this.transitions = new ArrayList<Matrix>();
         this.name = name;
+        transitionsSequence.print(2,0);
 
         for (int i = 0; i < transitionsSequence.getColumnDimension(); i++) {
             int index = (int) transitionsSequence.get(0, i);
@@ -40,6 +41,8 @@ public class Threads extends Thread {
         while (!this.monitor.testCondition()) {
             System.out.println("ENTRO WACHO ENTRO EL HILO:"+ Thread.currentThread().getId());
             this.firingVector = transitions.get(transitionCounter);
+
+            firingVector.print(2,0);
             if (monitor.fireTransition(firingVector)) {
                 nextTransition();
             }

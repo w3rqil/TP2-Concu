@@ -145,6 +145,7 @@ public class PetriNet {
         System.out.println("marcado actual ");
         currentMarking.print(2,0);
         matriz = fundamentalEquation(firingVector);
+        matriz.print(2,0);
         for(int i = 0; i < this.matriz.getColumnDimension(); i++)
             if(this.matriz.get(0, i) < 0) return false; return true;
     }
@@ -180,7 +181,7 @@ public class PetriNet {
                 sensibilizedTransitions.set(0, i, 1);
             } else sensibilizedTransitions.set(0, i, 0);
         }*/
-        backwardsIncidence.print(2,0);
+
         currentMarking.print(2,0);
         for(int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
             boolean enabledTransition = true;
@@ -198,8 +199,9 @@ public class PetriNet {
             }
 
         }
-        sensibilizedTransitions.print(sensibilizedTransitions.getRowDimension(), 0);
         System.out.println("sensibileas");
+        sensibilizedTransitions.print(sensibilizedTransitions.getRowDimension(), 0);
+
 
     }
 
@@ -218,6 +220,7 @@ public class PetriNet {
     void fire(Matrix v)             //esta es la que hace el disparo literal, actualizando la rdp
     {
         this.currentMarking = fundamentalEquation(v);  //.transpose()
+        v.print(2,0);
         enableTransitions();
         setWorkingVector(v, 0);
         testPInvariants();

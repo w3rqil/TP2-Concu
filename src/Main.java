@@ -70,6 +70,7 @@ public class Main {
         petrinet.enableTransitions(); // Seteo de las transiciones sensibilizadas dado el marcado inicial de la red.
 
         threads[0] = new Threads(loader1Path, monitor, "Loader 1");
+
         threads[1] = new Threads(loader2Path, monitor, "Loader 2");
         threads[2] = new Threads(resizer1Path, monitor, "Resizer 1");
         threads[3] = new Threads(resizer2Path, monitor, "Resizer 2");

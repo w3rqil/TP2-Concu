@@ -2,14 +2,20 @@ import Jama.Matrix;
 
 //import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
+import java.lang.Math;
 
 public class Policy {
     private String policyType;
     private ArrayList<Integer> transitions;
+    private Random randomGenerator;
     //private int segment;
 
     public Policy(String policyType) {
+
         this.policyType = policyType;
+        this.transitions = new ArrayList<>();
+        randomGenerator = new Random();
     }
 // segment = matrix con transiciones sensibilizadas y encoladas
 
@@ -19,7 +25,7 @@ public class Policy {
     Segment 3: T8 T9
     */
     public int fireChoice(Matrix matrix) {
-        double prob1 = 0.5;
+        /*double prob1 = 0.5;
         double prob2 = 0.2;
         double randomNum = Math.random();
         int segment;
@@ -56,8 +62,7 @@ public class Policy {
                     return 9;
                 }
             }
-        }
-        else {
+        } else {
             if(segment == 1) {
                 if(randomNum < prob1) {
                     System.out.println("T0");
@@ -89,7 +94,17 @@ public class Policy {
                 }
             }
         }
-        return 5000;
+        return 5000;*/
+        transitions.clear(); //Vaciar el arreglo.
+
+        for(int i = 0; i < matrix.getColumnDimension(); i++)
+            if(matrix.get(0, i) > 0) transitions.add(i);
+
+        int choice = (int)Math.round(randomGenerator.nextInt(transitions.size()));
+        int indexChosen = (int)Math.round(transitions.get(choice));
+
+        return indexChosen;
+
     }
 
     private void setTransitions(Matrix matrix) {
