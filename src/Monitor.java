@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 import Jama.Matrix;
 //import java.util.ArrayList;
@@ -10,7 +11,8 @@ public class Monitor {
     private Semaphore mutex;
     private CQueues conditionQueues;
     private int tInvariantsCounter;
-    private InvariantsManager invariantsManager;
+    private ArrayList<String> invariantsManager;
+    private String transitionTrace;
     // hay q hacer la colas de condición
 
     public Monitor(PetriNet petrinet, Policy policy) {
@@ -19,8 +21,22 @@ public class Monitor {
         this.policy = policy;
         this.mutex = new Semaphore(1, true);
         this.tInvariantsCounter = 0;
-        this.invariantsManager = new InvariantsManager();
+        this.invariantsManager = new ArrayList<>();
+        setTInvariants();
+        this.transitionTrace = "";
     }
+
+    private void setTInvariants() {
+        this.invariantsManager.add("13579111213");
+        this.invariantsManager.add("13578101213");
+        this.invariantsManager.add("13469111213");
+        this.invariantsManager.add("13468101213");
+        this.invariantsManager.add("02579111213");
+        this.invariantsManager.add("02578101213");
+        this.invariantsManager.add("02469111213");
+        this.invariantsManager.add("02468101213");
+    }
+
 
     /*
      * *************************
@@ -55,6 +71,9 @@ public class Monitor {
                     if (testCondition()) {
                         return false; // Si un hilo se despierta en este punto y ya se completo la condicion, debe
                     }         // salir sin disparar nada.
+                    else {
+                        System.out.println("Todavia no se cumple la condición de corte");
+                    }
 
                 } catch (InterruptedException e) 
                 {
@@ -92,7 +111,10 @@ public class Monitor {
                     // release
                     conditionQueues.getQueued().get(choice).release();
                     //          arreglo         .get(choiice).release ---> pido una posicón del arreglo de semáforos y le doy release
-                    this.tInvariantsCounter += this.invariantsManager.countTransition(choice);
+                    //this.tInvariantsCounter += this.invariantsManager.countTransition(choice);
+                    //transitionTrace = (transitionTrace + choice);
+                    //System.out.println("Trace: " + transitionTrace + " aguanten las PUTAAAAAAAAAASSSSSSSS");
+                    this.tInvariantsCounter++;
                     System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
                 } else {
                     k = false;
@@ -142,7 +164,7 @@ public class Monitor {
     }
 
     public boolean testCondition() {
-        return (this.tInvariantsCounter == 200);
+        return (this.tInvariantsCounter == (200*8));
     }
 
     /*

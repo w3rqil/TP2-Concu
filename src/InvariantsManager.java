@@ -23,28 +23,36 @@ public class InvariantsManager
         invariants.add(new HashSet<>(Arrays.asList(0,2,4,6,9,11,12,13)));
         invariants.add(new HashSet<>(Arrays.asList(0,2,4,6,8,10,12,13)));
     }
-    
-    public int countTransition(int transition) 
+
+    public int countTransition(int transition)
     {
-        for(int i = 0; i < invariants.size(); i++) 
+        for(int i = 0; i < 8; i++)
         {
             Set<Integer> requiredTransitions = this.invariants.get(i);
             int progress = transitionsProgress.get(i);
-            if(requiredTransitions.contains(transition)) 
+            if(requiredTransitions.contains(transition))
             {
-                if(transition == (progress+1)) 
+                if(transition == (progress+1))
                 {
                     transitionsProgress.set(i,(progress+1));
-                    if(transitionsProgress.get(i) == requiredTransitions.size()) 
+                    if(transitionsProgress.get(i) == requiredTransitions.size())
                     {
-                        /*
-                        Se completa un invariante de transicion, entonces reiniciamos el progreso 
-                        y devolvemos 1, para sumar al contador de la condicion de corte.
-                        */
-                        transitionsProgress.set(i, 0); 
+                    /*
+                    Se completa un invariante de transicion, entonces reiniciamos el progreso
+                    y devolvemos 1, para sumar al contador de la condicion de corte.
+                    */
+                        transitionsProgress.set(i, 0);
+                        System.out.println("Se cumple el T invariante " + i);
                         return 1;
                     }
                 }
+            }
+            else
+            {
+                // Si la transición no pertenece al invariante, reiniciamos el progreso
+                transitionsProgress.set(i, 0);
+                System.out.println("T invariante: " + i + " no se cumple, paso al otro");
+                return 0;
             }
         }
         return 0; // No se completa un invariante de transicion
