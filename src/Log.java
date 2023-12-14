@@ -18,7 +18,7 @@ public class Log {
     public Log(long start) {
         this.start = start;
         try {
-            file = new FileWriter("./effect/log.txt");
+            file = new FileWriter("./log.txt");
             pw = new PrintWriter(file);
 
         } catch (IOException e) {

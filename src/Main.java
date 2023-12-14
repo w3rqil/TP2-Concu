@@ -1,25 +1,29 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import Jama.Matrix;
 
 public class Main {
-    private static final int amountThreads = 7; // Depende de la cantidad de Path ???????? e asi o no?
+    private static final int amountThreads = 14; // Depende de la cantidad de Path ???????? e asi o no?
     private static PetriNet petrinet; // Red de petri representativa del sistema.
     private static Monitor monitor; // Monitor que controlará la red de Petri que modela el sistema.
-    private static double[] loader1 = { 0, 2 };
+    private static double[] loader1 = { 0};
+    private static double[] loader11 = { 2 };
     // 1 y 3
-    private static double[] loader2 = { 1, 3 };
+    private static double[] loader2 = { 1};
+    private static double[] loader21 = { 3 };
     // 4 y 6
-    private static double[] resizer1 = { 4, 6 };
+    private static double[] resizer1 = { 4 };
+    private static double[] resizer11 = { 6 };
     // 5 y 7
-    private static double[] resizer2 = { 5, 7 };
+    private static double[] resizer2 = { 5 };
+    private static double[] resizer21 = { 7 };
     // 8 y 10
-    private static double[] improver1 = { 8, 10 };
+    private static double[] improver1 = { 8 };
+    private static double[] improver11= { 10 };
     // 9 y 11
-    private static double[] improver2 = { 9, 11 };
+    private static double[] improver2 = { 9 };
+    private static double[] improver21 = {11 };
     // 12 y 13
-    private static double[] exit = { 12, 13 };
+    private static double[] exit = { 12};
+    private static double[] exit1 = { 13 };
 
     // matrices con transiciones asociadas a los hilos
     private static Matrix loader1Path = new Matrix(loader1, 1); // version traspuesta de P0
@@ -29,6 +33,13 @@ public class Main {
     private static Matrix improver1Path = new Matrix(improver1, 1); // version traspuesta de P4
     private static Matrix improver2Path = new Matrix(improver2, 1); // version traspuesta de P5
     private static Matrix exitPath = new Matrix(exit, 1); // version traspuesta de P6
+    private static Matrix loader11Path = new Matrix(loader11, 1); // version traspuesta de P0
+    private static Matrix loader21Path = new Matrix(loader21, 1); // version traspuesta de P1
+    private static Matrix resizer11Path = new Matrix(resizer11, 1); // version traspuesta de P2
+    private static Matrix resizer21Path = new Matrix(resizer21, 1); // version traspuesta de P3
+    private static Matrix improver11Path = new Matrix(improver11, 1); // version traspuesta de P4
+    private static Matrix improver21Path = new Matrix(improver21, 1); // version traspuesta de P5
+    private static Matrix exit1Path = new Matrix(exit1, 1); // version traspuesta de P6
 
     /**
      * Método principal.
@@ -65,6 +76,16 @@ public class Main {
         threads[4] = new Threads(improver1Path, monitor, "Improver 1");
         threads[5] = new Threads(improver2Path, monitor, "Improver 2");
         threads[6] = new Threads(exitPath, monitor, "Exit");
+
+
+        threads[7] = new Threads(loader11Path, monitor, "Loader 11");
+        threads[8] = new Threads(loader21Path, monitor, "Loader 21");
+        threads[9] = new Threads(resizer11Path, monitor, "Resizer 11");
+        threads[10] = new Threads(resizer21Path, monitor, "Resizer 21");
+
+        threads[11] = new Threads(improver11Path, monitor, "Improver 11");
+        threads[12] = new Threads(improver21Path, monitor, "Improver 21");
+        threads[13] = new Threads(exit1Path, monitor, "Exit1");
 
         for (Threads thread : threads) {
             thread.start();

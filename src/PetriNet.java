@@ -6,7 +6,7 @@ import Jama.Matrix;
 public class PetriNet {
     
     private Matrix incidence;
-    private Matrix transposeIncidence;
+    private Matrix backwardsIncidence;
     private Matrix currentMarking;
     private Matrix sensibilizedTransitions; // vector de transiciones sensibilizadas
     private Matrix pInvariants;
@@ -64,23 +64,53 @@ public class PetriNet {
             { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0 }, // 9    3,4,5,17
     };
 
-    private double[] initialMarking = { 1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1 }; 
+    private double[][] bIncidence = {
+         //T 0,1,2,3,4,5,6,7,8,9,0,1,2,3
+            {1,1,0,0,0,0,0,0,0,0,0,0,0,0},// P0
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0},// P1
+            {0,1,0,0,0,0,0,0,0,0,0,0,0,0},// P2
+            {0,0,1,0,0,0,0,0,0,0,0,0,0,0},// P3
+            {1,1,0,0,0,0,0,0,0,0,0,0,1,0},// P4
+            {0,0,0,1,0,0,0,0,0,0,0,0,0,0},// P5
+            {0,0,0,0,1,1,0,0,0,0,0,0,0,0},// P6
+            {0,0,0,0,1,0,0,0,0,0,0,0,0,0},// P7
+            {0,0,0,0,0,1,0,0,0,0,0,0,0,0},// P8
+            {0,0,0,0,0,0,1,0,0,0,0,0,0,0},// P9
+            {0,0,0,0,1,1,0,0,0,0,0,0,0,0},// P10
+            {0,0,0,0,0,0,0,1,0,0,0,0,0,0},// P11
+            {0,0,0,0,0,0,0,0,1,1,0,0,0,0},// P12
+            {0,0,0,0,0,0,0,0,0,0,1,0,0,0},// P13
+            {0,0,0,0,0,0,0,0,1,1,0,0,0,0},// P14
+            {0,0,0,0,0,0,0,0,0,0,0,1,0,0},// P15
+            {0,0,0,0,0,0,0,0,0,0,0,0,1,0},// P16
+            {0,0,0,0,0,0,0,0,0,0,0,0,0,1},// P17
+            {0,0,0,0,0,0,0,0,0,0,0,0,1,0}  //P18
+    };
+
+    private double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
 
     public PetriNet(Log log) 
     {
         this.log= log;
         this.incidence = new Matrix(matrixIndicence);
-        this.transposeIncidence = incidence.transpose();
-        this.currentMarking = new Matrix(initialMarking, 1);
-        this.sensibilizedTransitions = new Matrix(incidence.getRowDimension(), 1);
+        this.backwardsIncidence = new Matrix(bIncidence);
+        //------------------------imprimir matriz funcion-------------------------------
+        //backwardsIncidence.print(backwardsIncidence.getRowDimension(), 0);
+        //------------------------imprimir matriz funcion-------------------------------
+        this.currentMarking = new Matrix(initialMarking,1);
+        currentMarking.print(currentMarking.getRowDimension(), 0);
+        this.sensibilizedTransitions = new Matrix(1, incidence.getColumnDimension());
         this.pInvariants = new Matrix(pInvariant);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
-        this.workingVector = new Matrix(1, incidence.getRowDimension());
+        this.workingVector = new Matrix(1, incidence.getColumnDimension());
         this.firedSequence = new ArrayList<String>();
-        this.transitionCounter = new Matrix(1,15);
-        for (int j = 0; j < 15; j++) {
+        this.transitionCounter = new Matrix(1,14);
+        for (int j = 0; j < 14; j++) {
             transitionCounter.set(0, j, 0.0);
         }
+        //this.currentMarking = this.currentMarking.transpose();
+        System.out.println("Marcado inicial columnas: "+ currentMarking.getColumnDimension());
+        System.out.println("Marcado inicial filas: "+ currentMarking.getRowDimension());
     }
 
     /*
@@ -93,15 +123,28 @@ public class PetriNet {
      * Caculates fundamental ecuation of a petri net for a given fire vector.
      * new marking = current marking + (incidence matrix * fire vector).
      */
-
+// mi+1= mi+W*s
     public Matrix fundamentalEquation(Matrix v) 
     { 
-        boolean flag = true;
-        matriz = (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
+        /*boolean flag = true;
+        matriz = (currentMarking.transpose().plus(incidence.times(v.transpose())));
         for (int i = 0; i < this.matriz.getColumnDimension(); i++)
             if (this.matriz.get(0, i) < 0)
                 flag = false;
-        return flag ? currentMarking.plus(incidence.times(v)) : null;
+        System.out.println("Matriz columnas: "+ matriz.getColumnDimension());
+        System.out.println("Matriz filas: "+ matriz.getRowDimension());
+        return flag ? matriz : null;*/
+       return (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
+       //       (mi                          +  w       *       s)          transpose??
+    }
+
+    // aguante el paco, las putas, la droga, los enanos, las enanas
+
+    public boolean fundamentalEquationTest(Matrix firingVector) {
+        matriz = fundamentalEquation(firingVector);
+
+        for(int i = 0; i < this.matriz.getColumnDimension(); i++)
+            if(this.matriz.get(0, i) < 0) return false; return true;
     }
 
     /*
@@ -113,19 +156,51 @@ public class PetriNet {
      */
     void enableTransitions() 
     {
-        for (int i = 0; i < incidence.getRowDimension(); i++) {
+        System.out.println("transpuesta columnas " + backwardsIncidence.getColumnDimension());
+        System.out.println("transpuesta filas " + backwardsIncidence.getRowDimension());
+
+        System.out.println("Marcado columnas: "+ currentMarking.getColumnDimension());
+        System.out.println("Marcado filas: "+ currentMarking.getRowDimension());
+
+        /*for (int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
             boolean flag = true;
-            for (int j = 0; j < incidence.getColumnDimension(); j++) {
-                if (incidence.get(i, j) > currentMarking.get(0, j)) {
+            for (int j = 0; j < backwardsIncidence.getRowDimension(); j++) {
+                double aux1 = backwardsIncidence.get(j, i);
+                double aux2 = currentMarking.get(0,j);
+                if (aux1 > aux2) {
                     flag = false;
                     break;
                 } else {
                     flag = true;
                 }
             }
-            sensibilizedTransitions.set(i, 0, flag ? 1 : 0);
+            if(flag) {
+                sensibilizedTransitions.set(0, i, 1);
+            } else sensibilizedTransitions.set(0, i, 0);
+        }*/
+        backwardsIncidence.print(2,0);
+        currentMarking.print(2,0);
+        for(int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
+            boolean enabledTransition = true;
+            for(int j = 0; j < backwardsIncidence.getRowDimension(); j++) {
+                if(backwardsIncidence.get(j,i) > currentMarking.get(0,j)) {
+                    enabledTransition = false;
+                    break;
+                }
+            }
+            if(enabledTransition) {
+                sensibilizedTransitions.set(0,i,1);
+            }
+            else {
+                sensibilizedTransitions.set(0,i,0);
+            }
+
         }
+        sensibilizedTransitions.print(sensibilizedTransitions.getRowDimension(), 0);
+        System.out.println("sensibileas");
+
     }
+
 
     /* 
      * - cambiar marcado actual
@@ -140,7 +215,7 @@ public class PetriNet {
 
     void fire(Matrix v)             //esta es la que hace el disparo literal, actualizando la rdp
     {
-        this.currentMarking = fundamentalEquation(v);
+        this.currentMarking = fundamentalEquation(v);  //.transpose()
         enableTransitions();
         setWorkingVector(v, 0);
         testPInvariants();
@@ -154,6 +229,8 @@ public class PetriNet {
                 }
             }
         }
+        System.out.println(transitionsCounterInfo());
+        this.currentMarking.print(currentMarking.getRowDimension(),0);
     }
 
     public String transitionsCounterInfo() {

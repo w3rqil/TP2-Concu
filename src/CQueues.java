@@ -8,7 +8,7 @@ import Jama.Matrix;
 
 public class CQueues {
 
-    private final int maxQueues = 10;  // cambiar (num transiciones)
+    private final int maxQueues = 14;  // cambiar (num transiciones)
     private ArrayList<Semaphore> conditionQueues; 
 
     public CQueues()
@@ -52,7 +52,7 @@ public class CQueues {
     }
 
 
-    // tengo q retornar una matriz con las trnasiciones encoladas
+    // tengo q retornar una matriz con las transiciones encoladas
     // para poder hacer el and
     // modificar
     public Matrix queuedUp()
@@ -65,7 +65,8 @@ public class CQueues {
         }
         
         Matrix waitingThreads = new Matrix(aux, 1);
-        
+
+
         return waitingThreads;
 
     }
