@@ -1,13 +1,13 @@
 import Jama.Matrix;
 
 public class Main {
-    private static final int amountThreads = 14; // Depende de la cantidad de Path ???????? e asi o no?
+    private static final int amountThreads = 14;
     private static PetriNet petrinet; // Red de petri representativa del sistema.
     private static Monitor monitor; // Monitor que controlará la red de Petri que modela el sistema.
-    private static double[] loader1 = { 0};
+    private static double[] loader1 = { 0 };
     private static double[] loader11 = { 2 };
     // 1 y 3
-    private static double[] loader2 = { 1};
+    private static double[] loader2 = { 1 };
     private static double[] loader21 = { 3 };
     // 4 y 6
     private static double[] resizer1 = { 4 };
@@ -20,9 +20,9 @@ public class Main {
     private static double[] improver11= { 10 };
     // 9 y 11
     private static double[] improver2 = { 9 };
-    private static double[] improver21 = {11 };
+    private static double[] improver21 = { 11 };
     // 12 y 13
-    private static double[] exit = { 12};
+    private static double[] exit = { 12 };
     private static double[] exit1 = { 13 };
 
     // matrices con transiciones asociadas a los hilos
@@ -62,6 +62,8 @@ public class Main {
         Policy policy = new Policy("Equitative");
 
         // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
+
+        // aguanten las putas
 
         monitor = new Monitor(petrinet, policy);
 
