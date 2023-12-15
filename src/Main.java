@@ -59,7 +59,8 @@ public class Main {
 
         petrinet = new PetriNet(log);
 
-        Policy policy = new Policy("Equitative");
+       Policy policy = new Policy("8020");
+       // Policy policy = new Policy("Equitative");
 
         // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
 

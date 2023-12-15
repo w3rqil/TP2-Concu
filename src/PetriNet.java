@@ -101,7 +101,7 @@ public class PetriNet {
         currentMarking.print(currentMarking.getRowDimension(), 0);
         this.sensibilizedTransitions = new Matrix(1, incidence.getColumnDimension());
         this.pInvariants = new Matrix(pInvariant);
-        this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
+        this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1); // esto esta mal creo, no hay que ver el la incidencia
         this.workingVector = new Matrix(1, incidence.getColumnDimension());
         this.firedSequence = new ArrayList<String>();
         this.transitionCounter = new Matrix(1,14);
