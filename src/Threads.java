@@ -45,6 +45,7 @@ public class Threads extends Thread {
             firingVector.print(2,0);
             if (monitor.fireTransition(firingVector)) {
                 nextTransition();
+
             }
         }
         System.out.println(Thread.currentThread().getId() + ": finished run()");
