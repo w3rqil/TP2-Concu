@@ -6,7 +6,7 @@ public class Threads extends Thread {
     private ArrayList<Matrix> transitions;
     private Matrix firingVector;
     private Monitor monitor;
-    private int transitionCounter; 
+    private int transitionCounter;
     private String name;
     private boolean isFinished;
 
