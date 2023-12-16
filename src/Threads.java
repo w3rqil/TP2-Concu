@@ -63,7 +63,6 @@ public class Threads extends Thread {
             }
         }
         this.monitor.addDeadThreads();
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         System.out.println(Thread.currentThread().getId() + ": finished run()");
         this.monitor.printDaDead();
     }
