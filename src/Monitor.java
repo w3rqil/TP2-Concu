@@ -102,7 +102,7 @@ public class Monitor {
 
                 } else if(m==1)
                 {
-                    conditionQueues.getQueued().get(getIndex(and)).release;
+                    conditionQueues.getQueued().get(getIndex(and)).release();
 
                 } else // no hay transiciones habilitadas y encoladas
                 {
@@ -142,6 +142,16 @@ public class Monitor {
         return (this.tInvariantsCounter == (200*8));
     }
 
+    private int getIndex(Matrix vector) {
+        int index = 0;
+
+        for(int i = 0; i < vector.getColumnDimension(); i++) {
+            if(vector.get(0, i) == 1) break;
+            else index++;
+        }
+
+        return index;
+    }
     /*
      * *************************
      * *** Getters & Setters ***

@@ -49,7 +49,7 @@ public class Main {
      * También se inicializan tanto la red de Petri con su marcado inicial
      * como el monitor y el hilo logger.
      */
-
+//
     public static void main (String args[]) {
 
         long start = System.currentTimeMillis();
