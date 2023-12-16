@@ -56,6 +56,9 @@ De esta forma tendríamos hilos específicos por partes del código.
 
 ###### ver como darles a run despues xdxd
 
+## RdP Temporales
+- Idea: esperar tiempo minimo "alpha" desde que se sensibiliza, y no más de "beta" para disparar.
+- beta= lo más grande posible para que nunca se desensibilice. (máx cantidad de un long)
 
 ## Info auxuliar
 
