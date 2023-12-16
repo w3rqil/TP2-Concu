@@ -47,9 +47,11 @@ public class Monitor {
     // gestor del monitor
     public boolean fireTransition(Matrix v) 
     {
-        try {
+        try
+        {
             catchMonitor();
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
 
@@ -68,20 +70,17 @@ public class Monitor {
                 try 
                 {
                     conditionQueues.getQueued().get(queue).acquire();
-                    if (testCondition()) {
+                    //if (testCondition())
+                    if (petrinet.getfullCounters() == 200)
+                    {
                         return false; // Si un hilo se despierta en este punto y ya se completo la condicion, debe
-                    }         // salir sin disparar nada.
-                    else {
-                        System.out.println("Todavia no se cumple la condición de corte");
-                    }
-
+                    }         // salir sin disparar nada
                 } catch (InterruptedException e) 
                 {
                     e.printStackTrace();
                 }
             }
-            System.out.print("Disparo:   ");
-            v.print(2,1);
+
                //
 
             if (k) 
@@ -92,14 +91,14 @@ public class Monitor {
                 Matrix queued = conditionQueues.queuedUp();
                 Matrix and = sensibilized.arrayTimes(queued); // operación 'and'
 
-                System.out.println("queued:");
+ /*               System.out.println("queued:");
                 queued.print(2,0);
 
                 System.out.println("sensibles:");
                 sensibilized.print(2,0);
 
                 System.out.println("and:");
-                and.print(2,0);
+                and.print(2,0);*/
                 int m = result(and); // cantidad de transiciones sensibilizadas y encoladas
 
                 if (m > 0)
@@ -115,14 +114,16 @@ public class Monitor {
                     //transitionTrace = (transitionTrace + choice);
                     //System.out.println("Trace: " + transitionTrace + " aguanten las PUTAAAAAAAAAASSSSSSSS");
                     this.tInvariantsCounter++;
+
                     System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
-                } else {
+                } else
+                {
                     k = false;
                 }
             }
         }
         petrinet.setWorkingVector(v,(double)Thread.currentThread().getId());
-        System.out.println("Invariantes cumplidos: " + tInvariantsCounter);
+        //System.out.println("Invariantes cumplidos: " + tInvariantsCounter/8);
         exitMonitor();
         return true;
     }
