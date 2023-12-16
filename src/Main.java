@@ -54,8 +54,6 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-        Log log = new Log(start);
-
         //log.clearFile(); // que poronga es esto gordo te voy a cagar a bifes
 
         petrinet = new PetriNet(log);
@@ -65,15 +63,23 @@ public class Main {
        System.out.println("La política utilizada es: "+ policyType +" \n");
         // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
 
-        // aguanten las putas
-        // Confirmo
-
         monitor = new Monitor(petrinet, policy);
 
         Threads[] threads = new Threads[amountThreads]; // public Threads(Matrix transitionsSequence, Monitor monitor)
 
         petrinet.enableTransitions(); // Seteo de las transiciones sensibilizadas dado el marcado inicial de la red.
 
+        //Creación y ejecución del hilo logger.
+        try {
+            Log log = new Log("ReportMonitor.txt", petrinet, monitor);
+            log.start();
+        } catch(Exception e) {
+            e.printStackTrace();
+            System.out.println("Error al crear el hilo logger.");
+        }
+        
+        
+        
         threads[0] = new Threads(loader1Path, monitor, "Loader 1");
 
         threads[1] = new Threads(loader2Path, monitor, "Loader 2");
@@ -82,7 +88,6 @@ public class Main {
         threads[4] = new Threads(improver1Path, monitor, "Improver 1");
         threads[5] = new Threads(improver2Path, monitor, "Improver 2");
         threads[6] = new Threads(exitPath, monitor, "Exit");
-
 
         threads[7] = new Threads(loader11Path, monitor, "Loader 11");
         threads[8] = new Threads(loader21Path, monitor, "Loader 21");
@@ -97,22 +102,20 @@ public class Main {
             thread.start();
         }
 
-        try {
-            for (Threads waiting : threads) {
-                waiting.join();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
 
         for(int i=0; i<9 ; i++){
-            System.out.println("INVARIANTE "+ i +" " +"OCURRIO "+ petrinet.getValinvariantCounting(i) +" VECES ");
+            //System.out.println("Invariante "+ i +" aparece "+ petrinet.getValinvariantCounting(i) +" VECES ");
+            System.out.println(i +" T-invariant appears "+ petrinet.getValinvariantCounting(i) +" times.");
         }
+
+        monitor.printDaDead();
 
 
         System.out.println(petrinet.transitionsCounterInfo());
 
         log.closeFile(petrinet);
+
     }
 }

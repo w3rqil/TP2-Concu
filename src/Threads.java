@@ -49,9 +49,12 @@ public class Threads extends Thread {
     public void run()
     {
         System.out.println(Thread.currentThread().getId() + ": started run()");
-        while (this.monitor.getPetriNet().getfullCounters() != 200)
+
+        while (this.monitor.getPetriNet().getfullCounters() < 200)
         {
             this.firingVector = transitions.get(transitionCounter);
+
+            System.out.println(getThreadName());
 
             firingVector.print(2,0);
             if (monitor.fireTransition(firingVector))
@@ -59,7 +62,10 @@ public class Threads extends Thread {
                 nextTransition();
             }
         }
+        this.monitor.addDeadThreads();
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         System.out.println(Thread.currentThread().getId() + ": finished run()");
+        this.monitor.printDaDead();
     }
 }
 

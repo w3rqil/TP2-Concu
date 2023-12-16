@@ -24,7 +24,7 @@ public class PetriNet {
 
         ////AGREGO AGU
     private int[] invariantCounting;
-    private int fullCounters;
+    private static int fullCounters;
     private String CurrentRoute;
         ////
 
@@ -78,14 +78,14 @@ public class PetriNet {
     };
 
     private final double[][] tInvariant = {
-            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1}, // T1 T3 T5 T7 T9 T11 T12 T13
-            {0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1}, // T1 T3 T5 T7 T8 T10 T12 T13
-            {0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1}, // T1 T3 T4 T6 T9 T11 T12 T13
-            {0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1}, // T1 T3 T4 T6 T8 T10 T12 T13
-            {1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1}, // T0 T2 T5 T7 T9 T11 T12 T13
-            {1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1}, // T0 T2 T5 T7 T8 T10 T12 T13
-            {1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1}, // T0 T2 T4 T6 T9 T11 T12 T13
-            {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1}, // T0 T2 T4 T6 T8 T10 T11 T13
+            {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1     , 1, 1}, // T1 T3 T5 T7 T9 T11      T12 T13
+            {0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0     , 1, 1}, // T1 T3 T5 T7 T8 T10      T12 T13
+            {0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1     , 1, 1}, // T1 T3 T4 T6 T9 T11      T12 T13
+            {0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0     , 1, 1}, // T1 T3 T4 T6 T8 T10      T12 T13
+            {1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1     , 1, 1}, // T0 T2 T5 T7 T9 T11      T12 T13
+            {1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0     , 1, 1}, // T0 T2 T5 T7 T8 T10      T12 T13
+            {1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1     , 1, 1}, // T0 T2 T4 T6 T9 T11      T12 T13
+            {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0     , 1, 1}, // T0 T2 T4 T6 T8 T10      T12 T13
     };
     private final double[][] pInvariant = {
             //0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18
@@ -122,7 +122,7 @@ public class PetriNet {
                     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1},
                     {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0}
     };
-
+                                            //0 1  2  3 4   5  6  7  8  9 10 11 12 13 14 15 16 17 18
     private final double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
 
     public List<Integer> tInvariantSum;
@@ -139,7 +139,6 @@ public class PetriNet {
         this.incidence = new Matrix(matrixIndicence);
         this.backwardsIncidence = new Matrix(bIncidence);
         this.currentMarking = new Matrix(initialMarking,1);
-//currentMarking.print(currentMarking.getRowDimension(), 0);
         this.sensibilizedTransitions = new Matrix(1, incidence.getColumnDimension());
         this.pInvariants = new Matrix(pInvariant);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1); // esto esta mal creo, no hay que ver el la incidencia
@@ -190,13 +189,12 @@ public class PetriNet {
     public Matrix fundamentalEquation(Matrix v)
     {
        return (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
-       //       (mi                          +  w       *       s)          transpose??
+       //       (mi                          +  w       *       s)          transpose
     }
 
-    // aguante el paco, las putas, la droga, los enanos, las enanas
+
 
     public boolean fundamentalEquationTest(Matrix firingVector) {
-
 
         matriz = fundamentalEquation(firingVector);
 
@@ -272,7 +270,7 @@ public class PetriNet {
         System.out.println(transitionsCounterInfo());
         System.out.println("El marcado actual: \n");
         this.currentMarking.print(currentMarking.getRowDimension(),0);
-        ///AGREGE AGU
+
 
         // T1 T3 T5 T7 T9 T11 T12 T13
         // T1 T3 T5 T7 T8 T10 T12 T13
@@ -285,6 +283,74 @@ public class PetriNet {
 
         String lastTransition = getIndex(v)+"";
 
+        followUp(lastTransition);
+
+    }
+
+    public int getfullCounters() {
+        return fullCounters;
+    }
+
+    public int getValinvariantCounting(int i) {
+        return invariantCounting[i];
+    }
+
+    public String transitionsCounterInfo()
+    {
+        String arg = "Transitions:\n";
+        for(int i = 0; i < transitionCounter.getColumnDimension(); i++) {
+            arg += ("   - T" + i + ": " + (int)transitionCounter.get(0,i) + " times\n");
+        }
+        return arg;
+    }
+
+    // ********************* */
+
+    /*
+     * hay q buscar una forma de hacer que reciba un vector de disparo
+     * y me diga si es posible realizar un vector de disparo
+     */
+
+    public boolean isTransitionEnabled(int transition) 
+    {
+        return sensibilizedTransitions.get(transition, 0) == 1;
+    }
+
+    /*
+     * 
+     * HACER
+     * 
+     * 
+     */
+
+    /*
+     * *************************
+     * ***** Util Functions*****
+     * *************************
+     */
+
+
+    /*
+     * 
+     *          Checkeo el estado de la transición que quiero disparar
+     * 
+     *          Estados:  
+     *                  1) No hay nadie (0). ESTADO = NONE
+     *                  2) Hay alguien que no es el hilo solicitante (IDs no coincidentes) ESTADO = OTHER
+     *                  3) Quien estaba trabajando es el hilo solicitante. ESTADO = SELF
+     */
+    
+    public int workingState(Matrix v) 
+    {
+        int index = getIndex(v);
+
+        if(workingVector.get(0, index) == 0) return 0;
+        else if(workingVector.get(0, index) != Thread.currentThread().getId()) return 1;
+        else return 2;
+    }
+
+
+    public void followUp(String lastTransition){
 
         if( !lastTransition.contains("13") )
         {
@@ -337,16 +403,18 @@ public class PetriNet {
 
             else{
 
-                    for(int i=0; i<8 ; i++){
-                        System.out.println("INVARIANTE "+ i +" " +"OCURRIO " + getValinvariantCounting(i) + " VECES ");
-                    }
-
-
-                    System.out.println("ERROR EN " + CurrentRoute );
+                for(int i=0; i<8 ; i++){
+                    //System.out.println("INVARIANTE "+ i +" " +"OCURRIO " + getValinvariantCounting(i) + " VECES ");
+                    System.out.println(i +" T-invariant appears "+ getValinvariantCounting(i) +" times.");
                 }
 
+
+                System.out.println("Error in T-Invariant: " + CurrentRoute );
+            }
+
             for(int i=0; i<8 ; i++){
-                System.out.println("INVARIANTE "+ i +" " +"OCURRIO " + getValinvariantCounting(i) + " VECES ");
+                //System.out.println("INVARIANTE "+ i +" " +"OCURRIO " + getValinvariantCounting(i) + " VECES ");
+                System.out.println(i +" T-invariant appears "+ getValinvariantCounting(i) +" times.");
             }
 
 
@@ -356,67 +424,7 @@ public class PetriNet {
 
     }
 
-    public int getfullCounters() {
-        return fullCounters;
-    }
 
-    public int getValinvariantCounting(int i) {
-        return invariantCounting[i];
-    }
-
-    public String transitionsCounterInfo()
-    {
-        String arg = "Cantidad de disparos de transiciones:\n";
-        for(int i = 0; i < transitionCounter.getColumnDimension(); i++) {
-            arg += ("   - T" + i + ": " + (int)transitionCounter.get(0,i) + " veces\n");
-        }
-        return arg;
-    }
-
-    // ********************* */
-
-    /*
-     * hay q buscar una forma de hacer que reciba un vector de disparo
-     * y me diga si es posible realizar un vector de disparo
-     */
-
-    public boolean isTransitionEnabled(int transition) 
-    {
-        return sensibilizedTransitions.get(transition, 0) == 1;
-    }
-
-    /*
-     * 
-     * HACER
-     * 
-     * 
-     */
-
-    /*
-     * *************************
-     * ***** Util Functions*****
-     * *************************
-     */
-
-
-    /*
-     * 
-     *          Checkeo el estado de la transición que quiero disparar
-     * 
-     *          Estados:  
-     *                  1) No hay nadie (0). ESTADO = NONE
-     *                  2) Hay alguien que no es el hilo solicitante (IDs no coincidentes) ESTADO = OTHER
-     *                  3) Quien estaba trabajando es el hilo solicitante. ESTADO = SELF
-     */
-    
-    public int workingState(Matrix v) 
-    {
-        int index = getIndex(v);
-
-        if(workingVector.get(0, index) == 0) return 0;
-        else if(workingVector.get(0, index) != Thread.currentThread().getId()) return 1;
-        else return 2;
-    }
     /*
      * 
      */
@@ -434,7 +442,7 @@ public class PetriNet {
         pInv8= (currentMarking.get(0,3)+currentMarking.get(0,4)+ currentMarking.get(0,5) + currentMarking.get(0,17))==3;
 
         if(!(pInv0 && pInv1 && pInv2 && pInv3 && pInv4 && pInv5 && pInv6 && pInv7 && pInv8)){
-            System.out.println("NO SE CUMPLE ALGÚN INVARIANTE");
+            System.out.println("There's a P-invariant that has an error");
 
         }
     }

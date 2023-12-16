@@ -3,63 +3,106 @@
                   Contador para cantidad de invariantes completadas
 */
 
-import java.io.FileWriter;
+import java.util.concurrent.Semaphore;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+import Jama.Matrix;
+
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 
+public class Log extends Thread{
 
-public class Log {
+    private PetriNet    petrinet; //Red de Petri del sistema.
+    private Monitor     monitor; //Monitor que controla la red de Petri.
+    private File        f;         //v
+    private FileHandler FH; //Campos necesarios para loggear.
+    private Logger      logger;  //^
 
-    private PrintWriter pw;
-    private FileWriter file;
-    // crea el archivo log
-    private static long start;
+    public Log(String fileName, PetriNet pNet, Monitor monitor) {
 
-    public Log(long start) {
-        this.start = start;
-        try {
-            file = new FileWriter("./log.txt");
-            pw = new PrintWriter(file);
+        this.petrinet = pNet;
+        this.monitor = monitor;
+        f = new File(fileName);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        if(!f.exists()) f.createNewFile();
+
+        SimpleFormatter formatter = new SimpleFormatter();
+
+        FH = new FileHandler(fileName, true);
+
+        FH.setFormatter(formatter);
+
 
     }
 
     /* Escribe en el archivo log la transicion disparada */
     public void writeLog(int transicion) {
-        try {
-            if (transicion < 10)
-                pw.write("T0" + transicion);
-            else
-                pw.write("T" + transicion);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
     /* Cierra el archivo log */
     public void closeFile(PetriNet petrinet) {
-        try {
-            pw.write(petrinet.transitionsCounterInfo());  //      rdp.transitionsCounterInfo() devuelve string
-            pw.write("Tiempo de ejecucion: " + start);
-            file.flush();
-            file.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public void clearFile() {
-        try {
-            PrintWriter pw_log = new PrintWriter(".//Estadistica.txt");
-            pw_log.print("");
-            pw_log.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+
+}
+
+
+
+
+    public void run() {
+        long startTime = System.currentTimeMillis();
+
+        logger = Logger.getLogger("ReportTest");
+
+        logger.addHandler(FH);
+        logger.setLevel(Level.INFO);
+
+        while(!pNet.hasCompleted()) {
+            try {
+                sleep(1000);
+                logger.info("\n" + pNet.getMemoriesLoad() +
+                        "\n" + pNet.getProcessorsLoad() +
+                        "\n" + pNet.getProcessorsTasks());
+            } catch(InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
+        long finishTime = System.currentTimeMillis();
+
+        logger.info("\n" + pNet.getMemoriesLoad() +
+                "\n" + pNet.getProcessorsLoad() +
+                "\n" + pNet.getProcessorsTasks());
+
+        logger.info("\nEl tiempo de ejecucion fue de: " + (int)((finishTime - startTime) / 1000) + " segundos.");
+
+        Matrix finalMarkingVector = pNet.getCurrentMarkingVector();
+
+        String finalMarking = "[ ";
+
+        for(int i = 0; i < finalMarkingVector.getColumnDimension(); i++)
+            finalMarking += (int)finalMarkingVector.get(0, i) + " ";
+
+        finalMarking += "]";
+
+        //Despierta a los hilos encolados en las colas de condición de la red.
+        for(Semaphore queue : monitor.getConditionQueues().getSemaphore())
+            if(queue.hasQueuedThreads())
+                queue.release(queue.getQueueLength());
+
+        //Chequeo de hilos encolados en ArrivalRate.
+        if(monitor.getEntryQueue().hasQueuedThreads())
+            monitor.getEntryQueue().release(monitor.getEntryQueue().getQueueLength());
+
+        logger.info("Secuencia de transiciones disparadas: \"" + pNet.getTransitionsSequence().toString() + "\"");
+        logger.info("Marcado final de la red: " + finalMarking);
     }
 }
