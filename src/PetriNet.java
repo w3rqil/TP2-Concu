@@ -124,7 +124,7 @@ public class PetriNet {
     };
 
     private final double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
-    //private double[][]  tInvariantsAuxiliar = {{0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+
     public List<Integer> tInvariantSum;
 
     private List<List<Integer>> tInvariants;
@@ -135,25 +135,9 @@ public class PetriNet {
         this.CurrentRoute="";
         this.fullCounters=0;
         this.invariantCounting = new int[8];
-
-
-
-
-
-
-
-
-
-
-
-
-
         this.log= log;
         this.incidence = new Matrix(matrixIndicence);
         this.backwardsIncidence = new Matrix(bIncidence);
-        //------------------------imprimir matriz funcion-------------------------------
-        //backwardsIncidence.print(backwardsIncidence.getRowDimension(), 0);
-        //------------------------imprimir matriz funcion-------------------------------
         this.currentMarking = new Matrix(initialMarking,1);
 //currentMarking.print(currentMarking.getRowDimension(), 0);
         this.sensibilizedTransitions = new Matrix(1, incidence.getColumnDimension());
@@ -170,9 +154,7 @@ public class PetriNet {
         this.tInvariants = new ArrayList<>();
         setTInvariants();
         this.tInvariantCounter = 0;
-        //this.currentMarking = this.currentMarking.transpose();
- // System.out.println("Marcado inicial columnas: "+ currentMarking.getColumnDimension());
-       // System.out.println("Marcado inicial filas: "+ currentMarking.getRowDimension());
+
     }
 
     private void setTInvariants() {
@@ -207,14 +189,6 @@ public class PetriNet {
 // mi+1= mi+W*s
     public Matrix fundamentalEquation(Matrix v)
     {
-        /*boolean flag = true;
-        matriz = (currentMarking.transpose().plus(incidence.times(v.transpose())));
-        for (int i = 0; i < this.matriz.getColumnDimension(); i++)
-            if (this.matriz.get(0, i) < 0)
-                flag = false;
-        System.out.println("Matriz columnas: "+ matriz.getColumnDimension());
-        System.out.println("Matriz filas: "+ matriz.getRowDimension());
-        return flag ? matriz : null;*/
        return (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
        //       (mi                          +  w       *       s)          transpose??
     }
@@ -241,24 +215,6 @@ public class PetriNet {
      */
     void enableTransitions()
     {
-
-        /*for (int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
-            boolean flag = true;
-            for (int j = 0; j < backwardsIncidence.getRowDimension(); j++) {
-                double aux1 = backwardsIncidence.get(j, i);
-                double aux2 = currentMarking.get(0,j);
-                if (aux1 > aux2) {
-                    flag = false;
-                    break;
-                } else {
-                    flag = true;
-                }
-            }
-            if(flag) {
-                sensibilizedTransitions.set(0, i, 1);
-            } else sensibilizedTransitions.set(0, i, 0);
-        }*/
-
         //currentMarking.print(2,0);
         for(int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
             boolean enabledTransition = true;
@@ -304,8 +260,7 @@ public class PetriNet {
         testPInvariants();
         firedSequence.add("T" + getIndex(v) + ""); //tiene TODAS las secuencia de transiciones disparadas
         System.out.println("Disparo: T" + getIndex(v));
-        //tInvariantsAux.add(getIndex(v));
-        //if(getIndex(v)==13) compareTInvariants();
+
         log.writeLog(getIndex(v));
         for(int i = 0; i < v.getRowDimension(); i++) {
             for(int j = 0; j < v.getColumnDimension(); j++) {
@@ -317,14 +272,6 @@ public class PetriNet {
         System.out.println(transitionsCounterInfo());
         System.out.println("El marcado actual: \n");
         this.currentMarking.print(currentMarking.getRowDimension(),0);
-
-
-
-
-
-
-
-
         ///AGREGE AGU
 
         // T1 T3 T5 T7 T9 T11 T12 T13
@@ -335,8 +282,6 @@ public class PetriNet {
         // T0 T2 T5 T7 T8 T10 T12 T13
         // T0 T2 T4 T6 T9 T11 T12 T13
         // T0 T2 T4 T6 T8 T10 T11 T13       */
-
-
 
         String lastTransition = getIndex(v)+"";
 
@@ -355,7 +300,6 @@ public class PetriNet {
             // T0 T2 T5 T7 T8 T10 T12 T13
             // T0 T2 T4 T6 T9 T11 T12 T13
             // T0 T2 T4 T6 T8 T10 T11 T13       */
-
 
             if(CurrentRoute.contains("135791112"))
             {
@@ -398,7 +342,7 @@ public class PetriNet {
                     }
 
 
-                    System.out.println("ERROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR EN " + CurrentRoute );
+                    System.out.println("ERROR EN " + CurrentRoute );
                 }
 
             for(int i=0; i<8 ; i++){
@@ -420,13 +364,6 @@ public class PetriNet {
         return invariantCounting[i];
     }
 
-
-
-
-
-
-
-
     public String transitionsCounterInfo()
     {
         String arg = "Cantidad de disparos de transiciones:\n";
@@ -435,46 +372,7 @@ public class PetriNet {
         }
         return arg;
     }
-    /*
-    public void compareTInvariants()
-    {
-        int index = 0;
-        boolean flag = true;
-        for(List<Integer> invariant : tInvariants)
-        {
-            index++;
-            if(!this.tInvariantsAux.equals(invariant))
-            {
-                flag = false;
-            }else
-            {
-                flag = true;
-                break;
-            }
-        }
-        if(flag){
-            this.tInvariantSum.add(index, tInvariantSum.get(index)+1);
-            this.tInvariantCounter++;
-        }
-    }
 
-    public int getTInvariantCount() {
-        return this.tInvariantCounter;
-    }
-
-    /*
-    *  numero de suma de invariantes
-    *
-    public String sumInvariantsToString(){
-        String string="El invariante T";
-        int index = 0;
-        for(int i: this.tInvariantSum){
-            string += (index + " " + i + " veces\n");
-            i++; // creo que esto no hace falta, porque es un for each
-        }
-        return string;
-    }
-*/
     // ********************* */
 
     /*
@@ -519,120 +417,11 @@ public class PetriNet {
         else if(workingVector.get(0, index) != Thread.currentThread().getId()) return 1;
         else return 2;
     }
-
-
     /*
      * 
      */
     public void testPInvariants()
     {
-        /*
-        boolean pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8;
-        int i = 0;
-
-        double[] pInv_0 = { currentMarking.get(0, 0), currentMarking.get(0, 3), currentMarking.get(0, 5),
-                currentMarking.get(0, 6), currentMarking.get(0, 9), currentMarking.get(0, 11),
-                currentMarking.get(0, 12), currentMarking.get(0, 13), currentMarking.get(0, 15),
-                currentMarking.get(0, 16), currentMarking.get(0, 17) };
-        double sumInv0 = 0;
-        for (double markAux : pInv_0) {
-            sumInv0 += markAux;
-        }
-        pInv0 = (sumInv0 == maxPInvariants.get(0, 0));
-
-        double[] pInv_1 = { currentMarking.get(0, 1), currentMarking.get(0, 3) };
-        double sumInv1 = 0;
-        for (double markAux : pInv_1) {
-            sumInv1 += markAux;
-        }
-        pInv1 = (sumInv1 == maxPInvariants.get(1, 0));
-
-        double[] pInv_2 = { currentMarking.get(0, 2), currentMarking.get(0, 5) };
-        double sumInv2 = 0;
-        for (double markAux : pInv_2) {
-            sumInv2 += markAux;
-        }
-        pInv2 = (sumInv2 == maxPInvariants.get(2, 0));
-
-        double[] pInv_3 = { currentMarking.get(0, 13), currentMarking.get(0, 14), currentMarking.get(0, 15) };
-        double sumInv3 = 0;
-        for (double markAux : pInv_3) {
-            sumInv3 += markAux;
-        }
-        pInv3 = (sumInv3 == maxPInvariants.get(3, 0));
-
-        double[] pInv_4 = { currentMarking.get(0, 7), currentMarking.get(0, 9) };
-        double sumInv4 = 0;
-        for (double markAux : pInv_4) {
-            sumInv4 += markAux;
-        }
-        pInv4 = (sumInv4 == maxPInvariants.get(4, 0));
-
-        double[] pInv_5 = { currentMarking.get(0, 8), currentMarking.get(0, 10) };
-        double sumInv5 = 0;
-        for (double markAux : pInv_5) {
-            sumInv5 += markAux;
-        }
-        pInv5 = (sumInv5 == maxPInvariants.get(5, 0));
-
-        double[] pInv_6 = { currentMarking.get(0, 9), currentMarking.get(0, 10), currentMarking.get(0, 11) };
-        double sumInv6 = 0;
-        for (double markAux : pInv_6) {
-            sumInv6 += markAux;
-        }
-        pInv6 = (sumInv6 == maxPInvariants.get(6, 0));
-
-        double[] pInv_7 = { currentMarking.get(0, 17), currentMarking.get(0, 18) };
-        double sumInv7 = 0;
-        for (double markAux : pInv_7) {
-            sumInv7 += markAux;
-        }
-        pInv7 = (sumInv7 == maxPInvariants.get(7, 0));
-
-        double[] pInv_8 = { currentMarking.get(0, 3), currentMarking.get(0, 4), currentMarking.get(0, 5),
-                currentMarking.get(0, 17) };
-        double sumInv8 = 0;
-        for (double markAux : pInv_8) {
-            sumInv8 += markAux;
-        }
-        pInv8 = (sumInv8 == maxPInvariants.get(8, 0));
-
-        boolean[] pInv = { pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8 };
-
-        for (boolean pInvariant : pInv) {
-            if (!pInvariant) {
-                System.out.println("No se cumple el invariante de plaza: pInv" + i);
-            }
-            i++;
-        }*/
-/*
-        int invariantAmount; //La cantidad de tokens que se mantiene invariante.
-        int tokensAmount; //La cantidad de tokens que se van contando en las plazas.
-
-
-
-        for(int j = 0; j < pInvariants.getRowDimension(); j++)
-        {
-            invariantAmount = 0;
-            tokensAmount = 0;
-
-            for(int i = 0; i < currentMarking.getColumnDimension(); i++)
-                if(pInvariants.get(j, i) > 0)
-                {
-                    invariantAmount = (int)pInvariants.get(j, i);
-                    tokensAmount = tokensAmount + (int)currentMarking.get(0, i);
-                    //System.out.println(pInvariants.get(j,i));
-                }
-
-            if(j==6 || j==8){
-                System.out.println("TOKENS DEL PINV = " + tokensAmount);
-            }
-
-            if(tokensAmount != invariantAmount)
-                System.out.println("Error en el invariante de plaza: IP" + j);
-
-        }
-    */
         boolean pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8;
         pInv0 = (currentMarking.get(0,0)+ currentMarking.get(0,3)+ currentMarking.get(0,5)+currentMarking.get(0,6)+currentMarking.get(0,9)+currentMarking.get(0,11)+currentMarking.get(0,12)+currentMarking.get(0,13)+ currentMarking.get(0,15)+ currentMarking.get(0,16)+currentMarking.get(0,17))==1;
         pInv1= (currentMarking.get(0,1)+currentMarking.get(0,3))==1;
@@ -649,32 +438,11 @@ public class PetriNet {
 
         }
     }
-
     /*
      * ************************
      * *** Geters & Setters ***
      * ************************
      */
-
-    /*
-     * Idea: tener en un vector la cantidad máxima de tokens para c/p invariante
-     * esto sirve para checkear los p invariants
-     */
-    /*
-    public Matrix setMaxPInvariants() 
-    {
-        Matrix auxMatrix = new Matrix(pInvariants.getColumnDimension(), 1);
-        for (int i = 0; i < pInvariants.getColumnDimension(); i++) {
-            int max = 0;
-            for (int j = 0; j < pInvariants.getRowDimension(); j++) {
-                max += pInvariants.get(i, j);
-            }
-            auxMatrix.set(i, 0, max);
-        }
-        return auxMatrix;
-
-    }
-*/
     public void setMarking(Matrix marking) 
     {
         this.currentMarking = marking;

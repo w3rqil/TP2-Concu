@@ -13,7 +13,7 @@ public class Monitor {
     private int tInvariantsCounter;
     private ArrayList<String> invariantsManager;
     private String transitionTrace;
-    // hay q hacer la colas de condición
+
 
     public Monitor(PetriNet petrinet, Policy policy) {
         this.conditionQueues= new CQueues();
@@ -80,9 +80,6 @@ public class Monitor {
                     e.printStackTrace();
                 }
             }
-
-               //
-
             if (k) 
             {
                 petrinet.fire(v);
@@ -91,14 +88,6 @@ public class Monitor {
                 Matrix queued = conditionQueues.queuedUp();
                 Matrix and = sensibilized.arrayTimes(queued); // operación 'and'
 
- /*               System.out.println("queued:");
-                queued.print(2,0);
-
-                System.out.println("sensibles:");
-                sensibilized.print(2,0);
-
-                System.out.println("and:");
-                and.print(2,0);*/
                 int m = result(and); // cantidad de transiciones sensibilizadas y encoladas
 
                 if (m > 0)
@@ -109,10 +98,7 @@ public class Monitor {
 
                     // release
                     conditionQueues.getQueued().get(choice).release();
-                    //          arreglo         .get(choiice).release ---> pido una posicón del arreglo de semáforos y le doy release
-                    //this.tInvariantsCounter += this.invariantsManager.countTransition(choice);
-                    //transitionTrace = (transitionTrace + choice);
-                    //System.out.println("Trace: " + transitionTrace + " aguanten las PUTAAAAAAAAAASSSSSSSS");
+
                     this.tInvariantsCounter++;
 
                     System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
@@ -127,19 +113,6 @@ public class Monitor {
         exitMonitor();
         return true;
     }
-
-
-    /*  _____
-     * |*****|                                      PENE 8============================================================D
-     * |*****|                                                                                       ____
-     * |*****| ______________________________________________________________________________________|    \
-     *  _____ _______________________________________________________________________________________|   --|
-     * |*****|                                                                                       |____/
-     * |*****|
-     * |*****|
-     */
-
-
 
     /*
      * *************************
