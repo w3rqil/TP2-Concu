@@ -255,9 +255,9 @@ public class PetriNet {
         this.currentMarking = fundamentalEquation(v);  //.transpose()
         System.out.println("Vector de disparo: \n");
         v.print(2,0);
-        enableTransitions();
         setWorkingVector(v, 0);
         testPInvariants();
+        enableTransitions();
         firedSequence.add("T" + getIndex(v) + ""); //tiene TODAS las secuencia de transiciones disparadas
         System.out.println("Disparo: T" + getIndex(v));
 

@@ -70,7 +70,6 @@ public class Monitor {
                 try 
                 {
                     conditionQueues.getQueued().get(queue).acquire();
-                    //if (testCondition())
                     if (petrinet.getfullCounters() == 200)
                     {
                         return false; // Si un hilo se despierta en este punto y ya se completo la condicion, debe
@@ -90,26 +89,24 @@ public class Monitor {
 
                 int m = result(and); // cantidad de transiciones sensibilizadas y encoladas
 
-                if (m > 0)
+                if (m > 0) // hay transiciones habilitadas y encoladas
                 {
-
                     // cual
                     int choice = policy.fireChoice(and);
-
                     // release
                     conditionQueues.getQueued().get(choice).release();
 
                     this.tInvariantsCounter++;
 
                     System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
-                } else
+
+                } else // no hay transiciones habilitadas y encoladas
                 {
                     k = false;
                 }
             }
         }
         petrinet.setWorkingVector(v,(double)Thread.currentThread().getId());
-        //System.out.println("Invariantes cumplidos: " + tInvariantsCounter/8);
         exitMonitor();
         return true;
     }
