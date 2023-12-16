@@ -10,7 +10,7 @@ public class Monitor {
     private Policy policy;
     private Semaphore mutex;            //BORRAR
 
-  //  private Mutex mutex;
+    //  private Mutex mutex;
 
 
 
@@ -21,8 +21,10 @@ public class Monitor {
 
     private int deadThreads;
 
+
+
     public Monitor(PetriNet petrinet, Policy policy) {
-      //  this.mutex = Mutex.getInstance();       //INSTANCIA UNICA
+        //  this.mutex = Mutex.getInstance();       //INSTANCIA UNICA
         this.conditionQueues= new CQueues();
         this.petrinet = petrinet;
         this.policy = policy;
@@ -45,18 +47,25 @@ public class Monitor {
         this.invariantsManager.add("02468101213");
     }
 
+    public CQueues getConditionQueues() {
+        return conditionQueues;
+    }
     public void addDeadThreads() {
         this.deadThreads++;
+    }
+
+    public Semaphore getMutex() {
+        return mutex;
     }
 
     /*
      * *************************
      * **** Método TRONCAL *****
      * *************************
-     * 
+     *
      */
     // gestor del monitor
-    public boolean fireTransition(Matrix v) 
+    public boolean fireTransition(Matrix v)
     {
 
 
@@ -187,8 +196,8 @@ public class Monitor {
      * *************************
      */
     public void catchMonitor() throws InterruptedException {
-       //BORRAR
-            mutex.acquire();
+        //BORRAR
+        mutex.acquire();
 
     }
 

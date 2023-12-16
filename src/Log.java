@@ -1,108 +1,135 @@
-/*
-        Imprimir: Disparos de transiciones 
-                  Contador para cantidad de invariantes completadas
-*/
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 import java.util.concurrent.Semaphore;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
+
 
 import Jama.Matrix;
 
-import java.io.File;
-import java.io.IOException;
+// Clase que crea el Log estadístico para la ejecución del programa
+public class Log extends Thread {
 
-public class Log extends Thread{
+    //Campos privados
+    private PetriNet petrinet; //Red de Petri del sistema.
+    private Monitor monitor; //Monitor que controla la red de Petri.
 
-    private PetriNet    petrinet; //Red de Petri del sistema.
-    private Monitor     monitor; //Monitor que controla la red de Petri.
-    private File        f;         //v
-    private FileHandler FH; //Campos necesarios para loggear.
-    private Logger      logger;  //^
+    private  long startTime;
 
-    public Log(String fileName, PetriNet pNet, Monitor monitor) {
+    // Método que crea un archivo txt limpio
 
-        this.petrinet = pNet;
+
+    // Constructor
+    public Log(PetriNet petrinet, Monitor monitor,  long startTime) throws IOException {
+
+        this.petrinet = petrinet;
         this.monitor = monitor;
-        f = new File(fileName);
-
-        if(!f.exists()) f.createNewFile();
-
-        SimpleFormatter formatter = new SimpleFormatter();
-
-        FH = new FileHandler(fileName, true);
-
-        FH.setFormatter(formatter);
+        this.startTime = startTime;
 
 
     }
 
-    /* Escribe en el archivo log la transicion disparada */
-    public void writeLog(int transicion) {
-
-
-    }
-
-    /* Cierra el archivo log */
-    public void closeFile(PetriNet petrinet) {
-
-    }
-
-    public void clearFile() {
-
-}
-
-
-
-
+    // Sobreescritura del método run()
+    @Override
     public void run() {
-        long startTime = System.currentTimeMillis();
 
-        logger = Logger.getLogger("ReportTest");
 
-        logger.addHandler(FH);
-        logger.setLevel(Level.INFO);
-
-        while(!pNet.hasCompleted()) {
+        while (this.monitor.getPetriNet().getfullCounters() < 200) {
             try {
-                sleep(1000);
-                logger.info("\n" + pNet.getMemoriesLoad() +
-                        "\n" + pNet.getProcessorsLoad() +
-                        "\n" + pNet.getProcessorsTasks());
+                sleep(5);
+                //   pw_log.print("\n" + petrinet.getAllTransitionsPrint());
             } catch(InterruptedException e) {
                 e.printStackTrace();
-            }
+            }}
+
+        writeLog();
+
+    }
+
+
+
+    // Se escribe el Log
+    private void writeLog() {
+
+        try {
+
+            PrintWriter pw_log = new PrintWriter(new FileWriter(".//Estadistica.txt", true));
+
+            pw_log.print("\n\n");
+
+            pw_log.print("\n                                                                                                   ");
+
+
+            pw_log.print("\n          ░██████╗████████╗░█████╗░████████╗██╗░██████╗████████╗██╗░█████╗░░██████╗               ");
+            pw_log.print("\n          ██╔════╝╚══██╔══╝██╔══██╗╚══██╔══╝██║██╔════╝╚══██╔══╝██║██╔══██╗██╔════╝               ");
+            pw_log.print("\n          ╚█████╗░░░░██║░░░███████║░░░██║░░░██║╚█████╗░░░░██║░░░██║██║░░╚═╝╚█████╗░               ");
+            pw_log.print("\n          ░╚═══██╗░░░██║░░░██╔══██║░░░██║░░░██║░╚═══██╗░░░██║░░░██║██║░░██╗░╚═══██╗               ");
+            pw_log.print("\n          ██████╔╝░░░██║░░░██║░░██║░░░██║░░░██║██████╔╝░░░██║░░░██║╚█████╔╝██████╔╝               ");
+            pw_log.print("\n          ╚═════╝░░░░╚═╝░░░╚═╝░░╚═╝░░░╚═╝░░░╚═╝╚═════╝░░░░╚═╝░░░╚═╝░╚════╝░╚═════╝░               ");
+
+            pw_log.print("\n                                                                                               ");
+            pw_log.print("\n                                                                                               ");
+            pw_log.print("\n                    ➡️ T̲r̲a̲n̲s̲i̲t̲i̲o̲n̲ I̲n̲v̲a̲r̲i̲a̲n̲t̲s̲ P̲a̲r̲t̲i̲c̲i̲p̲a̲t̲i̲o̲n̲ R̲e̲g̲i̲s̲t̲e̲r̲                           ");
+            pw_log.print("\n                                                                                               ");
+
+
+
+
+            pw_log.print("\n                        0️⃣  T-invariant appears " + petrinet.getValinvariantCounting(0) + " times.                                ");
+            pw_log.print("\n                        1️⃣  T-invariant appears " + petrinet.getValinvariantCounting(1) + " times.                                  ");
+            pw_log.print("\n                        2️⃣  T-invariant appears " + petrinet.getValinvariantCounting(2) + " times.                                  ");
+            pw_log.print("\n                        3️⃣  T-invariant appears " + petrinet.getValinvariantCounting(3) + " times.                                  ");
+            pw_log.print("\n                        4️⃣  T-invariant appears " + petrinet.getValinvariantCounting(4) + " times.                                  ");
+            pw_log.print("\n                        5️⃣  T-invariant appears " + petrinet.getValinvariantCounting(5) + " times.                                  ");
+            pw_log.print("\n                        6️⃣  T-invariant appears " + petrinet.getValinvariantCounting(6) + " times.                                  ");
+            pw_log.print("\n                        7️⃣  T-invariant appears " + petrinet.getValinvariantCounting(7) + " times.                                  ");
+            pw_log.print("\n                                                                                               ");
+            pw_log.print("\n                                                                                               ");
+
+
+
+            long finishTime = System.currentTimeMillis();
+
+
+            pw_log.print("\n                    ➡️ T̲r̲i̲g̲g̲e̲r̲e̲d̲ t̲r̲a̲n̲s̲i̲t̲i̲o̲n̲s                                                ");
+            pw_log.print("\n                                                                                               ");
+
+            pw_log.print("\n                        🔹" + petrinet.getAllTransitionsPrint());
+
+            pw_log.print("\n                                                                                               ");
+            pw_log.print("\n                                                                                               ");
+
+            pw_log.print("\n                    ➡️ T̲h̲e̲ e̲x̲e̲c̲u̲t̲i̲o̲n̲ t̲i̲m̲e̲ w̲a̲s̲:̲                                               ");
+            pw_log.print("\n                                                                                               ");
+
+
+            pw_log.print("\n                        ⏲️ " + (float)((finishTime - startTime) / 1000) + " second.");
+
+            Matrix finalMarkingVector = petrinet.getCurrentMarking();
+
+            String finalMarking = "[ ";
+
+            for(int i = 0; i < finalMarkingVector.getColumnDimension(); i++)
+                finalMarking += (int)finalMarkingVector.get(0, i) + " ";
+
+            finalMarking += "]";
+
+            //Despierta a los hilos encolados en las colas de condición de la red.
+            for(Semaphore queue : monitor.getConditionQueues().getSemaphore())
+                if(queue.hasQueuedThreads())
+                    queue.release(queue.getQueueLength());
+
+            //Chequeo de hilos encolados en ArrivalRate.
+            if(monitor.getMutex().hasQueuedThreads())
+                monitor.getMutex().release(monitor.getMutex().getQueueLength());
+            pw_log.println();
+            pw_log.print("\n\n");
+            pw_log.close();
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        long finishTime = System.currentTimeMillis();
-
-        logger.info("\n" + pNet.getMemoriesLoad() +
-                "\n" + pNet.getProcessorsLoad() +
-                "\n" + pNet.getProcessorsTasks());
-
-        logger.info("\nEl tiempo de ejecucion fue de: " + (int)((finishTime - startTime) / 1000) + " segundos.");
-
-        Matrix finalMarkingVector = pNet.getCurrentMarkingVector();
-
-        String finalMarking = "[ ";
-
-        for(int i = 0; i < finalMarkingVector.getColumnDimension(); i++)
-            finalMarking += (int)finalMarkingVector.get(0, i) + " ";
-
-        finalMarking += "]";
-
-        //Despierta a los hilos encolados en las colas de condición de la red.
-        for(Semaphore queue : monitor.getConditionQueues().getSemaphore())
-            if(queue.hasQueuedThreads())
-                queue.release(queue.getQueueLength());
-
-        //Chequeo de hilos encolados en ArrivalRate.
-        if(monitor.getEntryQueue().hasQueuedThreads())
-            monitor.getEntryQueue().release(monitor.getEntryQueue().getQueueLength());
-
-        logger.info("Secuencia de transiciones disparadas: \"" + pNet.getTransitionsSequence().toString() + "\"");
-        logger.info("Marcado final de la red: " + finalMarking);
     }
 }
+

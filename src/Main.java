@@ -44,7 +44,7 @@ public class Main {
 
     /**
      * Método principal.
-     * 
+     *
      * Aquí se instancian y ejecutan los hilos con sus caminos asociados.
      * También se inicializan tanto la red de Petri con su marcado inicial
      * como el monitor y el hilo logger.
@@ -56,11 +56,11 @@ public class Main {
 
         //log.clearFile(); // que poronga es esto gordo te voy a cagar a bifes
 
-        petrinet = new PetriNet(log);
+        petrinet = new PetriNet();
 
-       // Policy policy = new Policy("8020");
-       Policy policy = new Policy(policyType);
-       System.out.println("La política utilizada es: "+ policyType +" \n");
+        // Policy policy = new Policy("8020");
+        Policy policy = new Policy(policyType);
+        System.out.println("La política utilizada es: "+ policyType +" \n");
         // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
 
         monitor = new Monitor(petrinet, policy);
@@ -71,15 +71,16 @@ public class Main {
 
         //Creación y ejecución del hilo logger.
         try {
-            Log log = new Log("ReportMonitor.txt", petrinet, monitor);
+            long startTime = System.currentTimeMillis();
+            Log log = new Log( petrinet, monitor, startTime);
             log.start();
         } catch(Exception e) {
             e.printStackTrace();
             System.out.println("Error al crear el hilo logger.");
         }
-        
-        
-        
+
+
+
         threads[0] = new Threads(loader1Path, monitor, "Loader 1");
 
         threads[1] = new Threads(loader2Path, monitor, "Loader 2");
@@ -102,20 +103,20 @@ public class Main {
             thread.start();
         }
 
-
-
-
+        /*
         for(int i=0; i<9 ; i++){
             //System.out.println("Invariante "+ i +" aparece "+ petrinet.getValinvariantCounting(i) +" VECES ");
             System.out.println(i +" T-invariant appears "+ petrinet.getValinvariantCounting(i) +" times.");
-        }
+        }*/
+
+
 
         monitor.printDaDead();
 
 
         System.out.println(petrinet.transitionsCounterInfo());
 
-        log.closeFile(petrinet);
+
 
     }
 }

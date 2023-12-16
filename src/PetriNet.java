@@ -6,7 +6,7 @@ import Jama.Matrix;
 //import MyEnum.transitionState;
 
 public class PetriNet {
-    
+
     private Matrix incidence;
     private Matrix backwardsIncidence;
     private Matrix currentMarking;
@@ -18,63 +18,63 @@ public class PetriNet {
     private Matrix transitionCounter;
     public ArrayList<Integer> tInvariantsAux;
     private ArrayList<String> firedSequence;
-    private Log log;
 
 
-
-        ////AGREGO AGU
+    ////AGREGO AGU
     private int[] invariantCounting;
     private static int fullCounters;
     private String CurrentRoute;
-        ////
+
+    private String AllTransitionsPrint;
+    ////
 
 
 
     private int tInvariantCounter;
-/*
-//  T0	T1	T2	T3	T4	T5	T6	T7	T8	T9	T10	T11	T12	T13
-    {-1, -1, 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1},
-    {-1, 0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-    {0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-    {1,	0, -1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-    {-1, -1, 1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1},
-    {0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-    {0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0,	0,	0,	0,	0},
-    {0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0},
-    {0,	0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0},
-    {0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0},
-    {0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0,	0,	0,	0,	0},
-    {0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0},
-    {0,	0,	0,	0,	0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0},
-    {0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0},
-    {0,	0,	0,	0,	0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0},
-    {0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0},
-    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	-1,	0},
-    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1},
-    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1}
+    /*
+    //  T0	T1	T2	T3	T4	T5	T6	T7	T8	T9	T10	T11	T12	T13
+        {-1, -1, 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1},
+        {-1, 0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+        {0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+        {1,	0, -1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+        {-1, -1, 1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1},
+        {0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+        {0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0,	0,	0,	0,	0},
+        {0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0},
+        {0,	0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0},
+        {0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0},
+        {0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0,	0,	0,	0,	0},
+        {0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0},
+        {0,	0,	0,	0,	0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0},
+        {0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0},
+        {0,	0,	0,	0,	0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0},
+        {0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0},
+        {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	-1,	0},
+        {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1},
+        {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1}
 
-* */
+    * */
     private final double[][] matrixIndicence = {
             //  T0	T1	T2	T3	T4	T5	T6	T7	T8	T9	T10	T11	T12	T13
-                {-1, -1, 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1},
-                {-1, 0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                {0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                {1,	0, -1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                {-1, -1, 1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1},
-                {0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                {0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0,	0,	0,	0,	0},
-                {0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0},
-                {0,	0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0},
-                {0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0},
-                {0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0,	0,	0,	0,	0},
-                {0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0},
-                {0,	0,	0,	0,	0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0},
-                {0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0},
-                {0,	0,	0,	0,	0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0},
-                {0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0},
-                {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	-1,	0},
-                {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1},
-                {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1}
+            {-1, -1, 0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1},
+            {-1, 0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	0, -1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {-1, -1, 1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1},
+            {0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	-1,	0,	1,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	1,	1,	-1,	-1,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	-1,	-1,	1,	1,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	-1,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	-1,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	-1},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	-1,	1}
     };
 
     private final double[][] tInvariant = {
@@ -101,41 +101,40 @@ public class PetriNet {
     };
 
     private final double[][] bIncidence = {
-                //  T0	T1	T2	T3	T4	T5	T6	T7	T8	T9	T10	T11	T12	T13
-                    {1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0},
-                    {0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0},
-                    {0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0},
-                    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0},
-                    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0},
-                    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1},
-                    {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0}
+            //  T0	T1	T2	T3	T4	T5	T6	T7	T8	T9	T10	T11	T12	T13
+            {1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0},
+            {0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1},
+            {0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0}
     };
-                                            //0 1  2  3 4   5  6  7  8  9 10 11 12 13 14 15 16 17 18
+    //0 1  2  3 4   5  6  7  8  9 10 11 12 13 14 15 16 17 18
     private final double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
 
     public List<Integer> tInvariantSum;
 
     private List<List<Integer>> tInvariants;
 
-    public PetriNet(Log log)
+    public PetriNet()
     {
         ///AGREGE AGU
         this.CurrentRoute="";
         this.fullCounters=0;
         this.invariantCounting = new int[8];
-        this.log= log;
         this.incidence = new Matrix(matrixIndicence);
         this.backwardsIncidence = new Matrix(bIncidence);
         this.currentMarking = new Matrix(initialMarking,1);
@@ -188,8 +187,8 @@ public class PetriNet {
 // mi+1= mi+W*s
     public Matrix fundamentalEquation(Matrix v)
     {
-       return (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
-       //       (mi                          +  w       *       s)          transpose
+        return (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
+        //       (mi                          +  w       *       s)          transpose
     }
 
 
@@ -248,6 +247,11 @@ public class PetriNet {
      * chupenme la pija
      */
 
+    public String getAllTransitionsPrint() {
+
+        return AllTransitionsPrint;
+    }
+
     void fire(Matrix v)             //esta es la que hace el disparo literal, actualizando la rdp
     {
         this.currentMarking = fundamentalEquation(v);  //.transpose()
@@ -259,7 +263,6 @@ public class PetriNet {
         firedSequence.add("T" + getIndex(v) + ""); //tiene TODAS las secuencia de transiciones disparadas
         System.out.println("Disparo: T" + getIndex(v));
 
-        log.writeLog(getIndex(v));
         for(int i = 0; i < v.getRowDimension(); i++) {
             for(int j = 0; j < v.getColumnDimension(); j++) {
                 if(v.get(i,j) != 0.0) {
@@ -282,6 +285,8 @@ public class PetriNet {
         // T0 T2 T4 T6 T8 T10 T11 T13       */
 
         String lastTransition = getIndex(v)+"";
+
+        AllTransitionsPrint +=  "T" +lastTransition;
 
         followUp(lastTransition);
 
@@ -311,16 +316,16 @@ public class PetriNet {
      * y me diga si es posible realizar un vector de disparo
      */
 
-    public boolean isTransitionEnabled(int transition) 
+    public boolean isTransitionEnabled(int transition)
     {
         return sensibilizedTransitions.get(transition, 0) == 1;
     }
 
     /*
-     * 
+     *
      * HACER
-     * 
-     * 
+     *
+     *
      */
 
     /*
@@ -331,16 +336,16 @@ public class PetriNet {
 
 
     /*
-     * 
+     *
      *          Checkeo el estado de la transición que quiero disparar
-     * 
-     *          Estados:  
+     *
+     *          Estados:
      *                  1) No hay nadie (0). ESTADO = NONE
      *                  2) Hay alguien que no es el hilo solicitante (IDs no coincidentes) ESTADO = OTHER
      *                  3) Quien estaba trabajando es el hilo solicitante. ESTADO = SELF
      */
-    
-    public int workingState(Matrix v) 
+
+    public int workingState(Matrix v)
     {
         int index = getIndex(v);
 
@@ -426,7 +431,7 @@ public class PetriNet {
 
 
     /*
-     * 
+     *
      */
     public void testPInvariants()
     {
@@ -451,17 +456,27 @@ public class PetriNet {
      * *** Geters & Setters ***
      * ************************
      */
-    public void setMarking(Matrix marking) 
+    public void setMarking(Matrix marking)
     {
         this.currentMarking = marking;
     }
 
-    public Matrix getSensibilized() 
+    public Matrix getCurrentMarking() {
+        return currentMarking;
+    }
+
+
+
+    public void setCurrentMarking(Matrix currentMarking) {
+        this.currentMarking = currentMarking;
+    }
+
+    public Matrix getSensibilized()
     {
         return sensibilizedTransitions;
     }
 
-    public ArrayList<String> getFiredSequence() 
+    public ArrayList<String> getFiredSequence()
     {
         return firedSequence;
     }
@@ -469,24 +484,24 @@ public class PetriNet {
      * la posicion del 
      * primer 1 del vector de disparo
      */
-    public int getIndex(Matrix v) 
+    public int getIndex(Matrix v)
     {
         int index = 0;
-        
-        for(int i = 0; i < v.getColumnDimension(); i++) 
+
+        for(int i = 0; i < v.getColumnDimension(); i++)
         {
             if(v.get(0, i) == 1) break; else index++;
         }
-        
+
         return index;
     }
 
-    public void setWorkingVector(Matrix firingVector, double value) 
+    public void setWorkingVector(Matrix firingVector, double value)
     {
         this.workingVector.set(0, getIndex(firingVector), value);
     }
 
-    public Matrix getIncidenceMatrix() 
+    public Matrix getIncidenceMatrix()
     {
         return this.incidence;
     }
