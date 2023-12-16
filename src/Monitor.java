@@ -89,7 +89,7 @@ public class Monitor {
 
                 int m = result(and); // cantidad de transiciones sensibilizadas y encoladas
 
-                if (m > 0) // hay transiciones habilitadas y encoladas
+                if (m > 1) // hay transiciones habilitadas y encoladas
                 {
                     // cual
                     int choice = policy.fireChoice(and);
@@ -99,6 +99,10 @@ public class Monitor {
                     this.tInvariantsCounter++;
 
                     System.out.println("Hilo " + Thread.currentThread().getId() + " se despierta");
+
+                } else if(m==1)
+                {
+                    conditionQueues.getQueued().get(getIndex(and)).release;
 
                 } else // no hay transiciones habilitadas y encoladas
                 {
