@@ -2,6 +2,7 @@ import Jama.Matrix;
 
 public class Main {
     private static final int amountThreads = 14;
+    private static final String policyType = "Equitative";
     private static PetriNet petrinet; // Red de petri representativa del sistema.
     private static Monitor monitor; // Monitor que controlará la red de Petri que modela el sistema.
     private static double[] loader1 = { 0 };
@@ -59,11 +60,13 @@ public class Main {
 
         petrinet = new PetriNet(log);
 
-        Policy policy = new Policy("Equitative");
-
+       // Policy policy = new Policy("8020");
+       Policy policy = new Policy(policyType);
+       System.out.println("La política utilizada es: "+ policyType +" \n");
         // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
 
         // aguanten las putas
+        // Confirmo
 
         monitor = new Monitor(petrinet, policy);
 
@@ -101,6 +104,12 @@ public class Main {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+        for(int i=0; i<9 ; i++){
+            System.out.println("INVARIANTE "+ i +" " +"OCURRIO "+ petrinet.getValinvariantCounting(i) +" VECES ");
+        }
+
 
         System.out.println(petrinet.transitionsCounterInfo());
 
