@@ -75,7 +75,7 @@ public class Monitor {
         {
             System.out.println("Firing vector: ");
             v.print(2,0);
-            if(petrinet.fundamentalEquationTest(v)&&(petrinet.workingState(v)==0))
+            if(petrinet.fundamentalEquationTest(v)&&((petrinet.workingState(v)==0)|| (petrinet.workingState(v)==2)))
             {
                 if(testTime(v)){
                     k = true;
