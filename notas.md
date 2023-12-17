@@ -22,7 +22,7 @@
 - Checkear invariantes: si no se cumplen tirar error
 - habilitar transiciones
 		![Alt text](image.png)
-
+- Imprimir en q estado está la red en cada momento 
 
 **VERIFICAR SI VECTOR DE DISPARO ES UN 'CHORIZO PARADO'**
 
@@ -59,6 +59,8 @@ De esta forma tendríamos hilos específicos por partes del código.
 ## RdP Temporales
 - Idea: esperar tiempo minimo "alpha" desde que se sensibiliza, y no más de "beta" para disparar.
 - beta= lo más grande posible para que nunca se desensibilice. (máx cantidad de un long)
+- combinacion con delay y con tiempo: tiempo asociado a las transiciones e intervalo de tiempo
+
 
 ## Info auxuliar
 
