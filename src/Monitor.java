@@ -62,7 +62,7 @@ public class Monitor {
         boolean k = true;
         while (k )
         {
-
+            System.out.println("Firing vector: ");
             v.print(2,0);
             if(petrinet.fundamentalEquationTest(v)&&(petrinet.workingState(v)==0))
                 k=true;
@@ -72,7 +72,8 @@ public class Monitor {
 
                 petrinet.fire(v);
                 Matrix sensibilized = petrinet.getSensibilized();
-                sensibilized.print(0,2);
+                //sensibilized.print(0,2);
+
                 Matrix queued = conditionQueues.queuedUp();
                 Matrix and = sensibilized.arrayTimes(queued); // operación 'and'
 

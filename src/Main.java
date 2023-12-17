@@ -75,8 +75,8 @@ public class Main {
             Log log = new Log( petrinet, monitor, startTime,true);
             log.start();
 
-            Log invariant = new Log( petrinet, monitor, startTime,false);
-            invariant.start();
+            Log transition = new Log( petrinet, monitor, startTime,false);
+            transition.start();
 
 
         } catch(Exception e) {

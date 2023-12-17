@@ -59,7 +59,11 @@ public class Log extends Thread {
 
             if(isLog){
 
-                PrintWriter pw_log = new PrintWriter(new FileWriter(".//Estadistica.txt", true));
+                File archivo = new File(".//statistics.txt");
+
+                archivo.delete();
+
+                PrintWriter pw_log = new PrintWriter(new FileWriter(".//statistics.txt", true));
 
                 pw_log.print("\n\n");
 
@@ -135,16 +139,16 @@ public class Log extends Thread {
             }
             else{
 
-                File archivo = new File(".//invariant.txt");
+                File archivo = new File(".//transitions.txt");
 
                 archivo.delete();
 
-                PrintWriter inv_log = new PrintWriter(new FileWriter(".//invariant.txt", false));
+                PrintWriter inv_log = new PrintWriter(new FileWriter(".//transitions.txt", false));
                 String withoutNull = "";
 
                     withoutNull =  petrinet.getAllTransitionsPrint().substring(4,petrinet.getAllTransitionsPrint().length() );
 
-                inv_log.println(withoutNull);
+                inv_log.print(withoutNull);
 
 
                 inv_log.close();
