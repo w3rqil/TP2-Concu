@@ -15,20 +15,17 @@ public class PetriNet {
     private Matrix matriz;
     private Matrix maxPInvariants;
     private Matrix workingVector;
+    private Matrix alphaTime;
     private Matrix transitionCounter;
+    private Matrix sensibilizedTime;
     public ArrayList<Integer> tInvariantsAux;
     private ArrayList<String> firedSequence;
 
-
-    ////AGREGO AGU
     private int[] invariantCounting;
     private static int completedInvariants;
     private String CurrentRoute;
 
     private String allTransitionsPrint;
-    ////
-
-
 
     private int tInvariantCounter;
     /*
@@ -125,6 +122,7 @@ public class PetriNet {
     //0 1  2  3 4   5  6  7  8  9 10 11 12 13 14 15 16 17 18
     private final double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
 
+    private final double[] aTimes = { 0, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
     public List<Integer> tInvariantSum;
 
     private List<List<Integer>> tInvariants;
@@ -142,6 +140,8 @@ public class PetriNet {
         this.pInvariants = new Matrix(pInvariant);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1); // esto esta mal creo, no hay que ver el la incidencia
         this.workingVector = new Matrix(1, incidence.getColumnDimension());
+        this.alphaTime = new Matrix(aTimes, 1);
+        this.sensibilizedTime = new Matrix(1, incidence.getColumnDimension());
         this.firedSequence = new ArrayList<String>();
         this.transitionCounter = new Matrix(1,14);
         this.tInvariantSum = new ArrayList<>();
@@ -213,6 +213,8 @@ public class PetriNet {
     void enableTransitions()
     {
         //currentMarking.print(2,0);
+        Long time = System.currentTimeMillis();//tiempo actual
+
         for(int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
             boolean enabledTransition = true;
             for(int j = 0; j < backwardsIncidence.getRowDimension(); j++) {
@@ -223,6 +225,7 @@ public class PetriNet {
             }
             if(enabledTransition) {
                 sensibilizedTransitions.set(0,i,1);
+                sensibilizedTime.set(0, i, (double)time);
             }
             else {
                 sensibilizedTransitions.set(0,i,0);
@@ -494,6 +497,8 @@ public class PetriNet {
         return index;
     }
 
+    public Matrix getAlphaTimes(){return alphaTime;}
+    public Matrix getSensibilizedTime(){return sensibilizedTime;}
     public void setWorkingVector(Matrix firingVector, double value)
     {
         this.workingVector.set(0, getIndex(firingVector), value);

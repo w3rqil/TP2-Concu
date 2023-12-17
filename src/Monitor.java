@@ -1,4 +1,5 @@
 
+import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 import Jama.Matrix;
 //import java.util.ArrayList;
@@ -9,6 +10,7 @@ public class Monitor {
     private Policy policy;
     private Semaphore mutex;
     private CQueues conditionQueues;
+    private HashMap<Long,Long> timeLeft;
 
     private int deadThreads;
 
@@ -18,6 +20,7 @@ public class Monitor {
         this.conditionQueues= new CQueues();
         this.petrinet = petrinet;
         this.policy = policy;
+        this.timeLeft= new HashMap<Long, Long>();
         this.mutex = new Semaphore(1 );
         this.deadThreads = 0;
     }
@@ -41,10 +44,18 @@ public class Monitor {
      *
      */
 
+    public void printHash() {
+        System.out.println("Hashmap: -----------------------");
+        for (long id: timeLeft.keySet()) {
+            String value = timeLeft.get(id).toString();
+            System.out.println(id + " " + value);
+        }
+    }
+
     public boolean fireTransition(Matrix v)
     {
 
-
+        //printHash();
         try
         {
             if(petrinet.getCompletedInvariants()<200) {
@@ -65,9 +76,18 @@ public class Monitor {
             System.out.println("Firing vector: ");
             v.print(2,0);
             if(petrinet.fundamentalEquationTest(v)&&(petrinet.workingState(v)==0))
-                k=true;
-            else
-                k=false;
+            {
+                if(testTime(v)){
+                    k = true;
+                }else{
+                    petrinet.setWorkingVector(v, (double)Thread.currentThread().getId());
+                    k=false;
+                    exitMonitor();
+                    return false;
+                }
+            }else {
+                k = false;
+            }
             if(k){
 
                 petrinet.fire(v);
@@ -108,6 +128,22 @@ public class Monitor {
 
         exitMonitor();
         return true;
+    }
+
+    private boolean testTime(Matrix v)
+    {
+        long time = System.currentTimeMillis();
+        long alpha = (long) petrinet.getAlphaTimes().get(0, getIndex(v));
+        long initTime = (long) petrinet.getSensibilizedTime().get(0, getIndex(v));
+        System.out.println("tiempo actual "+time+" y time menos init " + ( time - initTime) + "\n alpha: "+ alpha);
+        if(alpha <( time - initTime) || alpha==0){
+            System.out.println("alpha retorna true");
+            return true;
+        }else{
+            System.out.println("alpha retorna FALSE");
+            setTimeLeft(Thread.currentThread().getId(), alpha- (time - initTime));
+            return false;
+        }
     }
 
     public String backState(){
@@ -152,6 +188,10 @@ public class Monitor {
      * *** Getters & Setters ***
      * *************************
      */
+    public synchronized long getTimeLeft(long id){ return this.timeLeft.get(id);}
+    private synchronized void setTimeLeft(long id, long time) {
+        timeLeft.put(id, time);
+    }
 
     public PetriNet getPetriNet() {
         return this.petrinet;
