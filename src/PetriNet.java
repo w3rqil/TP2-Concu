@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import Jama.Matrix;
 //import MyEnum.transitionState;
@@ -20,6 +21,7 @@ public class PetriNet {
     public ArrayList<Integer> tInvariantsAux;
     private ArrayList<String> firedSequence;
 
+    private Matrix alphaTime;
 
     ////AGREGO AGU
     private int[] invariantCounting;
@@ -126,9 +128,11 @@ public class PetriNet {
     //0 1  2  3 4   5  6  7  8  9 10 11 12 13 14 15 16 17 18
     private final double[] initialMarking = {1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1};
 
+                                //   0  1   2   3  4   5    6   7   8  9  10    11  12  13
+    private final double[] alphaT = { 0, 0, 50, 50, 0, 0, 100, 100, 0, 0, 100, 100, 0, 50};
+
     public List<Integer> tInvariantSum;
 
-    private List<List<Integer>> tInvariants;
 
     public PetriNet()
     {
@@ -143,6 +147,7 @@ public class PetriNet {
         this.pInvariants = new Matrix(pInvariant);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1); // esto esta mal creo, no hay que ver el la incidencia
         this.sensibilizedTime = new Matrix(1, incidence.getColumnDimension());
+        this.alphaTime = new Matrix(alphaT, 1);
         this.workingVector = new Matrix(1, incidence.getColumnDimension());
         this.firedSequence = new ArrayList<String>();
         this.transitionCounter = new Matrix(1,14);
@@ -151,30 +156,10 @@ public class PetriNet {
         for (int j = 0; j < 14; j++) {
             transitionCounter.set(0, j, 0.0);
         }
-        this.tInvariants = new ArrayList<>();
-        setTInvariants();
         this.tInvariantCounter = 0;
-
     }
 
-    private void setTInvariants() {
-        Integer[] tInvariant0 = {1,3,5,7,9,11,12,13};
-        Integer[] tInvariant1 = {1,3,5,7,8,10,12,13};
-        Integer[] tInvariant2 = {1,3,4,6,9,11,12,13};
-        Integer[] tInvariant3 = {1,3,4,6,8,10,12,13};
-        Integer[] tInvariant4 = {0,2,5,7,9,11,12,13};
-        Integer[] tInvariant5 = {0,2,5,7,8,10,12,13};
-        Integer[] tInvariant6 = {0,2,4,6,9,11,12,13};
-        Integer[] tInvariant7 = {0,2,4,6,8,10,11,13};
-        this.tInvariants.add(Arrays.asList(tInvariant0));
-        this.tInvariants.add(Arrays.asList(tInvariant1));
-        this.tInvariants.add(Arrays.asList(tInvariant2));
-        this.tInvariants.add(Arrays.asList(tInvariant3));
-        this.tInvariants.add(Arrays.asList(tInvariant4));
-        this.tInvariants.add(Arrays.asList(tInvariant5));
-        this.tInvariants.add(Arrays.asList(tInvariant6));
-        this.tInvariants.add(Arrays.asList(tInvariant7));
-    }
+
 
     /*
      * ********************
@@ -471,6 +456,7 @@ public class PetriNet {
      * ************************
      */
 
+    public Matrix getAlphaTime() { return this.alphaTime;}
     public Matrix getCurrentMarking() {
         return currentMarking;
     }
@@ -502,6 +488,7 @@ public class PetriNet {
     {
         this.workingVector.set(0, getIndex(firingVector), value);
     }
+    public Matrix getSensibilizedTime(){ return this.sensibilizedTime;}
 
     public void setSensibilizedTime(int index, double time)
     {

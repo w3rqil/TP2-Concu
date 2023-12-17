@@ -1,6 +1,8 @@
 
+import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 import Jama.Matrix;
+import java.util.concurrent.TimeUnit;
 //import java.util.ArrayList;
 
 public class Monitor {
@@ -10,6 +12,7 @@ public class Monitor {
     private Semaphore mutex;
     private CQueues conditionQueues;
 
+    public HashMap<String, Long> sleeps;
     private int deadThreads;
 
 
@@ -20,6 +23,7 @@ public class Monitor {
         this.policy = policy;
         this.mutex = new Semaphore(1 );
         this.deadThreads = 0;
+        this.sleeps = new HashMap<>();
     }
 
 
@@ -43,8 +47,6 @@ public class Monitor {
 
     public boolean fireTransition(Matrix v)
     {
-
-
         try
         {
             if(petrinet.getCompletedInvariants()<200) {
@@ -58,7 +60,13 @@ public class Monitor {
             e.printStackTrace();
         }
 
-        // -----------------------------------------------
+        if(!checkTime(v))
+        {
+            petrinet.setWorkingVector(v, (double)Thread.currentThread().getId());
+            exitMonitor();
+            return false;
+        }
+// ---------------------------------------------------------
         boolean k = true;
         while (k )
         {
@@ -68,6 +76,7 @@ public class Monitor {
                 k=true;
             else
                 k=false;
+
             if(k){
 
                 petrinet.fire(v);
@@ -101,11 +110,8 @@ public class Monitor {
                 } catch ( InterruptedException e){
                     e.printStackTrace();
                 }
-
             }
-
         }
-
         exitMonitor();
         return true;
     }
@@ -123,8 +129,18 @@ public class Monitor {
      */
     public void catchMonitor() throws InterruptedException {    mutex.acquire();    }
 
-    public void exitMonitor() {                 //BORRAR
+    public void exitMonitor() {
         mutex.release();
+    }
+    public int getIndex(Matrix vector) {
+        int index = 0;
+
+        for(int i = 0; i < vector.getColumnDimension(); i++) {
+            if(vector.get(0, i) == 1) break;
+            else index++;
+        }
+
+        return index;
     }
 
     public int result(Matrix and) {
@@ -137,15 +153,22 @@ public class Monitor {
         return m;
     }
 
-    private int getIndex(Matrix vector) {
-        int index = 0;
 
-        for(int i = 0; i < vector.getColumnDimension(); i++) {
-            if(vector.get(0, i) == 1) break;
-            else index++;
+
+    public boolean checkTime(Matrix v)
+    {
+        long alpha= (long) petrinet.getAlphaTime().get(0, getIndex(v));
+        long sensTime= (long) petrinet.getSensibilizedTime().get(0, getIndex(v));
+        long time= System.currentTimeMillis();
+
+        if(alpha==0 || alpha < (time -sensTime))
+        {
+            return true;
+        }else
+        {
+            setSleepTime(Thread.currentThread().getName(), alpha - (time - sensTime));
+            return false;
         }
-
-        return index;
     }
     /*
      * *************************
@@ -153,6 +176,10 @@ public class Monitor {
      * *************************
      */
 
+    private void setSleepTime(String name, Long time){
+        this.sleeps.put(name, time);
+    }
+    public HashMap<String, Long> getSleepTime(){ return this.sleeps;}
     public PetriNet getPetriNet() {
         return this.petrinet;
     }
