@@ -21,7 +21,7 @@ public class Monitor {
         this.petrinet = petrinet;
         this.policy = policy;
         this.timeLeft= new HashMap<Long, Long>();
-        this.mutex = new Semaphore(1 );
+        this.mutex = new Semaphore(1, true);
         this.deadThreads = 0;
     }
 
