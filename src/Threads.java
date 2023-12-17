@@ -60,7 +60,7 @@ public class Threads extends Thread {
             {
                 try
                 {
-                    TimeUnit.MILLISECONDS.sleep(this.monitor.getSleepTime().get(this.getName()));
+                    TimeUnit.MILLISECONDS.sleep(monitor.getSleepTime().get(Thread.currentThread().getId()));
                 } catch(InterruptedException e)
                 {
                     e.printStackTrace();

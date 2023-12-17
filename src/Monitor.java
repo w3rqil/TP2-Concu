@@ -12,7 +12,7 @@ public class Monitor {
     private Semaphore mutex;
     private CQueues conditionQueues;
 
-    public HashMap<String, Long> sleeps;
+    public HashMap<Long, Long> sleeps;
     private int deadThreads;
 
 
@@ -165,7 +165,7 @@ public class Monitor {
             return true;
         }else
         {
-            setSleepTime(Thread.currentThread().getName(), alpha - (time - sensTime));
+            setSleepTime(Thread.currentThread().getId(), alpha - (time - sensTime));
             return false;
         }
     }
@@ -175,10 +175,10 @@ public class Monitor {
      * *************************
      */
 
-    private void setSleepTime(String name, Long time){
-        this.sleeps.put(name, time);
+    private void setSleepTime(long id, Long time){
+        this.sleeps.put(id, time);
     }
-    public HashMap<String, Long> getSleepTime(){ return this.sleeps;}
+    public HashMap<Long, Long> getSleepTime(){ return this.sleeps;}
     public PetriNet getPetriNet() {
         return this.petrinet;
     }
