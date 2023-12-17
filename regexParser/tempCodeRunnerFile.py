@@ -1,0 +1,6 @@
+        layout.addWidget(self.subtitle_label, alignment=Qt.Alignment.AlignCenter)
+        layout.addWidget(self.image_label, alignment=Qt.Alignment.AlignCenter)
+        layout.addWidget(self.input_button, alignment=Qt.Alignment.AlignCenter)
+        layout.addWidget(self.output_button, alignment=Qt.Alignment.AlignCenter)
+        layout.addWidget(self.execute_button, alignment=Qt.Alignment.AlignCenter)
+        layout.addWidget(self.output_text, alignment=Qt.Alignment.AlignCenter)

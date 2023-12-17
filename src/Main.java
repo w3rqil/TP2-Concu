@@ -72,8 +72,13 @@ public class Main {
         //Creación y ejecución del hilo logger.
         try {
             long startTime = System.currentTimeMillis();
-            Log log = new Log( petrinet, monitor, startTime);
+            Log log = new Log( petrinet, monitor, startTime,true);
             log.start();
+
+            Log invariant = new Log( petrinet, monitor, startTime,false);
+            invariant.start();
+
+
         } catch(Exception e) {
             e.printStackTrace();
             System.out.println("Error creating logger.");

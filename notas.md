@@ -22,7 +22,9 @@
 - Checkear invariantes: si no se cumplen tirar error
 - habilitar transiciones
 		![Alt text](image.png)
-
+- Imprimir en q estado está la red en cada momento 
+- **importante** no puedo agarrar el mutex y preguntar si está sensibilizada temporalmente.
+- **Análisis temporal** ultimos 10min de la clase
 
 **VERIFICAR SI VECTOR DE DISPARO ES UN 'CHORIZO PARADO'**
 
@@ -55,6 +57,11 @@ De esta forma tendríamos hilos específicos por partes del código.
 
 
 ###### ver como darles a run despues xdxd
+
+## RdP Temporales
+- Idea: esperar tiempo minimo "alpha" desde que se sensibiliza, y no más de "beta" para disparar.
+- beta= lo más grande posible para que nunca se desensibilice. (máx cantidad de un long)
+- combinacion con delay y con tiempo: tiempo asociado a las transiciones e intervalo de tiempo
 
 
 ## Info auxuliar
