@@ -23,6 +23,8 @@
 - habilitar transiciones
 		![Alt text](image.png)
 - Imprimir en q estado está la red en cada momento 
+- **importante** no puedo agarrar el mutex y preguntar si está sensibilizada temporalmente.
+- **Análisis temporal** ultimos 10min de la clase
 
 **VERIFICAR SI VECTOR DE DISPARO ES UN 'CHORIZO PARADO'**
 
