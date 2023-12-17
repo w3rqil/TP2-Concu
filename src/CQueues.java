@@ -15,7 +15,7 @@ public class CQueues {
     {
         conditionQueues = new ArrayList<Semaphore>();
         for(int i = 0; i < maxQueues; i++)
-            conditionQueues.add(new Semaphore(0));  //les juro q lo hice sin mirar xd
+            conditionQueues.add(new Semaphore(0));
 
     }
     public ArrayList<Semaphore> getSemaphore() {

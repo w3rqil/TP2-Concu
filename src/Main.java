@@ -60,7 +60,7 @@ public class Main {
 
         // Policy policy = new Policy("8020");
         Policy policy = new Policy(policyType);
-        System.out.println("La política utilizada es: "+ policyType +" \n");
+        System.out.println("Policy type: "+ policyType +" \n");
         // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
 
         monitor = new Monitor(petrinet, policy);
@@ -76,7 +76,7 @@ public class Main {
             log.start();
         } catch(Exception e) {
             e.printStackTrace();
-            System.out.println("Error al crear el hilo logger.");
+            System.out.println("Error creating logger.");
         }
 
 
@@ -90,13 +90,13 @@ public class Main {
         threads[5] = new Threads(improver2Path, monitor, "Improver 2");
         threads[6] = new Threads(exitPath, monitor, "Exit");
 
-        threads[7] = new Threads(loader11Path, monitor, "Loader 11");
-        threads[8] = new Threads(loader21Path, monitor, "Loader 21");
-        threads[9] = new Threads(resizer11Path, monitor, "Resizer 11");
-        threads[10] = new Threads(resizer21Path, monitor, "Resizer 21");
+        threads[7] = new Threads(loader11Path, monitor, "Loader 1.1");
+        threads[8] = new Threads(loader21Path, monitor, "Loader 2.1");
+        threads[9] = new Threads(resizer11Path, monitor, "Resizer 1.1");
+        threads[10] = new Threads(resizer21Path, monitor, "Resizer 2.1");
 
-        threads[11] = new Threads(improver11Path, monitor, "Improver 11");
-        threads[12] = new Threads(improver21Path, monitor, "Improver 21");
+        threads[11] = new Threads(improver11Path, monitor, "Improver 1.1");
+        threads[12] = new Threads(improver21Path, monitor, "Improver 2.1");
         threads[13] = new Threads(exit1Path, monitor, "Exit1");
 
         for (Threads thread : threads) {

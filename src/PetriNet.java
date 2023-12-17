@@ -22,10 +22,10 @@ public class PetriNet {
 
     ////AGREGO AGU
     private int[] invariantCounting;
-    private static int fullCounters;
+    private static int completedInvariants;
     private String CurrentRoute;
 
-    private String AllTransitionsPrint;
+    private String allTransitionsPrint;
     ////
 
 
@@ -133,7 +133,7 @@ public class PetriNet {
     {
         ///AGREGE AGU
         this.CurrentRoute="";
-        this.fullCounters=0;
+        this.completedInvariants=0;
         this.invariantCounting = new int[8];
         this.incidence = new Matrix(matrixIndicence);
         this.backwardsIncidence = new Matrix(bIncidence);
@@ -229,10 +229,19 @@ public class PetriNet {
             }
 
         }
-        System.out.println("Las transiciones sensibilizadas: \n");
-        sensibilizedTransitions.print(sensibilizedTransitions.getRowDimension(), 0);
+        System.out.println("Enabled transitions: " + getEnabledTransitionsInfo());
+        //sensibilizedTransitions.print(1, 0);
 
+    }
 
+    public String getEnabledTransitionsInfo() {
+        String enabled = "";
+        for(int i = 0; i < 14; i++) {
+            if(sensibilizedTransitions.get(0,i) == 1) {
+                enabled += ("T" + i + "  ");
+            }
+        }
+        return enabled;
     }
 
 
@@ -243,26 +252,25 @@ public class PetriNet {
      * - agregar disparo a la secuencia
      *
      * Este es el metodo fire transition pero quería usar el nombre
-     * fire transition en monitor asi q yo le pongo el nombre q se me canta el culo manga de putossss
-     * chupenme la pija
+     * fire transition en monitor
      */
 
     public String getAllTransitionsPrint() {
 
-        return AllTransitionsPrint;
+        return allTransitionsPrint;
     }
 
     void fire(Matrix v)             //esta es la que hace el disparo literal, actualizando la rdp
     {
-        this.currentMarking = fundamentalEquation(v);  //.transpose()
-        System.out.println("Vector de disparo: \n");
-        v.print(2,0);
+        //this.currentMarking = fundamentalEquation(v);  //.transpose()
+        setCurrentMarking(fundamentalEquation(v));
+        /*System.out.println("Firing vector: \n");
+        v.print(2,0);*/
         setWorkingVector(v, 0);
         testPInvariants();
         enableTransitions();
         firedSequence.add("T" + getIndex(v) + ""); //tiene TODAS las secuencia de transiciones disparadas
-        System.out.println("Disparo: T" + getIndex(v));
-
+        System.out.println("Firing: T" + getIndex(v));
         for(int i = 0; i < v.getRowDimension(); i++) {
             for(int j = 0; j < v.getColumnDimension(); j++) {
                 if(v.get(i,j) != 0.0) {
@@ -271,8 +279,8 @@ public class PetriNet {
             }
         }
         System.out.println(transitionsCounterInfo());
-        System.out.println("El marcado actual: \n");
-        this.currentMarking.print(currentMarking.getRowDimension(),0);
+        System.out.println("Current marking:\n" + getMarkingInfo());
+        //this.currentMarking.print(2,0);
 
 
         // T1 T3 T5 T7 T9 T11 T12 T13
@@ -286,14 +294,27 @@ public class PetriNet {
 
         String lastTransition = getIndex(v)+"";
 
-        AllTransitionsPrint +=  "T" +lastTransition;
+        allTransitionsPrint +=  "T" +lastTransition;
 
         followUp(lastTransition);
 
     }
 
-    public int getfullCounters() {
-        return fullCounters;
+    public String getMarkingInfo() {
+        String marking = "P0 P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18\n";
+        for(int i = 0; i < currentMarking.getColumnDimension(); i++) {
+            if(i < 10) {
+                marking += ((int)currentMarking.get(0,i) + "  ");
+            }
+            else {
+                marking += ((int)currentMarking.get(0,i) + "   ");
+            }
+        }
+        return (marking + "\n");
+    }
+
+    public int getCompletedInvariants() {
+        return completedInvariants;
     }
 
     public int getValinvariantCounting(int i) {
@@ -301,6 +322,7 @@ public class PetriNet {
     }
 
     public String transitionsCounterInfo()
+
     {
         String arg = "Transitions:\n";
         for(int i = 0; i < transitionCounter.getColumnDimension(); i++) {
@@ -311,22 +333,13 @@ public class PetriNet {
 
     // ********************* */
 
-    /*
-     * hay q buscar una forma de hacer que reciba un vector de disparo
-     * y me diga si es posible realizar un vector de disparo
-     */
 
-    public boolean isTransitionEnabled(int transition)
+    /*ublic boolean isTransitionEnabled(int transition)
     {
         return sensibilizedTransitions.get(transition, 0) == 1;
-    }
+    }*/
 
-    /*
-     *
-     * HACER
-     *
-     *
-     */
+
 
     /*
      * *************************
@@ -375,35 +388,35 @@ public class PetriNet {
             if(CurrentRoute.contains("135791112"))
             {
                 invariantCounting[0]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
             else if (CurrentRoute.contains("135781012")) {
                 invariantCounting[1]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
             else if (CurrentRoute.contains("134691112")) {
                 invariantCounting[2]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
             else if (CurrentRoute.contains("134681012")) {
                 invariantCounting[3]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
             else if (CurrentRoute.contains("025791112")) {
                 invariantCounting[4]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
             else if (CurrentRoute.contains("025781012")) {
                 invariantCounting[5]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
             else if (CurrentRoute.contains("024691112")) {
                 invariantCounting[6]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
             else if (CurrentRoute.contains("024681012")) {
                 invariantCounting[7]+=1;
-                fullCounters++;
+                completedInvariants++;
             }
 
             else{
@@ -421,8 +434,6 @@ public class PetriNet {
                 //System.out.println("INVARIANTE "+ i +" " +"OCURRIO " + getValinvariantCounting(i) + " VECES ");
                 System.out.println(i +" T-invariant appears "+ getValinvariantCounting(i) +" times.");
             }
-
-
 
             CurrentRoute="";
         }
@@ -447,8 +458,7 @@ public class PetriNet {
         pInv8= (currentMarking.get(0,3)+currentMarking.get(0,4)+ currentMarking.get(0,5) + currentMarking.get(0,17))==3;
 
         if(!(pInv0 && pInv1 && pInv2 && pInv3 && pInv4 && pInv5 && pInv6 && pInv7 && pInv8)){
-            System.out.println("There's a P-invariant that has an error");
-
+            System.out.println("Error on a p-invariant.");
         }
     }
     /*
@@ -456,16 +466,10 @@ public class PetriNet {
      * *** Geters & Setters ***
      * ************************
      */
-    public void setMarking(Matrix marking)
-    {
-        this.currentMarking = marking;
-    }
 
     public Matrix getCurrentMarking() {
         return currentMarking;
     }
-
-
 
     public void setCurrentMarking(Matrix currentMarking) {
         this.currentMarking = currentMarking;
@@ -476,10 +480,6 @@ public class PetriNet {
         return sensibilizedTransitions;
     }
 
-    public ArrayList<String> getFiredSequence()
-    {
-        return firedSequence;
-    }
     /**
      * la posicion del 
      * primer 1 del vector de disparo
@@ -487,12 +487,10 @@ public class PetriNet {
     public int getIndex(Matrix v)
     {
         int index = 0;
-
         for(int i = 0; i < v.getColumnDimension(); i++)
         {
             if(v.get(0, i) == 1) break; else index++;
         }
-
         return index;
     }
 

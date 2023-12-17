@@ -8,11 +8,10 @@ public class Threads extends Thread {
     private Monitor monitor;
     private int transitionCounter;
     private String name;
-    private boolean isFinished;
+
 
     public Threads(Matrix transitionsSequence, Monitor monitor, String name)
-    {   // Procesinhos cerra el orto vos
-        this.isFinished = false;
+    {
         this.transitions = new ArrayList<Matrix>();
         this.name = name;
         transitionsSequence.print(2,0);
@@ -40,17 +39,13 @@ public class Threads extends Thread {
     public String getThreadName() {
         return this.name;
     }
-    
-    public void setFinished() {
-        this.isFinished = true;
-    }
 
     @Override
     public void run()
     {
-        System.out.println(Thread.currentThread().getId() + ": started run()");
-
-        while (this.monitor.getPetriNet().getfullCounters() < 200)
+        //System.out.println(Thread.currentThread().getId() + ": started run()");
+        System.out.println("Thread " + getThreadName() + ": started run()");
+        while (this.monitor.getPetriNet().getCompletedInvariants() < 200)
         {
             this.firingVector = transitions.get(transitionCounter);
 
@@ -63,7 +58,8 @@ public class Threads extends Thread {
             }
         }
         this.monitor.addDeadThreads();
-        System.out.println(Thread.currentThread().getId() + ": finished run()");
+        //System.out.println(Thread.currentThread().getId() + ": finished run()");
+        System.out.println("Thread " + getThreadName() + ": finished run()");
         this.monitor.printDaDead();
     }
 }

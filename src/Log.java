@@ -34,7 +34,7 @@ public class Log extends Thread {
     public void run() {
 
 
-        while (this.monitor.getPetriNet().getfullCounters() < 200) {
+        while (this.monitor.getPetriNet().getCompletedInvariants() < 200) {
             try {
                 sleep(5);
                 //   pw_log.print("\n" + petrinet.getAllTransitionsPrint());
@@ -53,7 +53,7 @@ public class Log extends Thread {
 
         try {
 
-            PrintWriter pw_log = new PrintWriter(new FileWriter(".//Estadistica.txt", true));
+            PrintWriter pw_log = new PrintWriter(new FileWriter(".//statistics.txt", true));
 
             pw_log.print("\n\n");
 
