@@ -16,6 +16,7 @@ public class PetriNet {
     private Matrix maxPInvariants;
     private Matrix workingVector;
     private Matrix transitionCounter;
+    private Matrix sensibilizedTime;
     public ArrayList<Integer> tInvariantsAux;
     private ArrayList<String> firedSequence;
 
@@ -141,6 +142,7 @@ public class PetriNet {
         this.sensibilizedTransitions = new Matrix(1, incidence.getColumnDimension());
         this.pInvariants = new Matrix(pInvariant);
         this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1); // esto esta mal creo, no hay que ver el la incidencia
+        this.sensibilizedTime = new Matrix(1, incidence.getColumnDimension());
         this.workingVector = new Matrix(1, incidence.getColumnDimension());
         this.firedSequence = new ArrayList<String>();
         this.transitionCounter = new Matrix(1,14);
@@ -213,6 +215,7 @@ public class PetriNet {
     void enableTransitions()
     {
         //currentMarking.print(2,0);
+        double time = System.currentTimeMillis();
         for(int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
             boolean enabledTransition = true;
             for(int j = 0; j < backwardsIncidence.getRowDimension(); j++) {
@@ -223,6 +226,7 @@ public class PetriNet {
             }
             if(enabledTransition) {
                 sensibilizedTransitions.set(0,i,1);
+                setSensibilizedTime(i,time);
             }
             else {
                 sensibilizedTransitions.set(0,i,0);
@@ -499,6 +503,10 @@ public class PetriNet {
         this.workingVector.set(0, getIndex(firingVector), value);
     }
 
+    public void setSensibilizedTime(int index, double time)
+    {
+        this.sensibilizedTime.set(0,index, time);
+    }
     public Matrix getIncidenceMatrix()
     {
         return this.incidence;
