@@ -447,7 +447,7 @@ public class PetriNet {
         pInv8= (currentMarking.get(0,3)+currentMarking.get(0,4)+ currentMarking.get(0,5) + currentMarking.get(0,17))==3;
 
         if(!(pInv0 && pInv1 && pInv2 && pInv3 && pInv4 && pInv5 && pInv6 && pInv7 && pInv8)){
-            System.out.println("Error on a p-invariant.");
+            System.out.println("Error in a p-invariant.");
         }
     }
     /*

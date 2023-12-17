@@ -52,7 +52,7 @@ public class Threads extends Thread {
 
             System.out.println(getThreadName());
 
-            firingVector.print(2,0);
+            //firingVector.print(2,0);
             if (monitor.fireTransition(firingVector))
             {
                 nextTransition();
