@@ -18,7 +18,7 @@ public class Main {
     private static double[] resizer21 = { 7 };
     // 8 y 10
     private static double[] improver1 = { 8 };
-    private static double[] improver11= { 10 };
+    private static double[] improver11 = { 10 };
     // 9 y 11
     private static double[] improver2 = { 9 };
     private static double[] improver21 = { 11 };
@@ -49,18 +49,18 @@ public class Main {
      * También se inicializan tanto la red de Petri con su marcado inicial
      * como el monitor y el hilo logger.
      */
-//
-    public static void main (String args[]) {
+    //
+    public static void main(String args[]) {
 
         long start = System.currentTimeMillis();
 
-        //log.clearFile(); // que poronga es esto gordo te voy a cagar a bifes
+        // log.clearFile(); // que poronga es esto gordo te voy a cagar a bifes
 
         petrinet = new PetriNet();
 
         // Policy policy = new Policy("8020");
         Policy policy = new Policy(policyType);
-        System.out.println("Policy type: "+ policyType +" \n");
+        System.out.println("Policy type: " + policyType + " \n");
         // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
 
         monitor = new Monitor(petrinet, policy);
@@ -69,22 +69,19 @@ public class Main {
 
         petrinet.enableTransitions(); // Seteo de las transiciones sensibilizadas dado el marcado inicial de la red.
 
-        //Creación y ejecución del hilo logger.
+        // Creación y ejecución del hilo logger.
         try {
             long startTime = System.currentTimeMillis();
-            Log log = new Log( petrinet, monitor, startTime,true);
+            Log log = new Log(petrinet, monitor, startTime, true);
             log.start();
 
-            Log transition = new Log( petrinet, monitor, startTime,false);
+            Log transition = new Log(petrinet, monitor, startTime, false);
             transition.start();
 
-
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error creating logger.");
         }
-
-
 
         threads[0] = new Threads(loader1Path, monitor, "Loader 1");
 
@@ -109,19 +106,17 @@ public class Main {
         }
 
         /*
-        for(int i=0; i<9 ; i++){
-            //System.out.println("Invariante "+ i +" aparece "+ petrinet.getValinvariantCounting(i) +" VECES ");
-            System.out.println(i +" T-invariant appears "+ petrinet.getValinvariantCounting(i) +" times.");
-        }*/
+         * for(int i=0; i<9 ; i++){
+         * //System.out.println("Invariante "+ i +" aparece "+
+         * petrinet.getValinvariantCounting(i) +" VECES ");
+         * System.out.println(i +" T-invariant appears "+
+         * petrinet.getValinvariantCounting(i) +" times.");
+         * }
+         */
 
-
-
-        monitor.printDaDead();
-
+        monitor.printDeadThreads();
 
         System.out.println(petrinet.transitionsCounterInfo());
-
-
 
     }
 }

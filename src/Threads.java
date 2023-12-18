@@ -56,18 +56,30 @@ public class Threads extends Thread {
             if (monitor.fireTransition(firingVector))
             {
                 nextTransition();
-            }else{
-                try{
-                    TimeUnit.MILLISECONDS.sleep(this.monitor.getTimeLeft(Thread.currentThread().getId()));
-                }catch(Exception e){
-                    e.printStackTrace();
+            }else
+            {
+                long sleepTime;
+                try {
+                    sleepTime = this.monitor.getTimeLeft(Thread.currentThread().getId());
+                }
+                catch (Exception e) {
+                    sleepTime = 0;
+                }
+                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 200))
+                {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(sleepTime);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
         this.monitor.addDeadThreads();
         //System.out.println(Thread.currentThread().getId() + ": finished run()");
         System.out.println("Thread " + getThreadName() + ": finished run()");
-        this.monitor.printDaDead();
+        this.monitor.printDeadThreads();
     }
 }
 
