@@ -182,10 +182,12 @@ public class PetriNet {
      */
 
     /*
-     * Caculates fundamental ecuation of a petri net for a given fire vector.
-     * new marking = current marking + (incidence matrix * fire vector).
-     */
-    // mi+1= mi+W*s
+     * This method calculates the fundamental ecuation of the petrinet: mi+1= mi+W*s
+     * where mi is the current marking, W is the incidence matrix and s is the firing vector.
+     * 
+    * @param v: firing vector
+    * @return fundamental equation
+    */
     public Matrix fundamentalEquation(Matrix v) {
         return (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
         // (mi + w * s) transpose
@@ -203,11 +205,13 @@ public class PetriNet {
     }
 
     /*
-     * Idea: comparar el marcado actual, con el marcado pedido para cada transición.
-     * Marcado actual: vector con el marcado individual de todas las plazas
-     * Matriz de incidencia: columnas=transiciones| filas= plazas
-     * Entonces, si una transición del marcado actual tiene menos tokens que los
-     * pedidos por la trasicion, no se puede disparar.
+     * Idea: compare the current marking to the marking requested for each transition. 
+     * Current marking: vector with the individual marking of all the places
+     * Incidence matrix: columns = transitions | rows = places
+     * Then, if a transition of the current marking has fewer tokens than those requested by the transition, it cannot be fired.
+     * 
+     * @param 
+     * @return 
      */
     void enableTransitions() {
         // currentMarking.print(2,0);
@@ -234,6 +238,11 @@ public class PetriNet {
 
     }
 
+    /*
+     * returns a string with the enabled transitions info.
+     * 
+     * @return enabled transitions info
+     */
     public String getEnabledTransitionsInfo() {
         String enabled = "";
         for (int i = 0; i < 14; i++) {
@@ -244,6 +253,11 @@ public class PetriNet {
         return enabled;
     }
 
+    public String getAllTransitionsPrint() {
+
+        return allTransitionsPrint;
+    }
+
     /*
      * - cambiar marcado actual
      * - actualizar sensibilizadas
@@ -252,22 +266,23 @@ public class PetriNet {
      *
      * Este es el metodo fire transition pero quería usar el nombre
      * fire transition en monitor
+     * 
+     * This method fires a transition if it is enabled.
+     * - change current marking.
+     * - update current working vector.
+     * - update sensibilized transitions.
+     * - adds to the fired secuence the fired transition.
+     * 
+     * @param v: firing vector
+     * @return
      */
-
-    public String getAllTransitionsPrint() {
-
-        return allTransitionsPrint;
-    }
 
     void fire(Matrix v) // esta es la que hace el disparo literal, actualizando la rdp
     {
-        // this.currentMarking = fundamentalEquation(v); //.transpose()
         setCurrentMarking(fundamentalEquation(v));
-        /*
-         * System.out.println("Firing vector: \n");
-         * v.print(2,0);
-         */
+    
         setWorkingVector(v, 0);
+
         testPInvariants();
         enableTransitions();
         firedSequence.add("T" + getIndex(v) + ""); // tiene TODAS las secuencia de transiciones disparadas
@@ -330,21 +345,7 @@ public class PetriNet {
         return arg;
     }
 
-    // ********************* */
-
-    /*
-     * ublic boolean isTransitionEnabled(int transition)
-     * {
-     * return sensibilizedTransitions.get(transition, 0) == 1;
-     * }
-     */
-
-    /*
-     * *************************
-     * ***** Util Functions*****
-     * *************************
-     */
-
+    
     /*
      *
      * Checkeo el estado de la transición que quiero disparar
@@ -354,6 +355,14 @@ public class PetriNet {
      * 2) Hay alguien que no es el hilo solicitante (IDs no coincidentes) ESTADO =
      * OTHER
      * 3) Quien estaba trabajando es el hilo solicitante. ESTADO = SELF
+     * 
+     * Checks the 'state' of the transition that is going to be fired.
+     * 0 - No one is working on it. STATE = NONE
+     * 1 - Someone is working on it, but it is not the thread that is requesting it. STATE = OTHER
+     * 2 - The thread that is requesting it is already working on it. STATE = SELF
+     * 
+     * @param v: firing vector
+     * @return
      */
 
     public int workingState(Matrix v) {
@@ -367,6 +376,13 @@ public class PetriNet {
             return 2;
     }
 
+
+    /*
+     * Follows the transitions fired in order to check the T-invariants.
+     * 
+     * @param lastTransition: last transition fired
+     * @return
+     */
     public void followUp(String lastTransition) {
 
         if (!lastTransition.contains("13")) {
@@ -431,7 +447,10 @@ public class PetriNet {
     }
 
     /*
-     *
+     * This method checks the P-invariants using the current marking of the places.
+     * 
+     * @param
+     * @return
      */
     public void testPInvariants() {
         boolean pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8;
@@ -471,10 +490,12 @@ public class PetriNet {
         return sensibilizedTransitions;
     }
 
-    /**
-     * la posicion del
-     * primer 1 del vector de disparo
-     */
+    /*
+     * Returns the index of the transition that is going to be fired.
+     * 
+     * @param v: firing vector
+     * @return index of the transition
+    */
     public int getIndex(Matrix v) {
         int index = 0;
         for (int i = 0; i < v.getColumnDimension(); i++) {
@@ -502,6 +523,13 @@ public class PetriNet {
         return this.incidence;
     }
 
+    /*
+     * Returns the number of times a transition has been fired.
+     * 
+     * @param 
+     * @return number of times the transition has been fired
+     */
+     
     public int[] occurrencesArr() {
         int[] occurrences = new int[14];
 

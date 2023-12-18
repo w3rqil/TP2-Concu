@@ -14,13 +14,10 @@ public class CQueues {
 
     }
 
-    public ArrayList<Semaphore> getSemaphore() {
-        return conditionQueues;
-    }
 
     /*
      * *************************
-     * *** Métodos públicos ****
+     * **** PUBLIC  METHODS ****
      * *************************
      */
 
@@ -35,7 +32,10 @@ public class CQueues {
     }
 
     /*
-     * retorno cola para la transicion correspondiente
+     * Returns the index of the first thread queued up for the transition associated with the vector v.
+     * 
+     * @param v: firing vector
+     * @return the index of the first thread queued up for the transition associated with the vector v
      */
     public int getQueue(Matrix v) {
         int index = 0;
@@ -50,13 +50,12 @@ public class CQueues {
         return index;
     }
 
-    public ArrayList<Semaphore> getConditionQueues() {
-        return conditionQueues;
-    }
-
-    // tengo q retornar una matriz con las transiciones encoladas
-    // para poder hacer el and
-    // modificar
+    /*
+     * Returns the number of threads queued up transitions.
+     * 
+     * @param 
+     * @return the number of threads queued up for the transition associated with
+     */
     public Matrix queuedUp() {
         double[] aux = new double[this.maxQueues];
 

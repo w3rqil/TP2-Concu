@@ -37,19 +37,18 @@ public class Monitor {
 
     /*
      * *************************
-     * **** Método TRONCAL *****
+     * *** PRINCIPAL METHOD  ***
      * *************************
-     *
      */
 
-    public void printHash() {
-        System.out.println("Hashmap: -----------------------");
-        for (long id : timeLeft.keySet()) {
-            String value = timeLeft.get(id).toString();
-            System.out.println(id + " " + value);
-        }
-    }
-
+     /*
+      * The method checks if the transition is enabled an "time enabled" calling the 'testTime' method.
+      * In case all conditions are met, the transition is fired and the method returns true.
+      * Otherwise, the thread is queued up and the method returns false.
+      * 
+      * @param v: firing vector
+      * @return true if the transition is fired, false otherwise
+      */
     public boolean fireTransition(Matrix v) {
 
         // printHash();
@@ -88,10 +87,10 @@ public class Monitor {
                 // sensibilized.print(0,2);
 
                 Matrix queued = conditionQueues.queuedUp();
-                Matrix and = sensibilized.arrayTimes(queued); // operación 'and'
+                Matrix and = sensibilized.arrayTimes(queued); //  'and' '&'
 
-                int m = result(and); // sensibilizadas y encoladas
-                if (m > 0) // hay transiciones habilitadas y encoladas
+                int m = result(and); // sensibilized and queued transitions
+                if (m > 0) // queued and enabled transitions
                 {
                     // cual
                     int choice = policy.fireChoice(and);
@@ -100,7 +99,7 @@ public class Monitor {
 
                     System.out.println("Thread ID: " + Thread.currentThread().getId() + " wakes up");
 
-                } else // no hay transiciones habilitadas y encoladas
+                } else // there's none transition enabled and queued
                 {
                     System.out.println("k turns to false");
                     k = false;
@@ -124,6 +123,14 @@ public class Monitor {
         return true;
     }
 
+    /*
+     * Test if the transition is "time enabled". Checking if the elapsed time since 
+     * the sensibilization of the transition is greater than the alpha time.
+     * Returns true if the transition is "time enabled", if it's not, returns false and save's the remaining time.
+     * 
+     * @param v: firing vector
+     * @return true if the transition is "time enabled", false otherwise
+     */
     private boolean testTime(Matrix v) {
         long time = System.currentTimeMillis();
         long alpha = (long) petrinet.getAlphaTimes().get(0, getIndex(v));
@@ -145,17 +152,28 @@ public class Monitor {
 
     /*
      * *************************
-     * *** Métodos públicos ****
+     * **** PUBLIC  METHODS ****
      * *************************
      */
+
+    public void printDeadThreads() {
+        System.out.println("Dead threads: " + deadThreads + "/14");
+    }
+    
     public void catchMonitor() throws InterruptedException {
         mutex.acquire();
     }
 
-    public void exitMonitor() { // BORRAR
+    public void exitMonitor() { 
         mutex.release();
     }
 
+    /*
+     * Returns the number of enabled and queued transitions.
+     * 
+     * @param and: matrix resulting from the 'and' operation between the sensibilized and queued transitions.
+     * @return the number of enabled and queued transitions.
+     */
     public int result(Matrix and) {
         int m = 0;
 
@@ -166,6 +184,12 @@ public class Monitor {
         return m;
     }
 
+    /*
+     * Returns the index of the transition that is going to be fired.
+     * 
+     * @param v: firing vector
+     * @return index of the transition
+    */
     private int getIndex(Matrix vector) {
         int index = 0;
 
@@ -200,7 +224,5 @@ public class Monitor {
         return this.petrinet;
     }
 
-    public void printDeadThreads() {
-        System.out.println("Dead threads: " + deadThreads + "/14");
-    }
+    
 }

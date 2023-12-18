@@ -144,7 +144,7 @@ public class Log extends Thread {
                 finalMarking += "]";
 
                 // Despierta a los hilos encolados en las colas de condición de la red.
-                for (Semaphore queue : monitor.getConditionQueues().getSemaphore())
+                for (Semaphore queue : monitor.getConditionQueues().getQueued())
                     if (queue.hasQueuedThreads())
                         queue.release(queue.getQueueLength());
 
