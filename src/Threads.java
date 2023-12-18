@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import Jama.Matrix;
-import java.util.concurrent.TimeUnit;
 
 public class Threads extends Thread {
     
@@ -56,15 +55,6 @@ public class Threads extends Thread {
             if (monitor.fireTransition(firingVector))
             {
                 nextTransition();
-            }else
-            {
-                try
-                {
-                    TimeUnit.MILLISECONDS.sleep(this.monitor.getSleepTime().get(this.getName()));
-                } catch(InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
             }
         }
         this.monitor.addDeadThreads();
