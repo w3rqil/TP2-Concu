@@ -142,12 +142,6 @@ public class Monitor {
         }
     }
 
-    public String backState() {
-        if (petrinet.getCompletedInvariants() >= 200) {
-            return "si";
-        }
-        return "no";
-    }
 
     /*
      * *************************
