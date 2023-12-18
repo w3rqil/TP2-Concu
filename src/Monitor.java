@@ -130,7 +130,8 @@ public class Monitor {
      * @param v: firing vector
      * @return true if the transition is "time enabled", false otherwise
      */
-    private boolean testTime(Matrix v) {
+    private boolean testTime(Matrix v) 
+    {
         long time = System.currentTimeMillis();
         long alpha = (long) petrinet.getAlphaTimes().get(0, getIndex(v));
         long initTime = (long) petrinet.getSensibilizedTime().get(0, getIndex(v));
@@ -149,7 +150,8 @@ public class Monitor {
      * *************************
      */
 
-    public void printDeadThreads() {
+    public void printDeadThreads() 
+    {
         System.out.println("Dead threads: " + deadThreads + "/14");
     }
     
@@ -167,7 +169,8 @@ public class Monitor {
      * @param and: matrix resulting from the 'and' operation between the sensibilized and queued transitions.
      * @return the number of enabled and queued transitions.
      */
-    public int result(Matrix and) {
+    public int result(Matrix and) 
+    {
         int m = 0;
 
         for (int i = 0; i < and.getColumnDimension(); i++)
