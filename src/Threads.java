@@ -46,39 +46,46 @@ public class Threads extends Thread {
     {
         //System.out.println(Thread.currentThread().getId() + ": started run()");
         System.out.println("Thread " + getThreadName() + ": started run()");
-        while (this.monitor.getPetriNet().getCompletedInvariants() < 200)
-        {
+        while (this.monitor.getPetriNet().getCompletedInvariants() < 200) {
             this.firingVector = transitions.get(transitionCounter);
 
             //System.out.println(getThreadName());
 
             //firingVector.print(2,0);
-            if (monitor.fireTransition(firingVector))
-            {
+            if (monitor.fireTransition(firingVector)) {
                 nextTransition();
-            }else
-            {
+            } else {
                 long sleepTime;
                 try {
                     sleepTime = this.monitor.getTimeLeft(Thread.currentThread().getId());
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     sleepTime = 0;
                 }
 
-                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 200)) {
+
+                if (!(this.monitor.getPetriNet().getCompletedInvariants() < 200)) {
                     try {
                         TimeUnit.MILLISECONDS.sleep(sleepTime);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
+                    if (!(this.monitor.getPetriNet().getCompletedInvariants() < 200)) {
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(sleepTime);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
                 }
             }
+            this.monitor.addDeadThreads();
+            //System.out.println(Thread.currentThread().getId() + ": finished run()");
+            System.out.println("Thread " + getThreadName() + ": finished run()");
+            this.monitor.printDeadThreads();
         }
-        this.monitor.addDeadThreads();
-        //System.out.println(Thread.currentThread().getId() + ": finished run()");
-        System.out.println("Thread " + getThreadName() + ": finished run()");
-        this.monitor.printDeadThreads();
     }
 }
 
