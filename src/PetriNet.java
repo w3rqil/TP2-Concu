@@ -122,14 +122,14 @@ public class PetriNet {
     // 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18
     private final double[] initialMarking = { 1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1 };
 
-    // 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+                                     // 0 1 2 3 4 5 6 7 8 9 10 11 12 13
     private final double[] aTimes = { 0, 0, 5, 5, 0, 0, 10, 10, 0, 0, 10, 10, 0, 5 };
     public List<Integer> tInvariantSum;
 
     private List<List<Integer>> tInvariants;
 
     public PetriNet() {
-        /// AGREGE AGU
+
         this.CurrentRoute = "";
         this.completedInvariants = 0;
         this.invariantCounting = new int[8];
@@ -138,8 +138,7 @@ public class PetriNet {
         this.currentMarking = new Matrix(initialMarking, 1);
         this.sensibilizedTransitions = new Matrix(1, incidence.getColumnDimension());
         this.pInvariants = new Matrix(pInvariant);
-        this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1); // esto esta mal creo, no hay que ver el la
-                                                                          // incidencia
+        this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1);
         this.workingVector = new Matrix(1, incidence.getColumnDimension());
         this.alphaTime = new Matrix(aTimes, 1);
         this.sensibilizedTime = new Matrix(1, incidence.getColumnDimension());
