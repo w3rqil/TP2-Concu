@@ -107,8 +107,8 @@ public class Main {
         //monitor.printDeadThreads();
         System.out.println("\nEnding program!");
         System.out.println(petrinet.transitionsCounterInfo());
-        System.out.println("T invariants:");
+        System.out.println("\nT invariants:");
         petrinet.tInvariantsInfo();
-        System.out.println("Elapsed Time: " + (double)((finalTime-initTime)/1000.0) + " seconds");
+        System.out.println("\nElapsed Time: " + (double)((finalTime-initTime)/1000.0) + " seconds");
     }
 }

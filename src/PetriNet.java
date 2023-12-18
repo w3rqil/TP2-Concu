@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import Jama.Matrix;
@@ -432,5 +431,4 @@ public class PetriNet {
     public Matrix getIncidenceMatrix() {
         return this.incidence;
     }
-
 }

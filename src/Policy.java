@@ -1,6 +1,4 @@
 import Jama.Matrix;
-
-//import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.lang.Math;

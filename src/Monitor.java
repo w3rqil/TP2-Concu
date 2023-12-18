@@ -209,6 +209,4 @@ public class Monitor {
     public PetriNet getPetriNet() {
         return this.petrinet;
     }
-
-    
 }
