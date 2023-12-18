@@ -54,22 +54,17 @@ public class Main {
 
         long start = System.currentTimeMillis();
 
-        // log.clearFile(); // que poronga es esto gordo te voy a cagar a bifes
-
         petrinet = new PetriNet();
 
-        // Policy policy = new Policy("8020");
         Policy policy = new Policy(policyType);
         System.out.println("Policy type: " + policyType + " \n");
-        // pNet.setCurrentMarkingVector(initialMarking); //ESTO NO VA ME PARECE
 
         monitor = new Monitor(petrinet, policy);
 
-        Threads[] threads = new Threads[amountThreads]; // public Threads(Matrix transitionsSequence, Monitor monitor)
+        Threads[] threads = new Threads[amountThreads];
 
-        petrinet.enableTransitions(); // Seteo de las transiciones sensibilizadas dado el marcado inicial de la red.
+        petrinet.enableTransitions();
 
-        // Creación y ejecución del hilo logger.
         try {
             long startTime = System.currentTimeMillis();
             Log log = new Log(petrinet, monitor, startTime, true);
@@ -105,14 +100,6 @@ public class Main {
             thread.start();
         }
 
-        /*
-         * for(int i=0; i<9 ; i++){
-         * //System.out.println("Invariante "+ i +" aparece "+
-         * petrinet.getValinvariantCounting(i) +" VECES ");
-         * System.out.println(i +" T-invariant appears "+
-         * petrinet.getValinvariantCounting(i) +" times.");
-         * }
-         */
 
         monitor.printDeadThreads();
 
