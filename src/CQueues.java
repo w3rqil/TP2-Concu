@@ -4,16 +4,15 @@ import Jama.Matrix;
 
 public class CQueues {
 
-    private final int maxQueues = 14; // cambiar (num transiciones)
+    private final int maxQueues = 14;
     private ArrayList<Semaphore> conditionQueues;
 
     public CQueues() {
         conditionQueues = new ArrayList<Semaphore>();
-        for (int i = 0; i < maxQueues; i++)
+        for (int i = 0; i < maxQueues; i++) {
             conditionQueues.add(new Semaphore(0));
-
+        }
     }
-
 
     /*
      * *************************
@@ -46,7 +45,6 @@ public class CQueues {
             else
                 index++;
         }
-
         return index;
     }
 
@@ -58,18 +56,13 @@ public class CQueues {
      */
     public Matrix queuedUp() {
         double[] aux = new double[this.maxQueues];
-
         for (Semaphore queue : conditionQueues) {
             if (queue.hasQueuedThreads())
                 aux[conditionQueues.indexOf(queue)] = 1;
             else
                 aux[conditionQueues.indexOf(queue)] = 0;
         }
-
         Matrix waitingThreads = new Matrix(aux, 1);
-
         return waitingThreads;
-
     }
-
 }

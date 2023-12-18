@@ -2,7 +2,8 @@ import Jama.Matrix;
 
 public class Main {
     private static final int amountThreads = 14;
-    private static final String policyType = "Equitative";
+    //private static final String policyType = "Equitative";
+    private static final String policyType = "8020";
     private static PetriNet petrinet; // Red de petri representativa del sistema.
     private static Monitor monitor; // Monitor que controlará la red de Petri que modela el sistema.
     private static double[] loader1 = { 0 };
@@ -51,9 +52,7 @@ public class Main {
      */
     //
     public static void main(String args[]) {
-
-        long start = System.currentTimeMillis();
-
+        Long initTime = System.currentTimeMillis();
         petrinet = new PetriNet();
 
         Policy policy = new Policy(policyType);
@@ -79,19 +78,16 @@ public class Main {
         }
 
         threads[0] = new Threads(loader1Path, monitor, "Loader 1");
-
         threads[1] = new Threads(loader2Path, monitor, "Loader 2");
         threads[2] = new Threads(resizer1Path, monitor, "Resizer 1");
         threads[3] = new Threads(resizer2Path, monitor, "Resizer 2");
         threads[4] = new Threads(improver1Path, monitor, "Improver 1");
         threads[5] = new Threads(improver2Path, monitor, "Improver 2");
         threads[6] = new Threads(exitPath, monitor, "Exit");
-
         threads[7] = new Threads(loader11Path, monitor, "Loader 1.1");
         threads[8] = new Threads(loader21Path, monitor, "Loader 2.1");
         threads[9] = new Threads(resizer11Path, monitor, "Resizer 1.1");
         threads[10] = new Threads(resizer21Path, monitor, "Resizer 2.1");
-
         threads[11] = new Threads(improver11Path, monitor, "Improver 1.1");
         threads[12] = new Threads(improver21Path, monitor, "Improver 2.1");
         threads[13] = new Threads(exit1Path, monitor, "Exit1");
@@ -99,13 +95,20 @@ public class Main {
         for (Threads thread : threads) {
             thread.start();
         }
-
-
-        monitor.printDeadThreads();
-
+        try {
+            for (Threads thread : threads) {
+                thread.join();
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        Long finalTime = System.currentTimeMillis();
+        //monitor.printDeadThreads();
+        System.out.println("\nEnding program!");
         System.out.println(petrinet.transitionsCounterInfo());
-
+        System.out.println("T invariants:");
+        petrinet.tInvariantsInfo();
+        System.out.println("Elapsed Time: " + (double)((finalTime-initTime)/1000.0) + " seconds");
     }
 }
-
-// tiempo actual 1702837283796 y time menos init 2

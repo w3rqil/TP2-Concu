@@ -3,7 +3,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import Jama.Matrix;
-//import MyEnum.transitionState;
 
 public class PetriNet {
 
@@ -11,46 +10,18 @@ public class PetriNet {
     private Matrix backwardsIncidence;
     private Matrix currentMarking;
     private Matrix sensibilizedTransitions; // vector de transiciones sensibilizadas
-    private Matrix pInvariants;
     private Matrix matriz;
-    private Matrix maxPInvariants;
     private Matrix workingVector;
     private Matrix alphaTime;
     private Matrix transitionCounter;
     private Matrix sensibilizedTime;
     public ArrayList<Integer> tInvariantsAux;
     private ArrayList<String> firedSequence;
-
     private int[] invariantCounting;
     private static int completedInvariants;
     private String CurrentRoute;
-
     private String allTransitionsPrint;
 
-    private int tInvariantCounter;
-    /*
-     * // T0 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 T12 T13
-     * {-1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-     * {-1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     * {0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     * {1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     * {-1, -1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1},
-     * {0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     * {0, 0, 1, 1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0},
-     * {0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0, 0},
-     * {0, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0, 0, 0},
-     * {0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0, 0},
-     * {0, 0, 0, 0, -1, -1, 1, 1, 0, 0, 0, 0, 0, 0},
-     * {0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0, 0, 0},
-     * {0, 0, 0, 0, 0, 0, 1, 1, -1, -1, 0, 0, 0, 0},
-     * {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0},
-     * {0, 0, 0, 0, 0, 0, 0, 0, -1, -1, 1, 1, 0, 0},
-     * {0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, -1, 0, 0},
-     * {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, -1, 0},
-     * {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, -1},
-     * {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 1}
-     * 
-     */
     private final double[][] matrixIndicence = {
             // T0 T1 T2 T3 T4 T5 T6 T7 T8 T9 T10 T11 T12 T13
             { -1, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 },
@@ -126,10 +97,7 @@ public class PetriNet {
     private final double[] aTimes = { 0, 0, 5, 5, 0, 0, 10, 10, 0, 0, 10, 10, 0, 5 };
     public List<Integer> tInvariantSum;
 
-    private List<List<Integer>> tInvariants;
-
     public PetriNet() {
-        /// AGREGE AGU
         this.CurrentRoute = "";
         this.completedInvariants = 0;
         this.invariantCounting = new int[8];
@@ -137,9 +105,6 @@ public class PetriNet {
         this.backwardsIncidence = new Matrix(bIncidence);
         this.currentMarking = new Matrix(initialMarking, 1);
         this.sensibilizedTransitions = new Matrix(1, incidence.getColumnDimension());
-        this.pInvariants = new Matrix(pInvariant);
-        this.maxPInvariants = new Matrix(incidence.getRowDimension(), 1); // esto esta mal creo, no hay que ver el la
-                                                                          // incidencia
         this.workingVector = new Matrix(1, incidence.getColumnDimension());
         this.alphaTime = new Matrix(aTimes, 1);
         this.sensibilizedTime = new Matrix(1, incidence.getColumnDimension());
@@ -150,30 +115,8 @@ public class PetriNet {
         for (int j = 0; j < 14; j++) {
             transitionCounter.set(0, j, 0.0);
         }
-        this.tInvariants = new ArrayList<>();
-        setTInvariants();
-        this.tInvariantCounter = 0;
-
     }
 
-    private void setTInvariants() {
-        Integer[] tInvariant0 = { 1, 3, 5, 7, 9, 11, 12, 13 };
-        Integer[] tInvariant1 = { 1, 3, 5, 7, 8, 10, 12, 13 };
-        Integer[] tInvariant2 = { 1, 3, 4, 6, 9, 11, 12, 13 };
-        Integer[] tInvariant3 = { 1, 3, 4, 6, 8, 10, 12, 13 };
-        Integer[] tInvariant4 = { 0, 2, 5, 7, 9, 11, 12, 13 };
-        Integer[] tInvariant5 = { 0, 2, 5, 7, 8, 10, 12, 13 };
-        Integer[] tInvariant6 = { 0, 2, 4, 6, 9, 11, 12, 13 };
-        Integer[] tInvariant7 = { 0, 2, 4, 6, 8, 10, 11, 13 };
-        this.tInvariants.add(Arrays.asList(tInvariant0));
-        this.tInvariants.add(Arrays.asList(tInvariant1));
-        this.tInvariants.add(Arrays.asList(tInvariant2));
-        this.tInvariants.add(Arrays.asList(tInvariant3));
-        this.tInvariants.add(Arrays.asList(tInvariant4));
-        this.tInvariants.add(Arrays.asList(tInvariant5));
-        this.tInvariants.add(Arrays.asList(tInvariant6));
-        this.tInvariants.add(Arrays.asList(tInvariant7));
-    }
 
     /*
      * ********************
@@ -194,9 +137,7 @@ public class PetriNet {
     }
 
     public boolean fundamentalEquationTest(Matrix firingVector) {
-
         matriz = fundamentalEquation(firingVector);
-
         for (int i = 0; i < this.matriz.getColumnDimension(); i++)
             if (this.matriz.get(0, i) < 0) {
                 return false;
@@ -214,9 +155,7 @@ public class PetriNet {
      * @return 
      */
     void enableTransitions() {
-        // currentMarking.print(2,0);
         Long time = System.currentTimeMillis();// tiempo actual
-
         for (int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
             boolean enabledTransition = true;
             for (int j = 0; j < backwardsIncidence.getRowDimension(); j++) {
@@ -233,9 +172,7 @@ public class PetriNet {
             }
 
         }
-        System.out.println("Enabled transitions: " + getEnabledTransitionsInfo());
-        // sensibilizedTransitions.print(1, 0);
-
+        //System.out.println("Enabled transitions: " + getEnabledTransitionsInfo());
     }
 
     /*
@@ -254,16 +191,10 @@ public class PetriNet {
     }
 
     public String getAllTransitionsPrint() {
-
         return allTransitionsPrint;
     }
 
     /*
-     * - cambiar marcado actual
-     * - actualizar sensibilizadas
-     * - checkear invariantes
-     * - agregar disparo a la secuencia
-     *
      * Este es el metodo fire transition pero quería usar el nombre
      * fire transition en monitor
      * 
@@ -280,12 +211,10 @@ public class PetriNet {
     void fire(Matrix v) // esta es la que hace el disparo literal, actualizando la rdp
     {
         setCurrentMarking(fundamentalEquation(v));
-    
         setWorkingVector(v, 0);
-
         testPInvariants();
         enableTransitions();
-        firedSequence.add("T" + getIndex(v) + ""); // tiene TODAS las secuencia de transiciones disparadas
+        firedSequence.add("T" + getIndex(v) + ""); // tiene todas las secuencia de transiciones disparadas
         System.out.println("Firing: T" + getIndex(v));
         for (int i = 0; i < v.getRowDimension(); i++) {
             for (int j = 0; j < v.getColumnDimension(); j++) {
@@ -296,21 +225,8 @@ public class PetriNet {
         }
         System.out.println(transitionsCounterInfo());
         System.out.println("Current marking:\n" + getMarkingInfo());
-        // this.currentMarking.print(2,0);
-
-        // T1 T3 T5 T7 T9 T11 T12 T13
-        // T1 T3 T5 T7 T8 T10 T12 T13
-        // T1 T3 T4 T6 T9 T11 T12 T13
-        // T1 T3 T4 T6 T8 T10 T12 T13
-        // T0 T2 T5 T7 T9 T11 T12 T13
-        // T0 T2 T5 T7 T8 T10 T12 T13
-        // T0 T2 T4 T6 T9 T11 T12 T13
-        // T0 T2 T4 T6 T8 T10 T11 T13 */
-
         String lastTransition = getIndex(v) + "";
-
         allTransitionsPrint += "T" + lastTransition;
-
         followUp(lastTransition);
 
     }
@@ -349,8 +265,6 @@ public class PetriNet {
 
     
     /*
-     *
-     * 
      * Checks the 'state' of the transition that is going to be fired.
      * 0 - No one is working on it. STATE = NONE
      * 1 - Someone is working on it, but it is not the thread that is requesting it. STATE = OTHER
@@ -422,23 +336,24 @@ public class PetriNet {
             else {
 
                 for (int i = 0; i < 8; i++) {
-                    // System.out.println("INVARIANTE "+ i +" " +"OCURRIO " +
-                    // getValinvariantCounting(i) + " VECES ");
                     System.out.println(i + " T-invariant appears " + getValinvariantCounting(i) + " times.");
                 }
-
                 System.out.println("Error in T-Invariant: " + CurrentRoute);
             }
 
             for (int i = 0; i < 8; i++) {
-                // System.out.println("INVARIANTE "+ i +" " +"OCURRIO " +
-                // getValinvariantCounting(i) + " VECES ");
                 System.out.println(i + " T-invariant appears " + getValinvariantCounting(i) + " times.");
             }
 
             CurrentRoute = "";
         }
 
+    }
+
+    public void tInvariantsInfo() {
+        for (int i = 0; i < 8; i++) {
+            System.out.println(i + " T-invariant appears " + getValinvariantCounting(i) + " times.");
+        }
     }
 
     /*

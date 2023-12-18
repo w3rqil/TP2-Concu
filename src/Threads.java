@@ -44,15 +44,10 @@ public class Threads extends Thread {
     @Override
     public void run()
     {
-        //System.out.println(Thread.currentThread().getId() + ": started run()");
         System.out.println("Thread " + getThreadName() + ": started run()");
         while (this.monitor.getPetriNet().getCompletedInvariants() < 200)
         {
             this.firingVector = transitions.get(transitionCounter);
-
-            //System.out.println(getThreadName());
-
-            //firingVector.print(2,0);
             if (monitor.fireTransition(firingVector))
             {
                 nextTransition();
@@ -77,9 +72,8 @@ public class Threads extends Thread {
             }
         }
         this.monitor.addDeadThreads();
-        //System.out.println(Thread.currentThread().getId() + ": finished run()");
         System.out.println("Thread " + getThreadName() + ": finished run()");
-        this.monitor.printDeadThreads();
+        //this.monitor.printDeadThreads();
     }
 }
 

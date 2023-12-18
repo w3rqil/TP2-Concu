@@ -1,8 +1,6 @@
-
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 import Jama.Matrix;
-//import java.util.ArrayList;
 
 public class Monitor {
 
@@ -83,7 +81,6 @@ public class Monitor {
 
                 petrinet.fire(v);
                 Matrix sensibilized = petrinet.getSensibilized();
-                // sensibilized.print(0,2);
 
                 Matrix queued = conditionQueues.queuedUp();
                 Matrix and = sensibilized.arrayTimes(queued); //  'and' '&'
@@ -98,7 +95,7 @@ public class Monitor {
 
                     System.out.println("Thread ID: " + Thread.currentThread().getId() + " wakes up");
 
-                } else // there's none transition enabled and queued
+                } else // there's no transition enabled and queued
                 {
                     System.out.println("k turns to false");
                     k = false;
@@ -113,11 +110,8 @@ public class Monitor {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-
         }
-
         exitMonitor();
         return true;
     }
@@ -142,7 +136,6 @@ public class Monitor {
             return false;
         }
     }
-
 
     /*
      * *************************
@@ -204,9 +197,6 @@ public class Monitor {
      * *** Getters & Setters ***
      * *************************
      */
-    public HashMap<Long, Long> getTimeLeftMap() {
-        return this.timeLeft;
-    }
 
     public synchronized long getTimeLeft(long id) {
         return this.timeLeft.get(id);

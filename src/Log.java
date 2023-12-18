@@ -132,42 +132,25 @@ public class Log extends Thread {
                 pw_log.print(
                         "\n                                                                                               ");
 
-                pw_log.print("\n                        ⏲️ " + (float) ((finishTime - startTime) / 1000) + " second.");
+                pw_log.print("\n                        ⏲️ " + (float) ((finishTime - startTime) / 1000.0) + " seconds.");
                 pw_log.print(
                         "\n                                                                                               ");
                 pw_log.print(
                         "\n                                                                                               ");
-
                 Matrix finalMarkingVector = petrinet.getCurrentMarking();
-
                 String finalMarking = "[ ";
-
                 for (int i = 0; i < finalMarkingVector.getColumnDimension(); i++)
                     finalMarking += (int) finalMarkingVector.get(0, i) + " ";
-
                 finalMarking += "]";
-
                 // Despierta a los hilos encolados en las colas de condición de la red.
                 for (Semaphore queue : monitor.getConditionQueues().getQueued())
                     if (queue.hasQueuedThreads())
                         queue.release(queue.getQueueLength());
-
                 // Chequeo de hilos encolados en ArrivalRate.
                 if (monitor.getMutex().hasQueuedThreads())
                     monitor.getMutex().release(monitor.getMutex().getQueueLength());
-
                String info = petrinet.transitionsCounterInfo();
-
-
-               // int aux[] = petrinet.occurrencesArr();
-              //  int total = 0;
-
-
-
                 pw_log.print("\n                    ➡️ " + info);
-
-
-
                 pw_log.println();
                 pw_log.print("\n\n");
                 pw_log.close();
@@ -175,17 +158,12 @@ public class Log extends Thread {
             } else {
 
                 File archivo = new File(".//transitions.txt");
-
                 archivo.delete();
-
                 PrintWriter inv_log = new PrintWriter(new FileWriter(".//transitions.txt", false));
                 String withoutNull = "";
-
                 withoutNull = petrinet.getAllTransitionsPrint().substring(4,
                         petrinet.getAllTransitionsPrint().length());
-
                 inv_log.print(withoutNull);
-
                 inv_log.close();
             }
 
