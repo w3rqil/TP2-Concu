@@ -349,13 +349,6 @@ public class PetriNet {
     
     /*
      *
-     * Checkeo el estado de la transición que quiero disparar
-     *
-     * Estados:
-     * 1) No hay nadie (0). ESTADO = NONE
-     * 2) Hay alguien que no es el hilo solicitante (IDs no coincidentes) ESTADO =
-     * OTHER
-     * 3) Quien estaba trabajando es el hilo solicitante. ESTADO = SELF
      * 
      * Checks the 'state' of the transition that is going to be fired.
      * 0 - No one is working on it. STATE = NONE
