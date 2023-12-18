@@ -50,7 +50,7 @@ public class Threads extends Thread {
         {
             this.firingVector = transitions.get(transitionCounter);
 
-            System.out.println(getThreadName());
+            //System.out.println(getThreadName());
 
             //firingVector.print(2,0);
             if (monitor.fireTransition(firingVector))

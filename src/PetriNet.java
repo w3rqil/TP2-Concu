@@ -336,12 +336,14 @@ public class PetriNet {
     }
 
     public String transitionsCounterInfo()
-
     {
+        int totalCount = 0;
         String arg = "Transitions:\n";
         for (int i = 0; i < transitionCounter.getColumnDimension(); i++) {
-            arg += ("   - T" + i + ": " + (int) transitionCounter.get(0, i) + " times\n");
+            arg += ("                         🔹T" + i + ": " + (int) transitionCounter.get(0, i) + " times\n");
+            totalCount += (int) transitionCounter.get(0, i);
         }
+        arg += ("                                   🔹Total transitions: " +totalCount);
         return arg;
     }
 
@@ -533,36 +535,40 @@ public class PetriNet {
     public int[] occurrencesArr() {
         int[] occurrences = new int[14];
 
+        //                              T3T4T6T9T11
+
         for (int i = 0; i < (getAllTransitionsPrint().length() - 1); i++) {
-            if (getAllTransitionsPrint().charAt(i) == '0' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            if (getAllTransitionsPrint().charAt(i) == '0' && getAllTransitionsPrint().charAt(i + 1) == 'T'  ) {
                 occurrences[0]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == 'T'   &&  getAllTransitionsPrint().charAt(i - 1) != 'T') {
                 occurrences[1]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '2' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '2' && getAllTransitionsPrint().charAt(i + 1) == 'T'    ) {
                 occurrences[2]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '3' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '3' && getAllTransitionsPrint().charAt(i + 1) == 'T'    ) {
                 occurrences[3]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '4' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '4' && getAllTransitionsPrint().charAt(i + 1) == 'T'   ) {
                 occurrences[4]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '5' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '5' && getAllTransitionsPrint().charAt(i + 1) == 'T'   ) {
                 occurrences[5]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '6' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '6' && getAllTransitionsPrint().charAt(i + 1) == 'T'   ) {
                 occurrences[6]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '7' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '7' && getAllTransitionsPrint().charAt(i + 1) == 'T'   ) {
                 occurrences[7]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '8' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '8' && getAllTransitionsPrint().charAt(i + 1) == 'T'   ) {
                 occurrences[8]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '9' && getAllTransitionsPrint().charAt(i + 1) == 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '9' && getAllTransitionsPrint().charAt(i + 1) == 'T'   ) {
                 occurrences[9]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '0'   &&  getAllTransitionsPrint().charAt(i - 2) != 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '0'  ) {
                 occurrences[10]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '1'   &&  getAllTransitionsPrint().charAt(i - 2) != 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '1'  ) {
                 occurrences[11]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '2'   &&  getAllTransitionsPrint().charAt(i - 2) != 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '2'   ) {
                 occurrences[12]++;
-            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '3'   &&  getAllTransitionsPrint().charAt(i - 2) != 'T') {
+            } else if (getAllTransitionsPrint().charAt(i) == '1' && getAllTransitionsPrint().charAt(i + 1) == '3'   ) {
                 occurrences[13]++;
             }
+
+         //  T3T4T6T9T11
 
             else {
 

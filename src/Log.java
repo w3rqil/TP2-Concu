@@ -115,7 +115,7 @@ public class Log extends Thread {
                 long finishTime = System.currentTimeMillis();
 
                 pw_log.print(
-                        "\n                    ➡️ T̲r̲i̲g̲g̲e̲r̲e̲d̲ t̲r̲a̲n̲s̲i̲t̲i̲o̲n̲s                                                ");
+                        "\n                    ➡️ T̲r̲i̲g̲g̲e̲r̲e̲d̲ t̲r̲a̲n̲s̲i̲t̲i̲o̲n̲s̲                                                ");
                 pw_log.print(
                         "\n                                                                                               ");
 
@@ -133,6 +133,10 @@ public class Log extends Thread {
                         "\n                                                                                               ");
 
                 pw_log.print("\n                        ⏲️ " + (float) ((finishTime - startTime) / 1000) + " second.");
+                pw_log.print(
+                        "\n                                                                                               ");
+                pw_log.print(
+                        "\n                                                                                               ");
 
                 Matrix finalMarkingVector = petrinet.getCurrentMarking();
 
@@ -152,39 +156,17 @@ public class Log extends Thread {
                 if (monitor.getMutex().hasQueuedThreads())
                     monitor.getMutex().release(monitor.getMutex().getQueueLength());
 
-                int aux[] = petrinet.occurrencesArr();
+               String info = petrinet.transitionsCounterInfo();
 
-                pw_log.print(
-                        "\n                    ➡️ T̲r̲a̲n̲s̲i̲t̲i̲o̲n̲ T̲r̲i̲g̲g̲e̲r̲ O̲c̲c̲u̲r̲r̲e̲n̲c̲e̲s̲                                                ");
 
-                pw_log.print("\n                     🔹 Transition  T0  appears " + aux[0]
-                        + "   times.             ➡️    Percentage        " + aux[0] / 14);
-                pw_log.print("\n                     🔹 Transition  T1  appears " + aux[1]
-                        + "   times.             ➡️    Percentage        " + aux[1] / 14);
-                pw_log.print("\n                     🔹 Transition  T2  appears " + aux[2]
-                        + "   times.             ➡️    Percentage        " + aux[2] / 14);
-                pw_log.print("\n                     🔹 Transition  T3  appears " + aux[3]
-                        + "   times.             ➡️    Percentage        " + aux[3] / 14);
-                pw_log.print("\n                     🔹 Transition  T4  appears " + aux[4]
-                        + "   times.             ➡️    Percentage        " + aux[4] / 14);
-                pw_log.print("\n                     🔹 Transition  T5  appears " + aux[5]
-                        + "   times.             ➡️    Percentage        " + aux[5] / 14);
-                pw_log.print("\n                     🔹 Transition  T6  appears " + aux[6]
-                        + "   times.             ➡️    Percentage        " + aux[6] / 14);
-                pw_log.print("\n                     🔹 Transition  T7  appears " + aux[7]
-                        + "   times.             ➡️    Percentage        " + aux[7] / 14);
-                pw_log.print("\n                     🔹 Transition  T8  appears " + aux[8]
-                        + "   times.             ➡️    Percentage        " + aux[8] / 14);
-                pw_log.print("\n                     🔹 Transition  T9  appears " + aux[9]
-                        + "   times.             ➡️    Percentage        " + aux[9] / 14);
-                pw_log.print("\n                     🔹 Transition  T10 appears " + aux[10]
-                        + " times.             ➡️    Percentage        " + aux[10] / 14);
-                pw_log.print("\n                     🔹 Transition  T11 appears " + aux[11]
-                        + " times.             ➡️    Percentage        " + aux[11] / 14);
-                pw_log.print("\n                     🔹 Transition  T12 appears " + aux[12]
-                        + " times.             ➡️    Percentage        " + aux[12] / 14);
-                pw_log.print("\n                     🔹 Transition  T13 appears " + aux[13]
-                        + " times.             ➡️    Percentage        " + aux[13] / 14);
+               // int aux[] = petrinet.occurrencesArr();
+              //  int total = 0;
+
+
+
+                pw_log.print("\n                    ➡️ " + info);
+
+
 
                 pw_log.println();
                 pw_log.print("\n\n");
