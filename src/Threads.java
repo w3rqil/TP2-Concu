@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import Jama.Matrix;
+import java.util.concurrent.TimeUnit;
 
 public class Threads extends Thread {
     
@@ -49,18 +50,36 @@ public class Threads extends Thread {
         {
             this.firingVector = transitions.get(transitionCounter);
 
-            System.out.println(getThreadName());
+            //System.out.println(getThreadName());
 
             //firingVector.print(2,0);
             if (monitor.fireTransition(firingVector))
             {
                 nextTransition();
+            }else
+            {
+                long sleepTime;
+                try {
+                    sleepTime = this.monitor.getTimeLeft(Thread.currentThread().getId());
+                }
+                catch (Exception e) {
+                    sleepTime = 0;
+                }
+                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 200))
+                {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(sleepTime);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
         }
         this.monitor.addDeadThreads();
         //System.out.println(Thread.currentThread().getId() + ": finished run()");
         System.out.println("Thread " + getThreadName() + ": finished run()");
-        this.monitor.printDaDead();
+        this.monitor.printDeadThreads();
     }
 }
 
