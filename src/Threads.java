@@ -65,14 +65,15 @@ public class Threads extends Thread {
                 catch (Exception e) {
                     sleepTime = 0;
                 }
-                
-                try {
-                    TimeUnit.MILLISECONDS.sleep(sleepTime);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 200))
+                {
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(sleepTime);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-                
+                }
             }
         }
         this.monitor.addDeadThreads();
