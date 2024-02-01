@@ -52,7 +52,7 @@ public class Monitor {
             }
         } catch(Exception e) {
             System.err.println("❌  I was interrupted with the monitor in my hands  ❌");
-            System.exit(1);     // Stop the program with a non-zero exit code
+            System.exit(1);     // Stops the program with a non-zero exit code
         }
 
         if(!petrinet.fundamentalEquationTest(v) || (petrinet.workingState(v) == 1)) {
