@@ -38,7 +38,7 @@ public class Log extends Thread {
     @Override
     public void run() {
 
-        while (this.monitor.getPetriNet().getCompletedInvariants() < 1) {
+        while (this.monitor.getPetriNet().getCompletedInvariants() < 200) {
             try {
                 sleep(5);
                 // pw_log.print("\n" + petrinet.getAllTransitionsPrint());

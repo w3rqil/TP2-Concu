@@ -62,7 +62,7 @@ public class Threads extends Thread {
                 {
                     sleepTime = 0;
                 }
-                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 1))
+                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 200))
                 {
                     try
                     {
