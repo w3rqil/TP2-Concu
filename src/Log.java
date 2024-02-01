@@ -38,12 +38,13 @@ public class Log extends Thread {
     @Override
     public void run() {
 
-        while (this.monitor.getPetriNet().getCompletedInvariants() < 200) {
+        while (this.monitor.getPetriNet().getCompletedInvariants() < 1) {
             try {
                 sleep(5);
                 // pw_log.print("\n" + petrinet.getAllTransitionsPrint());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch(Exception e) {
+                System.err.println("❌  interrupted while sleeping  ❌");
+                System.exit(1);     // Stop the program with a non-zero exit code
             }
         }
 
@@ -167,8 +168,9 @@ public class Log extends Thread {
                 inv_log.close();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch(Exception e) {
+            System.err.println("❌  I can't write the log, there is an error.  ❌");
+            System.exit(1);     // Stop the program with a non-zero exit code
         }
     }
 }

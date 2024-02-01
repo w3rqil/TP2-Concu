@@ -1,56 +1,42 @@
 import Jama.Matrix;
 
 public class Main {
-    private static final int amountThreads = 14;
-    //private static final String policyType = "Equitative";
-    private static final String policyType = "8020";
-    private static PetriNet petrinet; // Red de petri representativa del sistema.
-    private static Monitor monitor; // Monitor que controlará la red de Petri que modela el sistema.
-    private static double[] loader1 = { 0 };
-    private static double[] loader11 = { 2 };
-    // 1 y 3
-    private static double[] loader2 = { 1 };
-    private static double[] loader21 = { 3 };
-    // 4 y 6
-    private static double[] resizer1 = { 4 };
-    private static double[] resizer11 = { 6 };
-    // 5 y 7
-    private static double[] resizer2 = { 5 };
-    private static double[] resizer21 = { 7 };
-    // 8 y 10
-    private static double[] improver1 = { 8 };
-    private static double[] improver11 = { 10 };
-    // 9 y 11
-    private static double[] improver2 = { 9 };
-    private static double[] improver21 = { 11 };
-    // 12 y 13
-    private static double[] exit = { 12 };
-    private static double[] exit1 = { 13 };
+    private static final int amountThreads = 7;
+    private static final String policyType = "Equitative";
+    //private static final String policyType = "8020";
+    private static PetriNet petrinet;               // Petri net representative of the system.
+    private static Monitor monitor;                 // Monitor that will control the Petri net that models the system.
+    private static double[] loaderLeft = { 0,2 };
 
-    // matrices con transiciones asociadas a los hilos
-    private static Matrix loader1Path = new Matrix(loader1, 1); // version traspuesta de P0
-    private static Matrix loader2Path = new Matrix(loader2, 1); // version traspuesta de P1
-    private static Matrix resizer1Path = new Matrix(resizer1, 1); // version traspuesta de P2
-    private static Matrix resizer2Path = new Matrix(resizer2, 1); // version traspuesta de P3
-    private static Matrix improver1Path = new Matrix(improver1, 1); // version traspuesta de P4
-    private static Matrix improver2Path = new Matrix(improver2, 1); // version traspuesta de P5
-    private static Matrix exitPath = new Matrix(exit, 1); // version traspuesta de P6
-    private static Matrix loader11Path = new Matrix(loader11, 1); // version traspuesta de P0
-    private static Matrix loader21Path = new Matrix(loader21, 1); // version traspuesta de P1
-    private static Matrix resizer11Path = new Matrix(resizer11, 1); // version traspuesta de P2
-    private static Matrix resizer21Path = new Matrix(resizer21, 1); // version traspuesta de P3
-    private static Matrix improver11Path = new Matrix(improver11, 1); // version traspuesta de P4
-    private static Matrix improver21Path = new Matrix(improver21, 1); // version traspuesta de P5
-    private static Matrix exit1Path = new Matrix(exit1, 1); // version traspuesta de P6
+    private static double[] loaderRight = { 1,3 };
+
+    private static double[] resizerLeft = { 4, 6 };
+
+    private static double[] resizerRight = { 5,7 };
+
+    private static double[] improverLeft = { 8,10 };
+
+    private static double[] improverRight = { 9,11 };
+
+    private static double[] exit = { 12,13 };
+
+    // arrays with transitions associated with threads
+    private static Matrix loaderLeftPath = new Matrix(loaderLeft, 1);         // transposed version of de loaderLeft
+    private static Matrix loaderRightPath = new Matrix(loaderRight, 1);       // transposed version of de loaderRight
+    private static Matrix resizerLeftPath = new Matrix(resizerLeft, 1);       // transposed version of de resizerLeft
+    private static Matrix resizerRightPath = new Matrix(resizerRight, 1);     // transposed version of de resizerRight
+    private static Matrix improverLeftPath = new Matrix(improverLeft, 1);     // transposed version of de improverLeft
+    private static Matrix improverRightPath = new Matrix(improverRight, 1);   // transposed version of de improverRight
+    private static Matrix exitPath = new Matrix(exit, 1);                     // transposed version of de exit
 
     /**
-     * Método principal.
+     * Main method.
      *
-     * Aquí se instancian y ejecutan los hilos con sus caminos asociados.
-     * También se inicializan tanto la red de Petri con su marcado inicial
-     * como el monitor y el hilo logger.
+     * Here the threads with their associated paths are instantiated and executed.
+     * Both the Petri net are also initialized with their initial marking
+     * like the monitor and the logger thread.
      */
-    //
+
     public static void main(String args[]) {
         Long initTime = System.currentTimeMillis();
         petrinet = new PetriNet();
@@ -73,24 +59,18 @@ public class Main {
             transition.start();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error creating logger.");
+            System.err.println("❌ Error creating logger. ❌");
+            System.exit(1);     // Stop the program with a non-zero exit code
         }
 
-        threads[0] = new Threads(loader1Path, monitor, "Loader 1");
-        threads[1] = new Threads(loader2Path, monitor, "Loader 2");
-        threads[2] = new Threads(resizer1Path, monitor, "Resizer 1");
-        threads[3] = new Threads(resizer2Path, monitor, "Resizer 2");
-        threads[4] = new Threads(improver1Path, monitor, "Improver 1");
-        threads[5] = new Threads(improver2Path, monitor, "Improver 2");
+        threads[0] = new Threads(loaderLeftPath, monitor, "Loader Left");
+        threads[1] = new Threads(loaderRightPath, monitor, "Loader Right");
+        threads[2] = new Threads(resizerLeftPath, monitor, "Resizer Left");
+        threads[3] = new Threads(resizerRightPath, monitor, "Resizer Right");
+        threads[4] = new Threads(improverLeftPath, monitor, "Improver Left");
+        threads[5] = new Threads(improverRightPath, monitor, "Improver Right");
         threads[6] = new Threads(exitPath, monitor, "Exit");
-        threads[7] = new Threads(loader11Path, monitor, "Loader 1.1");
-        threads[8] = new Threads(loader21Path, monitor, "Loader 2.1");
-        threads[9] = new Threads(resizer11Path, monitor, "Resizer 1.1");
-        threads[10] = new Threads(resizer21Path, monitor, "Resizer 2.1");
-        threads[11] = new Threads(improver11Path, monitor, "Improver 1.1");
-        threads[12] = new Threads(improver21Path, monitor, "Improver 2.1");
-        threads[13] = new Threads(exit1Path, monitor, "Exit1");
+
 
         for (Threads thread : threads) {
             thread.start();
@@ -101,7 +81,8 @@ public class Main {
             }
         }
         catch(Exception e) {
-            e.printStackTrace();
+            System.err.println("❌ I can't wait, I'm tired. ❌");
+            System.exit(1);     // Stop the program with a non-zero exit code
         }
         Long finalTime = System.currentTimeMillis();
         //monitor.printDeadThreads();

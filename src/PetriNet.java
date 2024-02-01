@@ -93,7 +93,7 @@ public class PetriNet {
     private final double[] initialMarking = { 1, 1, 1, 0, 3, 0, 0, 1, 1, 0, 2, 0, 0, 0, 1, 0, 0, 0, 1 };
 
     // 0 1 2 3 4 5 6 7 8 9 10 11 12 13
-    private final double[] aTimes = { 0, 0, 5, 5, 0, 0, 10, 10, 0, 0, 10, 10, 0, 5 };
+    private final double[] aTimes = { 0, 0, 100, 100, 0, 0, 200, 200, 0, 0, 200, 200, 0, 100 };
     public List<Integer> tInvariantSum;
 
     public PetriNet() {
@@ -381,11 +381,7 @@ public class PetriNet {
             System.out.println("Error in a p-invariant.");
         }
     }
-    /*
-     * ************************
-     * *** Geters & Setters ***
-     * ************************
-     */
+
 
     public Matrix getCurrentMarking() {
         return currentMarking;

@@ -45,7 +45,7 @@ public class Threads extends Thread {
     public void run()
     {
         System.out.println("Thread " + getThreadName() + ": started run()");
-        while (this.monitor.getPetriNet().getCompletedInvariants() < 200)
+        while (this.monitor.getPetriNet().getCompletedInvariants() < 1)
         {
             this.firingVector = transitions.get(transitionCounter);
             if (monitor.fireTransition(firingVector))
@@ -60,20 +60,19 @@ public class Threads extends Thread {
                 catch (Exception e) {
                     sleepTime = 0;
                 }
-                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 200))
+                if(!(this.monitor.getPetriNet().getCompletedInvariants() < 1))
                 {
                     try {
                         TimeUnit.MILLISECONDS.sleep(sleepTime);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    } catch(Exception e) {
+                        System.err.println("❌  interrupted while sleeping  ❌");
+                        System.exit(1);     // Stop the program with a non-zero exit code
                     }
-
                 }
             }
         }
         this.monitor.addDeadThreads();
         System.out.println("Thread " + getThreadName() + ": finished run()");
-        //this.monitor.printDeadThreads();
     }
 }
 

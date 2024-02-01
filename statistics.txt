@@ -12,41 +12,41 @@
                                                                                                
                     ➡️ T̲r̲a̲n̲s̲i̲t̲i̲o̲n̲ I̲n̲v̲a̲r̲i̲a̲n̲t̲s̲ P̲a̲r̲t̲i̲c̲i̲p̲a̲t̲i̲o̲n̲ R̲e̲g̲i̲s̲t̲e̲r̲                           
                                                                                                
-                        0️⃣  T-invariant appears 14 times.                                
-                        1️⃣  T-invariant appears 44 times.                                  
-                        2️⃣  T-invariant appears 8 times.                                  
-                        3️⃣  T-invariant appears 50 times.                                  
-                        4️⃣  T-invariant appears 10 times.                                  
-                        5️⃣  T-invariant appears 28 times.                                  
-                        6️⃣  T-invariant appears 13 times.                                  
-                        7️⃣  T-invariant appears 33 times.                                  
+                        0️⃣  T-invariant appears 0 times.                                
+                        1️⃣  T-invariant appears 0 times.                                  
+                        2️⃣  T-invariant appears 0 times.                                  
+                        3️⃣  T-invariant appears 0 times.                                  
+                        4️⃣  T-invariant appears 0 times.                                  
+                        5️⃣  T-invariant appears 0 times.                                  
+                        6️⃣  T-invariant appears 0 times.                                  
+                        7️⃣  T-invariant appears 1 times.                                  
                                                                                                
                                                                                                
                     ➡️ T̲r̲i̲g̲g̲e̲r̲e̲d̲ t̲r̲a̲n̲s̲i̲t̲i̲o̲n̲s̲                                                
                                                                                                
-                        🔹T0T2T5T7T8T10T12T13T0T2T4T6T9T11T12T13T0T2T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T4T6T8T10T12T13T0T2T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T9T11T12T13T0T2T5T7T8T10T12T13T1T3T4T6T9T11T12T13T0T2T4T6T9T11T12T13T0T2T4T6T8T10T12T13T1T3T4T6T9T11T12T13T0T2T4T6T9T11T12T13T1T3T5T7T9T11T12T13T1T3T5T7T8T10T12T13T0T2T4T6T9T11T12T13T0T2T5T7T9T11T12T13T1T3T4T6T8T10T12T13T1T3T5T7T9T11T12T13T0T2T4T6T8T10T12T13T0T2T5T7T9T11T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T0T2T5T7T8T10T12T13T0T2T5T7T9T11T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T0T2T5T7T8T10T12T13T0T2T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T9T11T12T13T1T3T5T7T9T11T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T1T3T5T7T8T10T12T13T0T2T4T6T9T11T12T13T0T2T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T9T11T12T13T1T3T5T7T9T11T12T13T0T2T4T6T9T11T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T9T11T12T13T1T3T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T9T11T12T13T1T3T5T7T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T8T10T12T13T0T2T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T0T2T5T7T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T9T11T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T9T11T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T9T11T12T13T1T3T4T6T8T10T12T13T1T3T4T6T9T11T12T13T0T2T4T6T8T10T12T13T0T2T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T0T2T5T7T9T11T12T13T0T2T5T7T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T9T11T12T13T1T3T5T7T8T10T12T13T1T3T4T6T9T11T12T13T1T3T5T7T8T10T12T13T0T2T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T5T7T9T11T12T13T0T2T5T7T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T9T11T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T0T2T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T5T7T9T11T12T13T1T3T4T6T8T10T12T13T1T3T4T6T9T11T12T13T1T3T5T7T8T10T12T13T0T2T5T7T8T10T12T13T0T2T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T5T7T9T11T12T13T1T3T4T6T9T11T12T13T0T2T5T7T8T10T12T13T1T3T5T7T9T11T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T9T11T12T13T1T3T5T7T8T10T12T13T0T2T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T4T6T9T11T12T13T1T3T5T7T9T11T12T13T0T2T4T6T8T10T12T13T1T3T4T6T8T10T12T13T0T2T4T6T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T9T11T12T13T1T3T5T7T8T10T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T0T2T5T7T8T10T12T13T0T2T4T6T9T11T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T4T6T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T9T11T12T13T1T3T4T6T9T11T12T13T0T2T4T6T8T10T12T13T0T2T4T6T8T10T12T13T0T2T5T7T8T10T12T13T1T3T5T7T8T10T12T13T0T2T4T6T8T10T12T13T1T3T5T7T8T10T12T13T0T2T5T7T8T10T12T13T1T3T5T7T8T10T12T13T1T3T5T7T9T11T12T13T1T3T4T6T8T10T12T13T1T3T5T7T9T11T12T13T1T3T5T7T9T11T12T13T1T3T4T6T8T10T12T13T0T2T5T7T9T11T12T13T1T3T4T6T8T10T12T13
+                        🔹T0T2T4T6T8T10T12T13T0
                                                                                                
                                                                                                
                     ➡️ T̲h̲e̲ e̲x̲e̲c̲u̲t̲i̲o̲n̲ t̲i̲m̲e̲ w̲a̲s̲:                                              
                                                                                                
-                        ⏲️ 7.454 seconds.
+                        ⏲️ 0.639 seconds.
                                                                                                
                                                                                                
                     ➡️ Transitions:
-                         🔹T0: 84 times
-                         🔹T1: 116 times
-                         🔹T2: 84 times
-                         🔹T3: 116 times
-                         🔹T4: 104 times
-                         🔹T5: 96 times
-                         🔹T6: 104 times
-                         🔹T7: 96 times
-                         🔹T8: 155 times
-                         🔹T9: 45 times
-                         🔹T10: 155 times
-                         🔹T11: 45 times
-                         🔹T12: 200 times
-                         🔹T13: 200 times
-                                   🔹Total transitions: 1600
+                         🔹T0: 2 times
+                         🔹T1: 0 times
+                         🔹T2: 1 times
+                         🔹T3: 0 times
+                         🔹T4: 1 times
+                         🔹T5: 0 times
+                         🔹T6: 1 times
+                         🔹T7: 0 times
+                         🔹T8: 1 times
+                         🔹T9: 0 times
+                         🔹T10: 1 times
+                         🔹T11: 0 times
+                         🔹T12: 1 times
+                         🔹T13: 1 times
+                                   🔹Total transitions: 9
 
 

@@ -33,11 +33,6 @@ public class Monitor {
         return mutex;
     }
 
-    /*
-     * *************************
-     * *** PRINCIPAL METHOD  ***
-     * *************************
-     */
 
      /*
       * The method checks if the transition is enabled an "time enabled" calling the 'testTime' method.
@@ -49,71 +44,57 @@ public class Monitor {
       */
     public boolean fireTransition(Matrix v) {
 
-        // printHash();
         try {
             if (petrinet.getCompletedInvariants() < 200) {
                 catchMonitor();
             } else {
                 return false;
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch(Exception e) {
+            System.err.println("❌  I was interrupted with the monitor in my hands  ❌");
+            System.exit(1);     // Stop the program with a non-zero exit code
         }
 
-        // -----------------------------------------------
-        boolean k = true;
-        while (k) {
+        if(!petrinet.fundamentalEquationTest(v) || (petrinet.workingState(v) == 1)) {
+            exitMonitor();
 
-            if (petrinet.fundamentalEquationTest(v)
-                    && ((petrinet.workingState(v) == 0) || (petrinet.workingState(v) == 2))) {
-                if (testTime(v)) {
-                    k = true;
-                } else {
-                    petrinet.setWorkingVector(v, (double) Thread.currentThread().getId());
-                    k = false;
-                    exitMonitor();
-                    return false;
-                }
-            } else {
-                k = false;
-            }
-            if (k) {
+            int queue = conditionQueues.getQueue(v);
 
-                petrinet.fire(v);
-                Matrix sensibilized = petrinet.getSensibilized();
-
-                Matrix queued = conditionQueues.queuedUp();
-                Matrix and = sensibilized.arrayTimes(queued); //  'and' '&'
-
-                int m = result(and); // sensibilized and queued transitions
-                if (m > 0) // queued and enabled transitions
-                {
-                    // cual
-                    int choice = policy.fireChoice(and);
-                    // release
-                    conditionQueues.getQueued().get(choice).release();
-
-                    System.out.println("Thread ID: " + Thread.currentThread().getId() + " wakes up");
-
-                } else // there's no transition enabled and queued
-                {
-                    System.out.println("k turns to false");
-                    k = false;
-                }
-            } else {
-                exitMonitor();
-                int queue = conditionQueues.getQueue(v);
-                try {
-                    conditionQueues.getQueued().get(queue).acquire();
-                    if (petrinet.getCompletedInvariants() >= 200)
+            try {
+                conditionQueues.getQueued().get(queue).acquire();
+                if (petrinet.getCompletedInvariants() >= 200)
                         return false;
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            } catch(Exception e) {
+                System.err.println("❌  current thread is interrupted   ❌");
+                System.exit(1);     // Stop the program with a non-zero exit code
             }
         }
-        exitMonitor();
-        return true;
+
+        if(testTime(v)) {
+            petrinet.fire(v);
+            //Chequeo de hilos encolados en transiciones sensibilizadas para despertarlos con la política establecida.
+            Matrix sensibilized = petrinet.getSensibilized();
+
+            Matrix queued = conditionQueues.queuedUp();
+            Matrix and = sensibilized.arrayTimes(queued); //  'and' '&'
+
+            int m = result(and); // sensibilized and queued transitions
+
+
+            if(m > 0) {
+                int choice = policy.fireChoice(and);
+                // release
+                conditionQueues.getQueued().get(choice).release();
+            }else {
+                exitMonitor();
+            }
+            return true;
+        } else {
+             petrinet.setWorkingVector(v, (double) Thread.currentThread().getId());
+             exitMonitor();
+             return false;
+        }
+
     }
 
     /*
@@ -192,11 +173,6 @@ public class Monitor {
         return index;
     }
 
-    /*
-     * *************************
-     * *** Getters & Setters ***
-     * *************************
-     */
 
     public synchronized long getTimeLeft(long id) {
         return this.timeLeft.get(id);

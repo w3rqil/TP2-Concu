@@ -46,7 +46,7 @@ public class Policy {
                 indexChosen = (int) Math.round(transitions.get(choice));
             }
         } else if (this.policyType == "Equitative") { 
-            // if policy type is equitative chooses randomly with a normal distribution of probabilities                                                     // red
+            // if policy type is equitative chooses randomly with a normal distribution of probabilities    // red
             transitions.clear(); // Clears array
             for (int i = 0; i < matrix.getColumnDimension(); i++) {
                 if (matrix.get(0, i) > 0) {

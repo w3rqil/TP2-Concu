@@ -14,21 +14,11 @@ public class CQueues {
         }
     }
 
-    /*
-     * *************************
-     * **** PUBLIC  METHODS ****
-     * *************************
-     */
-
-    /*
-     * *************************
-     * *** getters y setters ***
-     * *************************
-     */
 
     public ArrayList<Semaphore> getQueued() {
         return conditionQueues;
     }
+
 
     /*
      * Returns the index of the first thread queued up for the transition associated with the vector v.
@@ -36,6 +26,7 @@ public class CQueues {
      * @param v: firing vector
      * @return the index of the first thread queued up for the transition associated with the vector v
      */
+
     public int getQueue(Matrix v) {
         int index = 0;
 
