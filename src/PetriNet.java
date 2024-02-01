@@ -96,7 +96,8 @@ public class PetriNet {
     private final double[] aTimes = { 0, 0, 100, 100, 0, 0, 200, 200, 0, 0, 200, 200, 0, 100 };
     public List<Integer> tInvariantSum;
 
-    public PetriNet() {
+    public PetriNet()
+    {
         this.CurrentRoute = "";
         this.completedInvariants = 0;
         this.invariantCounting = new int[8];
@@ -111,7 +112,8 @@ public class PetriNet {
         this.transitionCounter = new Matrix(1, 14);
         this.tInvariantSum = new ArrayList<>();
         this.tInvariantsAux = new ArrayList<>();
-        for (int j = 0; j < 14; j++) {
+        for (int j = 0; j < 14; j++)
+        {
             transitionCounter.set(0, j, 0.0);
         }
     }
@@ -130,12 +132,14 @@ public class PetriNet {
     * @param v: firing vector
     * @return fundamental equation
     */
-    public Matrix fundamentalEquation(Matrix v) {
+    public Matrix fundamentalEquation(Matrix v)
+    {
         return (currentMarking.transpose().plus(incidence.times(v.transpose()))).transpose();
         // (mi + w * s) transpose
     }
 
-    public boolean fundamentalEquationTest(Matrix firingVector) {
+    public boolean fundamentalEquationTest(Matrix firingVector)
+    {
         matriz = fundamentalEquation(firingVector);
         for (int i = 0; i < this.matriz.getColumnDimension(); i++)
             if (this.matriz.get(0, i) < 0) {
@@ -153,20 +157,26 @@ public class PetriNet {
      * @param 
      * @return 
      */
-    void enableTransitions() {
+    void enableTransitions()
+    {
         Long time = System.currentTimeMillis();// tiempo actual
-        for (int i = 0; i < backwardsIncidence.getColumnDimension(); i++) {
+        for (int i = 0; i < backwardsIncidence.getColumnDimension(); i++)
+        {
             boolean enabledTransition = true;
-            for (int j = 0; j < backwardsIncidence.getRowDimension(); j++) {
-                if (backwardsIncidence.get(j, i) > currentMarking.get(0, j)) {
+            for (int j = 0; j < backwardsIncidence.getRowDimension(); j++)
+            {
+                if (backwardsIncidence.get(j, i) > currentMarking.get(0, j))
+                {
                     enabledTransition = false;
                     break;
                 }
             }
-            if (enabledTransition) {
+            if (enabledTransition)
+            {
                 sensibilizedTransitions.set(0, i, 1);
                 sensibilizedTime.set(0, i, (double) time);
-            } else {
+            } else
+            {
                 sensibilizedTransitions.set(0, i, 0);
             }
 
@@ -179,10 +189,12 @@ public class PetriNet {
      * 
      * @return enabled transitions info
      */
-    public String getEnabledTransitionsInfo() {
+    public String getEnabledTransitionsInfo()
+    {
         String enabled = "";
         for (int i = 0; i < 14; i++) {
-            if (sensibilizedTransitions.get(0, i) == 1) {
+            if (sensibilizedTransitions.get(0, i) == 1)
+            {
                 enabled += ("T" + i + "  ");
             }
         }
@@ -215,9 +227,12 @@ public class PetriNet {
         enableTransitions();
         firedSequence.add("T" + getIndex(v) + ""); // tiene todas las secuencia de transiciones disparadas
         System.out.println("Firing: T" + getIndex(v));
-        for (int i = 0; i < v.getRowDimension(); i++) {
-            for (int j = 0; j < v.getColumnDimension(); j++) {
-                if (v.get(i, j) != 0.0) {
+        for (int i = 0; i < v.getRowDimension(); i++)
+        {
+            for (int j = 0; j < v.getColumnDimension(); j++)
+            {
+                if (v.get(i, j) != 0.0)
+                {
                     transitionCounter.set(i, j, (transitionCounter.get(i, j) + v.get(i, j)));
                 }
             }
@@ -230,12 +245,16 @@ public class PetriNet {
 
     }
 
-    public String getMarkingInfo() {
+    public String getMarkingInfo()
+    {
         String marking = "P0 P1 P2 P3 P4 P5 P6 P7 P8 P9 P10 P11 P12 P13 P14 P15 P16 P17 P18\n";
-        for (int i = 0; i < currentMarking.getColumnDimension(); i++) {
-            if (i < 10) {
+        for (int i = 0; i < currentMarking.getColumnDimension(); i++)
+        {
+            if (i < 10)
+            {
                 marking += ((int) currentMarking.get(0, i) + "  ");
-            } else {
+            } else
+            {
                 marking += ((int) currentMarking.get(0, i) + "   ");
             }
         }
@@ -254,7 +273,8 @@ public class PetriNet {
     {
         int totalCount = 0;
         String arg = "Transitions:\n";
-        for (int i = 0; i < transitionCounter.getColumnDimension(); i++) {
+        for (int i = 0; i < transitionCounter.getColumnDimension(); i++)
+        {
             arg += ("                         🔹T" + i + ": " + (int) transitionCounter.get(0, i) + " times\n");
             totalCount += (int) transitionCounter.get(0, i);
         }
@@ -273,7 +293,8 @@ public class PetriNet {
      * @return
      */
 
-    public int workingState(Matrix v) {
+    public int workingState(Matrix v)
+    {
         int index = getIndex(v);
 
         if (workingVector.get(0, index) == 0)
@@ -291,11 +312,14 @@ public class PetriNet {
      * @param lastTransition: last transition fired
      * @return
      */
-    public void followUp(String lastTransition) {
+    public void followUp(String lastTransition)
+    {
 
-        if (!lastTransition.contains("13")) {
+        if (!lastTransition.contains("13"))
+        {
             CurrentRoute += lastTransition;
-        } else {
+        } else
+        {
 
             // T1 T3 T5 T7 T9 T11 T12 T13
             // T1 T3 T5 T7 T8 T10 T12 T13
@@ -306,41 +330,50 @@ public class PetriNet {
             // T0 T2 T4 T6 T9 T11 T12 T13
             // T0 T2 T4 T6 T8 T10 T11 T13 */
 
-            if (CurrentRoute.contains("135791112")) {
+            if (CurrentRoute.contains("135791112"))
+            {
                 invariantCounting[0] += 1;
                 completedInvariants++;
-            } else if (CurrentRoute.contains("135781012")) {
+            } else if (CurrentRoute.contains("135781012"))
+            {
                 invariantCounting[1] += 1;
                 completedInvariants++;
-            } else if (CurrentRoute.contains("134691112")) {
+            } else if (CurrentRoute.contains("134691112"))
+            {
                 invariantCounting[2] += 1;
                 completedInvariants++;
-            } else if (CurrentRoute.contains("134681012")) {
+            } else if (CurrentRoute.contains("134681012"))
+            {
                 invariantCounting[3] += 1;
                 completedInvariants++;
-            } else if (CurrentRoute.contains("025791112")) {
+            } else if (CurrentRoute.contains("025791112"))
+            {
                 invariantCounting[4] += 1;
                 completedInvariants++;
-            } else if (CurrentRoute.contains("025781012")) {
+            } else if (CurrentRoute.contains("025781012"))
+            {
                 invariantCounting[5] += 1;
                 completedInvariants++;
-            } else if (CurrentRoute.contains("024691112")) {
+            } else if (CurrentRoute.contains("024691112"))
+            {
                 invariantCounting[6] += 1;
                 completedInvariants++;
-            } else if (CurrentRoute.contains("024681012")) {
+            } else if (CurrentRoute.contains("024681012"))
+            {
                 invariantCounting[7] += 1;
                 completedInvariants++;
-            }
+            } else
+            {
 
-            else {
-
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < 8; i++)
+                {
                     System.out.println(i + " T-invariant appears " + getValinvariantCounting(i) + " times.");
                 }
                 System.out.println("Error in T-Invariant: " + CurrentRoute);
             }
 
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 8; i++)
+            {
                 System.out.println(i + " T-invariant appears " + getValinvariantCounting(i) + " times.");
             }
 
@@ -349,8 +382,10 @@ public class PetriNet {
 
     }
 
-    public void tInvariantsInfo() {
-        for (int i = 0; i < 8; i++) {
+    public void tInvariantsInfo()
+    {
+        for (int i = 0; i < 8; i++)
+        {
             System.out.println(i + " T-invariant appears " + getValinvariantCounting(i) + " times.");
         }
     }
@@ -361,7 +396,8 @@ public class PetriNet {
      * @param
      * @return
      */
-    public void testPInvariants() {
+    public void testPInvariants()
+    {
         boolean pInv0, pInv1, pInv2, pInv3, pInv4, pInv5, pInv6, pInv7, pInv8;
         pInv0 = (currentMarking.get(0, 0) + currentMarking.get(0, 3) + currentMarking.get(0, 5)
                 + currentMarking.get(0, 6) + currentMarking.get(0, 9) + currentMarking.get(0, 11)
@@ -377,7 +413,8 @@ public class PetriNet {
         pInv8 = (currentMarking.get(0, 3) + currentMarking.get(0, 4) + currentMarking.get(0, 5)
                 + currentMarking.get(0, 17)) == 3;
 
-        if (!(pInv0 && pInv1 && pInv2 && pInv3 && pInv4 && pInv5 && pInv6 && pInv7 && pInv8)) {
+        if (!(pInv0 && pInv1 && pInv2 && pInv3 && pInv4 && pInv5 && pInv6 && pInv7 && pInv8))
+        {
             System.out.println("Error in a p-invariant.");
         }
     }
@@ -401,9 +438,11 @@ public class PetriNet {
      * @param v: firing vector
      * @return index of the transition
     */
-    public int getIndex(Matrix v) {
+    public int getIndex(Matrix v)
+    {
         int index = 0;
-        for (int i = 0; i < v.getColumnDimension(); i++) {
+        for (int i = 0; i < v.getColumnDimension(); i++)
+        {
             if (v.get(0, i) == 1)
                 break;
             else
@@ -420,7 +459,8 @@ public class PetriNet {
         return sensibilizedTime;
     }
 
-    public void setWorkingVector(Matrix firingVector, double value) {
+    public void setWorkingVector(Matrix firingVector, double value)
+    {
         this.workingVector.set(0, getIndex(firingVector), value);
     }
 
