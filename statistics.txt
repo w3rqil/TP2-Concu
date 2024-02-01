@@ -16,37 +16,37 @@
                         1️⃣  T-invariant appears 0 times.                                  
                         2️⃣  T-invariant appears 0 times.                                  
                         3️⃣  T-invariant appears 0 times.                                  
-                        4️⃣  T-invariant appears 0 times.                                  
+                        4️⃣  T-invariant appears 1 times.                                  
                         5️⃣  T-invariant appears 0 times.                                  
                         6️⃣  T-invariant appears 0 times.                                  
-                        7️⃣  T-invariant appears 1 times.                                  
+                        7️⃣  T-invariant appears 0 times.                                  
                                                                                                
                                                                                                
                     ➡️ T̲r̲i̲g̲g̲e̲r̲e̲d̲ t̲r̲a̲n̲s̲i̲t̲i̲o̲n̲s̲                                                
                                                                                                
-                        🔹T0T2T4T6T8T10T12T13T0
+                        🔹T0T2T5T7T9T11T12T13T1
                                                                                                
                                                                                                
                     ➡️ T̲h̲e̲ e̲x̲e̲c̲u̲t̲i̲o̲n̲ t̲i̲m̲e̲ w̲a̲s̲:                                              
                                                                                                
-                        ⏲️ 0.639 seconds.
+                        ⏲️ 0.813 seconds.
                                                                                                
                                                                                                
                     ➡️ Transitions:
                          🔹T0: 2 times
-                         🔹T1: 0 times
+                         🔹T1: 1 times
                          🔹T2: 1 times
                          🔹T3: 0 times
                          🔹T4: 1 times
-                         🔹T5: 0 times
-                         🔹T6: 1 times
-                         🔹T7: 0 times
+                         🔹T5: 2 times
+                         🔹T6: 0 times
+                         🔹T7: 1 times
                          🔹T8: 1 times
-                         🔹T9: 0 times
-                         🔹T10: 1 times
-                         🔹T11: 0 times
+                         🔹T9: 2 times
+                         🔹T10: 0 times
+                         🔹T11: 1 times
                          🔹T12: 1 times
                          🔹T13: 1 times
-                                   🔹Total transitions: 9
+                                   🔹Total transitions: 14
 
 
