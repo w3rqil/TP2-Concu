@@ -47,22 +47,8 @@ public class Monitor {
      * @param v: firing vector
      * @return true if the transition is fired, false otherwise
      */
-    public boolean fireTransition(Matrix v) {
-
-        // printHash();
-        try {
-            if (petrinet.getCompletedInvariants() < 200) {
-                catchMonitor();
-            } else {
-                return false;
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        // -----------------------------------------------
-        boolean k = true;
-
+    public boolean fireTransition(Matrix v) 
+    {
 
         try {
             if (petrinet.getCompletedInvariants() < 200) {
