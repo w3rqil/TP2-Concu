@@ -61,7 +61,8 @@ public class Monitor {
             System.exit(1);     // Stop the program with a non-zero exit code
         }
 
-        if(!petrinet.fundamentalEquationTest(v) || (petrinet.workingState(v) == 1)) {
+
+        if(!petrinet.fundamentalEquationTest(v) || (petrinet.workingState(v) == 1)) { // Someone is working on it, but it is not the thread that is requesting it. STATE = OTHER
             exitMonitor();
 
             int queue = conditionQueues.getQueue(v);
@@ -78,7 +79,8 @@ public class Monitor {
 
         if(testTime(v)) {
             petrinet.fire(v);
-            //Chequeo de hilos encolados en transiciones sensibilizadas para despertarlos con la política establecida.
+            
+            // Checks for threads queued up in sensibilized transitions to wake them up with the established policy.
             Matrix sensibilized = petrinet.getSensibilized();
 
             Matrix queued = conditionQueues.queuedUp();

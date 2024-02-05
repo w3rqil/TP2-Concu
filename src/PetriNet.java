@@ -206,8 +206,6 @@ public class PetriNet {
     }
 
     /*
-     * Este es el metodo fire transition pero quería usar el nombre
-     * fire transition en monitor
      * 
      * This method fires a transition if it is enabled.
      * - change current marking.
