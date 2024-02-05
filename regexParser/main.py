@@ -62,7 +62,8 @@ class App(QMainWindow):
                     f.write(match[0])
                     f.close()
                     if match[1] == 0:
-                        self.output_text.setText('FAIL: sobraron transiciones')
+                        #self.output_text.setText('FAIL: sobraron transiciones\n')
+                        self.output_text.setText('FAIL: sobraron transiciones. Match: {}\n'.format(match))
                         break
                     if match[0] == '':
                         self.output_text.setText('SUCCESS, Test OK')
