@@ -6,5 +6,7 @@ En este repositorio se presenta el desarrollo del trabajo final de la materia "P
 - Moroz, Esteban Mauricio.
 - Pallardó, Agustín.
 - Villar, Federico Ignacio.
-
-***tp aprobado porq tenemos la verga re grande***
+--------
+# Proyecto
+El proyecto se trata de un monitor de concurrencia para un sistema de procesamiento doble de imágenes.
+Para una explicación más detallada del código y el análisis realizado, revisar el [informe](informe/informeTPFinal.pdf).
